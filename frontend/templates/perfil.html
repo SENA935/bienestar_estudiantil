@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Bienestar Estudiantil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/responsive.css">
+    <style>
+        .profile-card { max-width: 700px; margin: 0 auto; }
+        .profile-avatar { width: 120px; height: 120px; border-radius: 50%; background: var(--primary-color, #4f46e5); color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 700; margin: 0 auto 1.5rem; }
+        .profile-info { text-align: center; margin-bottom: 2rem; }
+        .profile-info h2 { margin: 0 0 0.25rem; }
+        .profile-info p { color: #666; margin: 0; }
+        .profile-details { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+        .profile-details .detail-item { padding: 0.75rem; background: #f8f9fa; border-radius: 8px; }
+        .profile-details .detail-item label { font-size: 0.8rem; color: #666; display: block; margin-bottom: 0.25rem; }
+        .profile-details .detail-item span { font-weight: 600; }
+        .section-title { font-size: 1.1rem; font-weight: 600; margin: 1.5rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e5e7eb; }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header"><div class="sidebar-logo"><div class="logo-icon"><i class="fas fa-heart-pulse"></i></div><div class="logo-text"><h2>Bienestar</h2><p>Estudiantil SENA</p></div></div></div>
+        <nav class="sidebar-nav">
+            <div class="nav-section">Principal</div>
+            <a href="/dashboard" class="nav-item" data-page="dashboard"><i class="fas fa-home"></i> Inicio</a>
+            <div class="nav-section">Gesti&#243;n</div>
+            <a href="/instituciones" class="nav-item" data-page="instituciones"><i class="fas fa-building"></i> Instituci&#243;n</a>
+            <a href="/cursos" class="nav-item" data-page="cursos"><i class="fas fa-graduation-cap"></i> Acad&#233;mico</a>
+            <a href="/usuarios" class="nav-item" data-page="usuarios"><i class="fas fa-users"></i> Usuarios</a>
+            <div class="nav-section">Actividades</div>
+            <a href="/actividades" class="nav-item" data-page="actividades"><i class="fas fa-calendar-alt"></i> Actividades</a>
+            <a href="/programaciones" class="nav-item" data-page="programaciones"><i class="fas fa-calendar-check"></i> Programaciones</a>
+            <div class="nav-section">Participaci&#243;n</div>
+            <a href="/encuestas" class="nav-item" data-page="encuestas"><i class="fas fa-clipboard-list"></i> Encuestas</a>
+            <a href="/propuestas" class="nav-item" data-page="propuestas"><i class="fas fa-lightbulb"></i> Propuestas</a>
+            <a href="/alertas" class="nav-item" data-page="alertas"><i class="fas fa-bell"></i> Alertas</a>
+            <div class="nav-section">Sistema</div>
+            <a href="/reportes" class="nav-item" data-page="reportes"><i class="fas fa-chart-bar"></i> Reportes</a>
+            <a href="/auditoria" class="nav-item" data-page="auditoria"><i class="fas fa-history"></i> Auditor&#237;a</a>
+            <a href="/configuracion" class="nav-item" data-page="configuracion"><i class="fas fa-cog"></i> Configuraci&#243;n</a>
+        </nav>
+        <div class="sidebar-footer"><div class="user-info"><div class="avatar" id="sidebar-avatar">--</div><div class="user-details"><h4 id="sidebar-user-name">Cargando...</h4><p id="sidebar-user-role">-</p></div></div></div>
+    </aside>
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left"><button class="menu-toggle" id="menu-toggle"><i class="fas fa-bars"></i></button><div class="header-title"><h1>Mi Perfil</h1></div></div>
+                <div class="header-right">
+                    <button class="notification-btn" onclick="window.location.href='/alertas'"><i class="fas fa-bell"></i><span class="badge" id="notif-badge" style="display:none">0</span></button>
+                    <div class="header-user" onclick="window.location.href='/perfil'"><div class="avatar" id="header-avatar">--</div><div class="user-meta"><h4 id="header-user-name">Cargando...</h4><p id="header-user-role">-</p></div></div>
+                    <button class="btn btn-sm btn-outlined" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </header>
+            <div class="content">
+                <div class="profile-card card" style="padding:2rem;">
+                    <div class="profile-avatar" id="profile-avatar"></div>
+                    <div class="profile-info">
+                        <h2 id="profile-name"></h2>
+                        <p id="profile-role"></p>
+                    </div>
+                    <div class="profile-details" id="profile-details"></div>
+
+                    <h3 class="section-title">Editar Informaci&#243;n</h3>
+                    <form id="edit-form" onsubmit="updateProfile(event)">
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                            <div class="form-group">
+                                <label>Nombre *</label>
+                                <input type="text" name="nombre" id="edit-nombre" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Apellido</label>
+                                <input type="text" name="apellido" id="edit-apellido">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" name="email" id="edit-email" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar Cambios</button>
+                    </form>
+
+                    <h3 class="section-title">Cambiar Contrase&#241;a</h3>
+                    <form id="password-form" onsubmit="changePassword(event)">
+                        <div class="form-group">
+                            <label>Contrase&#241;a Actual *</label>
+                            <input type="password" name="password_actual" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Nueva Contrase&#241;a *</label>
+                            <input type="password" name="password_nuevo" id="new-password" required minlength="6">
+                        </div>
+                        <div class="form-group">
+                            <label>Confirmar Nueva Contrase&#241;a *</label>
+                            <input type="password" name="password_confirmar" id="confirm-password" required minlength="6">
+                        </div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-key"></i> Cambiar Contrase&#241;a</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+    <script>
+        if (!checkAuth()) throw new Error('No auth');
+        var profileData = null;
+
+        async function loadProfile() {
+            try {
+                var data = await apiRequest('/perfil');
+                profileData = data.usuario || data;
+                renderProfile();
+            } catch (e) {
+                showToast('Error al cargar perfil', 'error');
+            }
+        }
+
+        function renderProfile() {
+            var initials = ((profileData.nombre || '')[0] || '') + ((profileData.apellido || '')[0] || '');
+            document.getElementById('profile-avatar').textContent = initials.toUpperCase() || '--';
+            document.getElementById('profile-name').textContent = profileData.nombre + ' ' + (profileData.apellido || '');
+            document.getElementById('profile-role').textContent = profileData.rol || '';
+            document.getElementById('profile-details').innerHTML =
+                '<div class="detail-item"><label>Usuario</label><span>' + (profileData.username || '-') + '</span></div>' +
+                '<div class="detail-item"><label>Email</label><span>' + (profileData.email || '-') + '</span></div>' +
+                '<div class="detail-item"><label>Rol</label><span>' + (profileData.rol || '-') + '</span></div>' +
+                '<div class="detail-item"><label>Instituci\u00f3n</label><span>' + (profileData.institucion_nombre || (profileData.institucion ? profileData.institucion.nombre : '-') ) + '</span></div>';
+            document.getElementById('edit-nombre').value = profileData.nombre || '';
+            document.getElementById('edit-apellido').value = profileData.apellido || '';
+            document.getElementById('edit-email').value = profileData.email || '';
+        }
+
+        async function updateProfile(e) {
+            e.preventDefault();
+            var form = e.target;
+            var body = {
+                nombre: form.nombre.value,
+                apellido: form.apellido.value,
+                email: form.email.value
+            };
+            try {
+                await apiRequest('/perfil', { method: 'PUT', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } });
+                showToast('Perfil actualizado exitosamente', 'success');
+                loadProfile();
+            } catch (e) {
+                showToast('Error al actualizar perfil', 'error');
+            }
+        }
+
+        async function changePassword(e) {
+            e.preventDefault();
+            var form = e.target;
+            if (form.password_nuevo.value !== form.password_confirmar.value) {
+                showToast('Las contrase\u00f1as no coinciden', 'error');
+                return;
+            }
+            var body = {
+                password_actual: form.password_actual.value,
+                password_nuevo: form.password_nuevo.value
+            };
+            try {
+                await apiRequest('/perfil/cambiar-password', { method: 'PUT', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } });
+                showToast('Contrase\u00f1a cambiada exitosamente', 'success');
+                form.reset();
+            } catch (e) {
+                showToast('Error al cambiar contrase\u00f1a', 'error');
+            }
+        }
+
+        loadProfile();
+    </script>
+</body>
+</html>

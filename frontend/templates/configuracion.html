@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuraci&#243;n - Bienestar Estudiantil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/responsive.css">
+    <style>
+        .tabs { display: flex; gap: 0; border-bottom: 2px solid #e5e7eb; margin-bottom: 1.5rem; }
+        .tab-btn { padding: 0.75rem 1.5rem; border: none; background: none; cursor: pointer; font-size: 0.95rem; font-weight: 500; color: #666; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+        .tab-btn.active { color: var(--primary-color, #4f46e5); border-bottom-color: var(--primary-color, #4f46e5); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header"><div class="sidebar-logo"><div class="logo-icon"><i class="fas fa-heart-pulse"></i></div><div class="logo-text"><h2>Bienestar</h2><p>Estudiantil SENA</p></div></div></div>
+        <nav class="sidebar-nav">
+            <div class="nav-section">Principal</div>
+            <a href="/dashboard" class="nav-item" data-page="dashboard"><i class="fas fa-home"></i> Inicio</a>
+            <div class="nav-section">Gesti&#243;n</div>
+            <a href="/instituciones" class="nav-item" data-page="instituciones"><i class="fas fa-building"></i> Instituci&#243;n</a>
+            <a href="/cursos" class="nav-item" data-page="cursos"><i class="fas fa-graduation-cap"></i> Acad&#233;mico</a>
+            <a href="/usuarios" class="nav-item" data-page="usuarios"><i class="fas fa-users"></i> Usuarios</a>
+            <div class="nav-section">Actividades</div>
+            <a href="/actividades" class="nav-item" data-page="actividades"><i class="fas fa-calendar-alt"></i> Actividades</a>
+            <a href="/programaciones" class="nav-item" data-page="programaciones"><i class="fas fa-calendar-check"></i> Programaciones</a>
+            <div class="nav-section">Participaci&#243;n</div>
+            <a href="/encuestas" class="nav-item" data-page="encuestas"><i class="fas fa-clipboard-list"></i> Encuestas</a>
+            <a href="/propuestas" class="nav-item" data-page="propuestas"><i class="fas fa-lightbulb"></i> Propuestas</a>
+            <a href="/alertas" class="nav-item" data-page="alertas"><i class="fas fa-bell"></i> Alertas</a>
+            <div class="nav-section">Sistema</div>
+            <a href="/reportes" class="nav-item" data-page="reportes"><i class="fas fa-chart-bar"></i> Reportes</a>
+            <a href="/auditoria" class="nav-item" data-page="auditoria"><i class="fas fa-history"></i> Auditor&#237;a</a>
+            <a href="/configuracion" class="nav-item active" data-page="configuracion"><i class="fas fa-cog"></i> Configuraci&#243;n</a>
+        </nav>
+        <div class="sidebar-footer"><div class="user-info"><div class="avatar" id="sidebar-avatar">--</div><div class="user-details"><h4 id="sidebar-user-name">Cargando...</h4><p id="sidebar-user-role">-</p></div></div></div>
+    </aside>
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left"><button class="menu-toggle" id="menu-toggle"><i class="fas fa-bars"></i></button><div class="header-title"><h1>Configuraci&#243;n</h1></div></div>
+                <div class="header-right">
+                    <button class="notification-btn" onclick="window.location.href='/alertas'"><i class="fas fa-bell"></i><span class="badge" id="notif-badge" style="display:none">0</span></button>
+                    <div class="header-user" onclick="window.location.href='/perfil'"><div class="avatar" id="header-avatar">--</div><div class="user-meta"><h4 id="header-user-name">Cargando...</h4><p id="header-user-role">-</p></div></div>
+                    <button class="btn btn-sm btn-outlined" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </header>
+            <div class="content">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('periodos')"><i class="fas fa-calendar"></i> Periodos Acad&#233;micos</button>
+                    <button class="tab-btn" onclick="switchTab('categorias')"><i class="fas fa-tags"></i> Categor&#237;as</button>
+                    <button class="tab-btn" onclick="switchTab('roles')"><i class="fas fa-user-shield"></i> Roles</button>
+                </div>
+
+                <div class="tab-content active" id="tab-periodos">
+                    <div class="toolbar">
+                        <div class="toolbar-left"></div>
+                        <div class="toolbar-right">
+                            <button class="btn btn-primary" onclick="openCreatePeriodo()"><i class="fas fa-plus"></i> Nuevo Periodo</button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead><tr><th>ID</th><th>Nombre</th><th>Fecha Inicio</th><th>Fecha Fin</th><th>Estado</th><th>Acciones</th></tr></thead>
+                            <tbody id="periodos-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-categorias">
+                    <div class="toolbar">
+                        <div class="toolbar-left"></div>
+                        <div class="toolbar-right">
+                            <button class="btn btn-primary" onclick="openCreateCategoria()"><i class="fas fa-plus"></i> Nueva Categor&#237;a</button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead><tr><th>ID</th><th>Nombre</th><th>Descripci&#243;n</th><th>Color</th><th>Acciones</th></tr></thead>
+                            <tbody id="categorias-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-roles">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead><tr><th>ID</th><th>Nombre</th><th>Descripci&#243;n</th></tr></thead>
+                            <tbody id="roles-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="create-periodo-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Nuevo Periodo Acad&#233;mico</h3>
+                <button class="modal-close" onclick="closeModal('create-periodo-modal')">&times;</button>
+            </div>
+            <form id="create-periodo-form" onsubmit="createPeriodo(event)">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nombre *</label>
+                        <input type="text" name="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Inicio *</label>
+                        <input type="date" name="fecha_inicio" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Fin *</label>
+                        <input type="date" name="fecha_fin" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Estado *</label>
+                        <select name="estado" required>
+                            <option value="Activo">Activo</option>
+                            <option value="Inactivo">Inactivo</option>
+                            <option value="Finalizado">Finalizado</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outlined" onclick="closeModal('create-periodo-modal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="edit-periodo-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Editar Periodo</h3>
+                <button class="modal-close" onclick="closeModal('edit-periodo-modal')">&times;</button>
+            </div>
+            <form id="edit-periodo-form" onsubmit="updatePeriodo(event)">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="edit-periodo-id">
+                    <div class="form-group">
+                        <label>Nombre *</label>
+                        <input type="text" name="nombre" id="edit-periodo-nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Inicio *</label>
+                        <input type="date" name="fecha_inicio" id="edit-periodo-fecha_inicio" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Fin *</label>
+                        <input type="date" name="fecha_fin" id="edit-periodo-fecha_fin" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Estado *</label>
+                        <select name="estado" id="edit-periodo-estado" required>
+                            <option value="Activo">Activo</option>
+                            <option value="Inactivo">Inactivo</option>
+                            <option value="Finalizado">Finalizado</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outlined" onclick="closeModal('edit-periodo-modal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="create-categoria-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Nueva Categor&#237;a</h3>
+                <button class="modal-close" onclick="closeModal('create-categoria-modal')">&times;</button>
+            </div>
+            <form id="create-categoria-form" onsubmit="createCategoria(event)">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nombre *</label>
+                        <input type="text" name="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Descripci&#243;n</label>
+                        <textarea name="descripcion" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Color</label>
+                        <input type="color" name="color" value="#4f46e5">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outlined" onclick="closeModal('create-categoria-modal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="edit-categoria-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Editar Categor&#237;a</h3>
+                <button class="modal-close" onclick="closeModal('edit-categoria-modal')">&times;</button>
+            </div>
+            <form id="edit-categoria-form" onsubmit="updateCategoria(event)">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="edit-categoria-id">
+                    <div class="form-group">
+                        <label>Nombre *</label>
+                        <input type="text" name="nombre" id="edit-categoria-nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Descripci&#243;n</label>
+                        <textarea name="descripcion" id="edit-categoria-descripcion" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Color</label>
+                        <input type="color" name="color" id="edit-categoria-color" value="#4f46e5">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outlined" onclick="closeModal('edit-categoria-modal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+    <script>
+        if (!checkAuth()) throw new Error('No auth');
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        async function loadPeriodos() {
+            try {
+                var data = await apiRequest('/configuracion/periodos');
+                var periodos = data.periodos || data || [];
+                var tbody = document.getElementById('periodos-body');
+                if (periodos.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center">No hay periodos configurados</td></tr>';
+                } else {
+                    tbody.innerHTML = periodos.map(function(p) {
+                        return '<tr>' +
+                            '<td>' + p.id + '</td>' +
+                            '<td>' + p.nombre + '</td>' +
+                            '<td>' + formatDate(p.fecha_inicio) + '</td>' +
+                            '<td>' + formatDate(p.fecha_fin) + '</td>' +
+                            '<td>' + getStatusBadge(p.estado) + '</td>' +
+                            '<td class="actions">' +
+                                '<button class="btn btn-sm btn-info" onclick="editPeriodo(' + p.id + ')"><i class="fas fa-edit"></i></button>' +
+                                '<button class="btn btn-sm btn-danger" onclick="deletePeriodo(' + p.id + ')"><i class="fas fa-trash"></i></button>' +
+                            '</td></tr>';
+                    }).join('');
+                }
+            } catch (e) {
+                showToast('Error al cargar periodos', 'error');
+            }
+        }
+
+        function openCreatePeriodo() {
+            document.getElementById('create-periodo-form').reset();
+            openModal('create-periodo-modal');
+        }
+
+        async function createPeriodo(e) {
+            e.preventDefault();
+            var form = e.target;
+            var body = {
+                nombre: form.nombre.value,
+                fecha_inicio: form.fecha_inicio.value,
+                fecha_fin: form.fecha_fin.value,
+                estado: form.estado.value
+            };
+            try {
+                await apiRequest('/configuracion/periodos', { method: 'POST', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } });
+                showToast('Periodo creado exitosamente', 'success');
+                closeModal('create-periodo-modal');
+                loadPeriodos();
+            } catch (e) {
+                showToast('Error al crear periodo', 'error');
+            }
+        }
+
+        async function editPeriodo(id) {
+            try {
+                var data = await apiRequest('/configuracion/periodos/' + id);
+                var p = data.periodo || data;
+                document.getElementById('edit-periodo-id').value = p.id;
+                document.getElementById('edit-periodo-nombre').value = p.nombre;
+                document.getElementById('edit-periodo-fecha_inicio').value = p.fecha_inicio ? p.fecha_inicio.split('T')[0] : '';
+                document.getElementById('edit-periodo-fecha_fin').value = p.fecha_fin ? p.fecha_fin.split('T')[0] : '';
+                document.getElementById('edit-periodo-estado').value = p.estado;
+                openModal('edit-periodo-modal');
+            } catch (e) {
+                showToast('Error al cargar periodo', 'error');
+            }
+        }
+
+        async function updatePeriodo(e) {
+            e.preventDefault();
+            var form = e.target;
+            var body = {
+                nombre: form.nombre.value,
+                fecha_inicio: form.fecha_inicio.value,
+                fecha_fin: form.fecha_fin.value,
+                estado: form.estado.value
+            };
+            try {
+                await apiRequest('/configuracion/periodos/' + form.id.value, { method: 'PUT', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } });
+                showToast('Periodo actualizado exitosamente', 'success');
+                closeModal('edit-periodo-modal');
+                loadPeriodos();
+            } catch (e) {
+                showToast('Error al actualizar periodo', 'error');
+            }
+        }
+
+        async function deletePeriodo(id) {
+            confirmDelete(async function() {
+                try {
+                    await apiRequest('/configuracion/periodos/' + id, { method: 'DELETE' });
+                    showToast('Periodo eliminado exitosamente', 'success');
+                    loadPeriodos();
+                } catch (e) {
+                    showToast('Error al eliminar periodo', 'error');
+                }
+            });
+        }
+
+        async function loadCategorias() {
+            try {
+                var data = await apiRequest('/configuracion/categorias');
+                var categorias = data.categorias || data || [];
+                var tbody = document.getElementById('categorias-body');
+                if (categorias.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-center">No hay categor&#237;as configuradas</td></tr>';
+                } else {
+                    tbody.innerHTML = categorias.map(function(c) {
+                        return '<tr>' +
+                            '<td>' + c.id + '</td>' +
+                            '<td>' + c.nombre + '</td>' +
+                            '<td>' + (c.descripcion || '-') + '</td>' +
+                            '<td><span style="display:inline-block;width:24px;height:24px;border-radius:50%;background:' + (c.color || '#ccc') + ';vertical-align:middle;"></span> ' + (c.color || '') + '</td>' +
+                            '<td class="actions">' +
+                                '<button class="btn btn-sm btn-info" onclick="editCategoria(' + c.id + ')"><i class="fas fa-edit"></i></button>' +
+                                '<button class="btn btn-sm btn-danger" onclick="deleteCategoria(' + c.id + ')"><i class="fas fa-trash"></i></button>' +
+                            '</td></tr>';
+                    }).join('');
+                }
+            } catch (e) {
+                showToast('Error al cargar categor&#237;as', 'error');
+            }
+        }
+
+        function openCreateCategoria() {
+            document.getElementById('create-categoria-form').reset();
+            openModal('create-categoria-modal');
+        }
+
+        async function createCategoria(e) {
+            e.preventDefault();
+            var form = e.target;
+            var body = {
+                nombre: form.nombre.value,
+                descripcion: form.descripcion.value,
+                color: form.color.value
+            };
+            try {
+                await apiRequest('/configuracion/categorias', { method: 'POST', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } });
+                showToast('Categor&#237;a creada exitosamente', 'success');
+                closeModal('create-categoria-modal');
+                loadCategorias();
+            } catch (e) {
+                showToast('Error al crear categor&#237;a', 'error');
+            }
+        }
+
+        async function editCategoria(id) {
+            try {
+                var data = await apiRequest('/configuracion/categorias/' + id);
+                var c = data.categoria || data;
+                document.getElementById('edit-categoria-id').value = c.id;
+                document.getElementById('edit-categoria-nombre').value = c.nombre;
+                document.getElementById('edit-categoria-descripcion').value = c.descripcion || '';
+                document.getElementById('edit-categoria-color').value = c.color || '#4f46e5';
+                openModal('edit-categoria-modal');
+            } catch (e) {
+                showToast('Error al cargar categor&#237;a', 'error');
+            }
+        }
+
+        async function updateCategoria(e) {
+            e.preventDefault();
+            var form = e.target;
+            var body = {
+                nombre: form.nombre.value,
+                descripcion: form.descripcion.value,
+                color: form.color.value
+            };
+            try {
+                await apiRequest('/configuracion/categorias/' + form.id.value, { method: 'PUT', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } });
+                showToast('Categor&#237;a actualizada exitosamente', 'success');
+                closeModal('edit-categoria-modal');
+                loadCategorias();
+            } catch (e) {
+                showToast('Error al actualizar categor&#237;a', 'error');
+            }
+        }
+
+        async function deleteCategoria(id) {
+            confirmDelete(async function() {
+                try {
+                    await apiRequest('/configuracion/categorias/' + id, { method: 'DELETE' });
+                    showToast('Categor&#237;a eliminada exitosamente', 'success');
+                    loadCategorias();
+                } catch (e) {
+                    showToast('Error al eliminar categor&#237;a', 'error');
+                }
+            });
+        }
+
+        async function loadRoles() {
+            try {
+                var data = await apiRequest('/configuracion/roles');
+                var roles = data.roles || data || [];
+                var tbody = document.getElementById('roles-body');
+                if (roles.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3" class="text-center">No hay roles configurados</td></tr>';
+                } else {
+                    tbody.innerHTML = roles.map(function(r) {
+                        return '<tr>' +
+                            '<td>' + r.id + '</td>' +
+                            '<td>' + (r.nombre || r.name || '-') + '</td>' +
+                            '<td>' + (r.descripcion || r.description || '-') + '</td>' +
+                        '</tr>';
+                    }).join('');
+                }
+            } catch (e) {
+                showToast('Error al cargar roles', 'error');
+            }
+        }
+
+        loadPeriodos();
+        loadCategorias();
+        loadRoles();
+    </script>
+</body>
+</html>

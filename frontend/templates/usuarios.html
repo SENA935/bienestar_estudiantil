@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios - Bienestar Estudiantil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/responsive.css">
+</head>
+<body>
+    <div class="app-layout">
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header"><div class="sidebar-logo"><div class="logo-icon"><i class="fas fa-heart-pulse"></i></div><div class="logo-text"><h2>Bienestar</h2><p>Estudiantil SENA</p></div></div></div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">Principal</div>
+                <a href="/dashboard" class="nav-item" data-page="dashboard"><i class="fas fa-home"></i> Inicio</a>
+                <div class="nav-section">Gestión</div>
+                <a href="/instituciones" class="nav-item" data-page="instituciones"><i class="fas fa-building"></i> Institución</a>
+                <a href="/cursos" class="nav-item" data-page="cursos"><i class="fas fa-graduation-cap"></i> Académico</a>
+                <a href="/usuarios" class="nav-item active" data-page="usuarios"><i class="fas fa-users"></i> Usuarios</a>
+                <div class="nav-section">Actividades</div>
+                <a href="/actividades" class="nav-item" data-page="actividades"><i class="fas fa-calendar-alt"></i> Actividades</a>
+                <a href="/programaciones" class="nav-item" data-page="programaciones"><i class="fas fa-calendar-check"></i> Programaciones</a>
+                <div class="nav-section">Participación</div>
+                <a href="/encuestas" class="nav-item" data-page="encuestas"><i class="fas fa-clipboard-list"></i> Encuestas</a>
+                <a href="/propuestas" class="nav-item" data-page="propuestas"><i class="fas fa-lightbulb"></i> Propuestas</a>
+                <a href="/alertas" class="nav-item" data-page="alertas"><i class="fas fa-bell"></i> Alertas</a>
+                <div class="nav-section">Sistema</div>
+                <a href="/reportes" class="nav-item" data-page="reportes"><i class="fas fa-chart-bar"></i> Reportes</a>
+                <a href="/auditoria" class="nav-item" data-page="auditoria"><i class="fas fa-history"></i> Auditoría</a>
+                <a href="/configuracion" class="nav-item" data-page="configuracion"><i class="fas fa-cog"></i> Configuración</a>
+            </nav>
+            <div class="sidebar-footer"><div class="user-info"><div class="avatar" id="sidebar-avatar">--</div><div class="user-details"><h4 id="sidebar-user-name">Cargando...</h4><p id="sidebar-user-role">-</p></div></div></div>
+        </aside>
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left"><button class="menu-toggle" id="menu-toggle"><i class="fas fa-bars"></i></button><div class="header-title"><h1>Usuarios</h1></div></div>
+                <div class="header-right">
+                    <button class="notification-btn" onclick="window.location.href='/alertas'"><i class="fas fa-bell"></i><span class="badge" id="notif-badge" style="display:none">0</span></button>
+                    <div class="header-user" onclick="window.location.href='/perfil'"><div class="avatar" id="header-avatar">--</div><div class="user-meta"><h4 id="header-user-name">Cargando...</h4><p id="header-user-role">-</p></div></div>
+                    <button class="btn btn-sm btn-outline" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </header>
+            <div class="content">
+                <div class="toolbar">
+                    <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Buscar usuario..." oninput="loadUsuarios()"></div>
+                    <select class="filter-select" id="filterRol" onchange="loadUsuarios()"><option value="">Todos los roles</option><option value="Administrador">Administrador</option><option value="Coordinador">Coordinador</option><option value="Docente">Docente</option><option value="Estudiante">Estudiante</option></select>
+                    <select class="filter-select" id="filterEstado" onchange="loadUsuarios()"><option value="">Todos</option><option value="Activo">Activo</option><option value="Inactivo">Inactivo</option></select>
+                    <button class="btn btn-primary" onclick="openNewUser()"><i class="fas fa-plus"></i> Nuevo Usuario</button>
+                </div>
+                <div class="card">
+                    <div class="table-container">
+                        <table class="table">
+                            <thead><tr><th>ID</th><th>Nombre</th><th>Usuario</th><th>Email</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr></thead>
+                            <tbody id="usuarios-table"><tr><td colspan="7"><div class="loading"><div class="spinner"></div></div></td></tr></tbody>
+                        </table>
+                    </div>
+                    <div class="card-body"><div class="pagination" id="pagination"></div></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="modalUsuario">
+        <div class="modal">
+            <div class="modal-header"><h3 id="modal-title">Nuevo Usuario</h3><button class="modal-close" onclick="closeModal('modalUsuario')">&times;</button></div>
+            <div class="modal-body">
+                <input type="hidden" id="usr-id">
+                <div class="form-row">
+                    <div class="form-group"><label>Nombre *</label><input type="text" class="form-control" id="usr-nombre"></div>
+                    <div class="form-group"><label>Apellido *</label><input type="text" class="form-control" id="usr-apellido"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Usuario *</label><input type="text" class="form-control" id="usr-username"></div>
+                    <div class="form-group"><label>Email *</label><input type="email" class="form-control" id="usr-email"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label id="pwd-label">Contraseña *</label><input type="password" class="form-control" id="usr-password"></div>
+                    <div class="form-group"><label>Rol *</label><select class="form-control" id="usr-rol"><option value="1">Administrador</option><option value="2">Coordinador</option><option value="3">Docente</option><option value="4">Estudiante</option></select></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Estado</label><select class="form-control" id="usr-estado"><option value="Activo">Activo</option><option value="Inactivo">Inactivo</option></select></div>
+                </div>
+            </div>
+            <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('modalUsuario')">Cancelar</button><button class="btn btn-primary" onclick="saveUsuario()"><i class="fas fa-save"></i> Guardar</button></div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+    <script>
+        if (!checkAuth()) throw new Error('No auth');
+        let currentPage = 1;
+
+        async function loadUsuarios(page = 1) {
+            currentPage = page;
+            const search = document.getElementById('searchInput').value;
+            const rol = document.getElementById('filterRol').value;
+            const estado = document.getElementById('filterEstado').value;
+            const res = await apiRequest(`/usuarios?search=${encodeURIComponent(search)}&rol=${rol}&estado=${estado}&page=${page}&per_page=10`);
+            const tbody = document.getElementById('usuarios-table');
+            if (!res || !res.success) { tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><i class="fas fa-users"></i><h3>Error al cargar</h3></div></td></tr>'; return; }
+            if (res.data.usuarios.length === 0) { tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><i class="fas fa-users"></i><h3>No hay usuarios</h3></div></td></tr>'; return; }
+            tbody.innerHTML = res.data.usuarios.map(u => `
+                <tr>
+                    <td>${u.id}</td>
+                    <td><strong>${u.nombre} ${u.apellido}</strong></td>
+                    <td>${u.username}</td>
+                    <td>${u.email}</td>
+                    <td><span class="badge badge-info">${u.rol_nombre}</span></td>
+                    <td>${getStatusBadge(u.estado)}</td>
+                    <td class="actions">
+                        <button class="btn btn-icon btn-outline" onclick="editUsuario(${JSON.stringify(u).replace(/"/g, '&quot;')})" title="Editar"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-icon ${u.estado==='Activo'?'btn-warning':'btn-success'}" onclick="toggleUsuario(${u.id})" title="${u.estado==='Activo'?'Desactivar':'Activar'}"><i class="fas fa-${u.estado==='Activo'?'ban':'check'}"></i></button>
+                        <button class="btn btn-icon btn-danger" onclick="deleteUsuario(${u.id})" title="Eliminar"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+
+            const pag = document.getElementById('pagination');
+            if (res.data.pages > 1) {
+                let html = '';
+                if (currentPage > 1) html += `<button onclick="loadUsuarios(${currentPage-1})">&laquo;</button>`;
+                for (let i = 1; i <= res.data.pages; i++) {
+                    html += `<button class="${i===currentPage?'active':''}" onclick="loadUsuarios(${i})">${i}</button>`;
+                }
+                if (currentPage < res.data.pages) html += `<button onclick="loadUsuarios(${currentPage+1})">&raquo;</button>`;
+                pag.innerHTML = html;
+            } else { pag.innerHTML = ''; }
+        }
+
+        function openNewUser() {
+            ['usr-id','usr-nombre','usr-apellido','usr-username','usr-email','usr-password'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('usr-rol').value = '4';
+            document.getElementById('usr-estado').value = 'Activo';
+            document.getElementById('pwd-label').textContent = 'Contraseña *';
+            document.getElementById('modal-title').textContent = 'Nuevo Usuario';
+            openModal('modalUsuario');
+        }
+
+        function editUsuario(u) {
+            document.getElementById('usr-id').value = u.id;
+            document.getElementById('usr-nombre').value = u.nombre;
+            document.getElementById('usr-apellido').value = u.apellido;
+            document.getElementById('usr-username').value = u.username;
+            document.getElementById('usr-email').value = u.email;
+            document.getElementById('usr-rol').value = u.rol_id;
+            document.getElementById('usr-estado').value = u.estado;
+            document.getElementById('usr-password').value = '';
+            document.getElementById('pwd-label').textContent = 'Contraseña (dejar vacío para no cambiar)';
+            document.getElementById('modal-title').textContent = 'Editar Usuario';
+            openModal('modalUsuario');
+        }
+
+        async function saveUsuario() {
+            const id = document.getElementById('usr-id').value;
+            const data = {
+                nombre: document.getElementById('usr-nombre').value,
+                apellido: document.getElementById('usr-apellido').value,
+                username: document.getElementById('usr-username').value,
+                email: document.getElementById('usr-email').value,
+                rol_id: parseInt(document.getElementById('usr-rol').value),
+                estado: document.getElementById('usr-estado').value
+            };
+            const pwd = document.getElementById('usr-password').value;
+            if (pwd) data.password = pwd;
+            if (!id && !pwd) { showToast('La contraseña es requerida para nuevos usuarios', 'error'); return; }
+            if (!data.nombre || !data.apellido || !data.username || !data.email) { showToast('Todos los campos marcados son requeridos', 'error'); return; }
+            let res;
+            if (id) { res = await apiRequest(`/usuarios/${id}`, { method: 'PUT', body: JSON.stringify(data) }); }
+            else { res = await apiRequest('/usuarios', { method: 'POST', body: JSON.stringify(data) }); }
+            if (res && res.success) { showToast(res.message); closeModal('modalUsuario'); loadUsuarios(); }
+            else showToast(res?.message || 'Error al guardar', 'error');
+        }
+
+        async function toggleUsuario(id) {
+            const res = await apiRequest(`/usuarios/${id}/toggle`, { method: 'PUT' });
+            if (res && res.success) { showToast(res.message); loadUsuarios(); }
+            else showToast(res?.message || 'Error', 'error');
+        }
+
+        async function deleteUsuario(id) {
+            confirmDelete(async () => {
+                const res = await apiRequest(`/usuarios/${id}`, { method: 'DELETE' });
+                if (res && res.success) { showToast(res.message); loadUsuarios(); }
+                else showToast(res?.message || 'Error al eliminar', 'error');
+            });
+        }
+
+        loadUsuarios();
+    </script>
+</body>
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programaciones - Bienestar Estudiantil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/responsive.css">
+</head>
+<body>
+    <div class="app-layout">
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header"><div class="sidebar-logo"><div class="logo-icon"><i class="fas fa-heart-pulse"></i></div><div class="logo-text"><h2>Bienestar</h2><p>Estudiantil SENA</p></div></div></div>
+        <nav class="sidebar-nav">
+            <div class="nav-section">Principal</div>
+            <a href="/dashboard" class="nav-item" data-page="dashboard"><i class="fas fa-home"></i> Inicio</a>
+            <div class="nav-section">Gestión</div>
+            <a href="/instituciones" class="nav-item" data-page="instituciones"><i class="fas fa-building"></i> Institución</a>
+            <a href="/cursos" class="nav-item" data-page="cursos"><i class="fas fa-graduation-cap"></i> Académico</a>
+            <a href="/usuarios" class="nav-item" data-page="usuarios"><i class="fas fa-users"></i> Usuarios</a>
+            <div class="nav-section">Actividades</div>
+            <a href="/actividades" class="nav-item" data-page="actividades"><i class="fas fa-calendar-alt"></i> Actividades</a>
+            <a href="/programaciones" class="nav-item active" data-page="programaciones"><i class="fas fa-calendar-check"></i> Programaciones</a>
+            <div class="nav-section">Participación</div>
+            <a href="/encuestas" class="nav-item" data-page="encuestas"><i class="fas fa-clipboard-list"></i> Encuestas</a>
+            <a href="/propuestas" class="nav-item" data-page="propuestas"><i class="fas fa-lightbulb"></i> Propuestas</a>
+            <a href="/alertas" class="nav-item" data-page="alertas"><i class="fas fa-bell"></i> Alertas</a>
+            <div class="nav-section">Sistema</div>
+            <a href="/reportes" class="nav-item" data-page="reportes"><i class="fas fa-chart-bar"></i> Reportes</a>
+            <a href="/auditoria" class="nav-item" data-page="auditoria"><i class="fas fa-history"></i> Auditoría</a>
+            <a href="/configuracion" class="nav-item" data-page="configuracion"><i class="fas fa-cog"></i> Configuración</a>
+        </nav>
+        <div class="sidebar-footer"><div class="user-info"><div class="avatar" id="sidebar-avatar">--</div><div class="user-details"><h4 id="sidebar-user-name">Cargando...</h4><p id="sidebar-user-role">-</p></div></div></div>
+    </aside>
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left"><button class="menu-toggle" id="menu-toggle"><i class="fas fa-bars"></i></button><div class="header-title"><h1>Programaciones</h1></div></div>
+                <div class="header-right">
+                    <button class="notification-btn" onclick="window.location.href='/alertas'"><i class="fas fa-bell"></i><span class="badge" id="notif-badge" style="display:none">0</span></button>
+                    <div class="header-user" onclick="window.location.href='/perfil'"><div class="avatar" id="header-avatar">--</div><div class="user-meta"><h4 id="header-user-name">Cargando...</h4><p id="header-user-role">-</p></div></div>
+                    <button class="btn btn-sm btn-outlined" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </header>
+            <div class="content">
+                <div class="toolbar">
+                    <div class="toolbar-left">
+                        <select id="filter-estado" onchange="filterTable()">
+                            <option value="">Todos los estados</option>
+                            <option value="Programada">Programada</option>
+                            <option value="En curso">En curso</option>
+                            <option value="Finalizada">Finalizada</option>
+                            <option value="Cancelada">Cancelada</option>
+                        </select>
+                    </div>
+                    <div class="toolbar-right">
+                        <button class="btn btn-primary" onclick="openCreateModal()"><i class="fas fa-plus"></i> Nueva Programación</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="programaciones-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Actividad</th>
+                                <th>Curso</th>
+                                <th>Docente</th>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Lugar</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body"></tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="pagination"></div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="create-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Nueva Programación</h3>
+                <button class="modal-close" onclick="closeModal('create-modal')">&times;</button>
+            </div>
+            <form id="create-form" onsubmit="createProgramacion(event)">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Actividad *</label>
+                        <select name="actividad_id" id="select-actividad" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Curso *</label>
+                        <select name="curso_id" id="select-curso" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Docente *</label>
+                        <select name="docente_id" id="select-docente" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha *</label>
+                        <input type="date" name="fecha" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Hora Inicio *</label>
+                        <input type="time" name="hora_inicio" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Hora Final *</label>
+                        <input type="time" name="hora_final" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Lugar</label>
+                        <input type="text" name="lugar">
+                    </div>
+                    <div class="form-group">
+                        <label>Estado *</label>
+                        <select name="estado" required>
+                            <option value="Programada">Programada</option>
+                            <option value="En curso">En curso</option>
+                            <option value="Finalizada">Finalizada</option>
+                            <option value="Cancelada">Cancelada</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outlined" onclick="closeModal('create-modal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="edit-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Editar Programación</h3>
+                <button class="modal-close" onclick="closeModal('edit-modal')">&times;</button>
+            </div>
+            <form id="edit-form" onsubmit="updateProgramacion(event)">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="edit-id">
+                    <div class="form-group">
+                        <label>Actividad *</label>
+                        <select name="actividad_id" id="edit-select-actividad" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Curso *</label>
+                        <select name="curso_id" id="edit-select-curso" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Docente *</label>
+                        <select name="docente_id" id="edit-select-docente" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha *</label>
+                        <input type="date" name="fecha" id="edit-fecha" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Hora Inicio *</label>
+                        <input type="time" name="hora_inicio" id="edit-hora_inicio" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Hora Final *</label>
+                        <input type="time" name="hora_final" id="edit-hora_final" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Lugar</label>
+                        <input type="text" name="lugar" id="edit-lugar">
+                    </div>
+                    <div class="form-group">
+                        <label>Estado *</label>
+                        <select name="estado" id="edit-estado" required>
+                            <option value="Programada">Programada</option>
+                            <option value="En curso">En curso</option>
+                            <option value="Finalizada">Finalizada</option>
+                            <option value="Cancelada">Cancelada</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outlined" onclick="closeModal('edit-modal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+    <script>
+        if (!checkAuth()) throw new Error('No auth');
+        let allProgramaciones = [];
+        let actividadesList = [];
+        let cursosList = [];
+        let docentesList = [];
+        let currentPage = 1;
+
+        async function loadSelects() {
+            try {
+                const [actRes, curRes, docRes] = await Promise.all([
+                    apiRequest('/actividades/all'),
+                    apiRequest('/cursos'),
+                    apiRequest('/usuarios?rol=Docente')
+                ]);
+                actividadesList = actRes.actividades || actRes || [];
+                cursosList = curRes.cursos || curRes || [];
+                docentesList = docRes.usuarios || docRes || [];
+                populateSelect('select-actividad', actividadesList, 'id', 'titulo');
+                populateSelect('select-curso', cursosList, 'id', 'nombre');
+                populateSelect('select-docente', docentesList, 'id', 'nombre');
+                populateSelect('edit-select-actividad', actividadesList, 'id', 'titulo');
+                populateSelect('edit-select-curso', cursosList, 'id', 'nombre');
+                populateSelect('edit-select-docente', docentesList, 'id', 'nombre');
+            } catch (e) {
+                showToast('Error al cargar datos de selects', 'error');
+            }
+        }
+
+        function populateSelect(id, items, valueKey, labelKey) {
+            const sel = document.getElementById(id);
+            sel.innerHTML = '<option value="">Seleccionar...</option>' +
+                items.map(i => `<option value="${i[valueKey]}">${i[labelKey]}</option>`).join('');
+        }
+
+        async function loadData() {
+            try {
+                const data = await apiRequest('/programaciones');
+                allProgramaciones = data.programaciones || data || [];
+                renderTable();
+            } catch (e) {
+                showToast('Error al cargar programaciones', 'error');
+            }
+        }
+
+        function renderTable() {
+            const estadoFilter = document.getElementById('filter-estado').value;
+            let filtered = allProgramaciones.filter(p => !estadoFilter || p.estado === estadoFilter);
+            const perPage = 10;
+            const total = filtered.length;
+            const totalPages = Math.ceil(total / perPage) || 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+            const start = (currentPage - 1) * perPage;
+            const pageData = filtered.slice(start, start + perPage);
+            const tbody = document.getElementById('table-body');
+            if (pageData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" class="text-center">No se encontraron programaciones</td></tr>';
+            } else {
+                tbody.innerHTML = pageData.map(p => `
+                    <tr>
+                        <td>${p.id}</td>
+                        <td>${p.actividad_titulo || p.actividad?.titulo || '-'}</td>
+                        <td>${p.curso_nombre || p.curso?.nombre || '-'}</td>
+                        <td>${p.docente_nombre || p.docente?.nombre || '-'}</td>
+                        <td>${formatDate(p.fecha)}</td>
+                        <td>${p.hora_inicio} - ${p.hora_final}</td>
+                        <td>${p.lugar || '-'}</td>
+                        <td>${getStatusBadge(p.estado)}</td>
+                        <td class="actions">
+                            <button class="btn btn-sm btn-info" onclick="editProgramacion(${p.id})"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteProgramacion(${p.id})"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+            renderPagination(totalPages);
+        }
+
+        function renderPagination(totalPages) {
+            const div = document.getElementById('pagination');
+            if (totalPages <= 1) { div.innerHTML = ''; return; }
+            let html = '';
+            html += `<button class="btn btn-sm" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${currentPage - 1})"><i class="fas fa-chevron-left"></i></button>`;
+            for (let i = 1; i <= totalPages; i++) {
+                html += `<button class="btn btn-sm ${i === currentPage ? 'btn-primary' : ''}" onclick="goToPage(${i})">${i}</button>`;
+            }
+            html += `<button class="btn btn-sm" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${currentPage + 1})"><i class="fas fa-chevron-right"></i></button>`;
+            div.innerHTML = html;
+        }
+
+        function goToPage(page) { currentPage = page; renderTable(); }
+        function filterTable() { currentPage = 1; renderTable(); }
+
+        function openCreateModal() {
+            document.getElementById('create-form').reset();
+            openModal('create-modal');
+        }
+
+        async function createProgramacion(e) {
+            e.preventDefault();
+            const form = e.target;
+            const body = {
+                actividad_id: parseInt(form.actividad_id.value),
+                curso_id: parseInt(form.curso_id.value),
+                docente_id: parseInt(form.docente_id.value),
+                fecha: form.fecha.value,
+                hora_inicio: form.hora_inicio.value,
+                hora_final: form.hora_final.value,
+                lugar: form.lugar.value,
+                estado: form.estado.value
+            };
+            try {
+                await apiRequest('/programaciones', { method: 'POST', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } });
+                showToast('Programación creada exitosamente', 'success');
+                closeModal('create-modal');
+                loadData();
+            } catch (e) {
+                showToast('Error al crear programación', 'error');
+            }
+        }
+
+        async function editProgramacion(id) {
+            try {
+                const data = await apiRequest('/programaciones/' + id);
+                const p = data.programacion || data;
+                document.getElementById('edit-id').value = p.id;
+                document.getElementById('edit-select-actividad').value = p.actividad_id || '';
+                document.getElementById('edit-select-curso').value = p.curso_id || '';
+                document.getElementById('edit-select-docente').value = p.docente_id || '';
+                document.getElementById('edit-fecha').value = p.fecha ? p.fecha.split('T')[0] : '';
+                document.getElementById('edit-hora_inicio').value = p.hora_inicio || '';
+                document.getElementById('edit-hora_final').value = p.hora_final || '';
+                document.getElementById('edit-lugar').value = p.lugar || '';
+                document.getElementById('edit-estado').value = p.estado;
+                openModal('edit-modal');
+            } catch (e) {
+                showToast('Error al cargar programación', 'error');
+            }
+        }
+
+        async function updateProgramacion(e) {
+            e.preventDefault();
+            const form = e.target;
+            const id = form.id.value;
+            const body = {
+                actividad_id: parseInt(form.actividad_id.value),
+                curso_id: parseInt(form.curso_id.value),
+                docente_id: parseInt(form.docente_id.value),
+                fecha: form.fecha.value,
+                hora_inicio: form.hora_inicio.value,
+                hora_final: form.hora_final.value,
+                lugar: form.lugar.value,
+                estado: form.estado.value
+            };
+            try {
+                await apiRequest('/programaciones/' + id, { method: 'PUT', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } });
+                showToast('Programación actualizada exitosamente', 'success');
+                closeModal('edit-modal');
+                loadData();
+            } catch (e) {
+                showToast('Error al actualizar programación', 'error');
+            }
+        }
+
+        async function deleteProgramacion(id) {
+            confirmDelete(async () => {
+                try {
+                    await apiRequest('/programaciones/' + id, { method: 'DELETE' });
+                    showToast('Programación eliminada exitosamente', 'success');
+                    loadData();
+                } catch (e) {
+                    showToast('Error al eliminar programación', 'error');
+                }
+            });
+        }
+
+        loadSelects();
+        loadData();
+    </script>
+</body>
+</html>

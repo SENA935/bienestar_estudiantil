@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursos - Bienestar Estudiantil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/responsive.css">
+</head>
+<body>
+    <div class="app-layout">
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header"><div class="sidebar-logo"><div class="logo-icon"><i class="fas fa-heart-pulse"></i></div><div class="logo-text"><h2>Bienestar</h2><p>Estudiantil SENA</p></div></div></div>
+        <nav class="sidebar-nav">
+            <div class="nav-section">Principal</div>
+            <a href="/dashboard" class="nav-item" data-page="dashboard"><i class="fas fa-home"></i> Inicio</a>
+            <div class="nav-section">Gestión</div>
+            <a href="/instituciones" class="nav-item" data-page="instituciones"><i class="fas fa-building"></i> Institución</a>
+            <a href="/cursos" class="nav-item active" data-page="cursos"><i class="fas fa-graduation-cap"></i> Académico</a>
+            <a href="/usuarios" class="nav-item" data-page="usuarios"><i class="fas fa-users"></i> Usuarios</a>
+            <div class="nav-section">Actividades</div>
+            <a href="/actividades" class="nav-item" data-page="actividades"><i class="fas fa-calendar-alt"></i> Actividades</a>
+            <a href="/programaciones" class="nav-item" data-page="programaciones"><i class="fas fa-calendar-check"></i> Programaciones</a>
+            <div class="nav-section">Participación</div>
+            <a href="/encuestas" class="nav-item" data-page="encuestas"><i class="fas fa-clipboard-list"></i> Encuestas</a>
+            <a href="/propuestas" class="nav-item" data-page="propuestas"><i class="fas fa-lightbulb"></i> Propuestas</a>
+            <a href="/alertas" class="nav-item" data-page="alertas"><i class="fas fa-bell"></i> Alertas</a>
+            <div class="nav-section">Sistema</div>
+            <a href="/reportes" class="nav-item" data-page="reportes"><i class="fas fa-chart-bar"></i> Reportes</a>
+            <a href="/auditoria" class="nav-item" data-page="auditoria"><i class="fas fa-history"></i> Auditoría</a>
+            <a href="/configuracion" class="nav-item" data-page="configuracion"><i class="fas fa-cog"></i> Configuración</a>
+        </nav>
+        <div class="sidebar-footer"><div class="user-info"><div class="avatar" id="sidebar-avatar">--</div><div class="user-details"><h4 id="sidebar-user-name">Cargando...</h4><p id="sidebar-user-role">-</p></div></div></div>
+    </aside>
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left"><button class="menu-toggle" id="menu-toggle"><i class="fas fa-bars"></i></button><div class="header-title"><h1>Cursos</h1></div></div>
+                <div class="header-right">
+                    <button class="notification-btn" onclick="window.location.href='/alertas'"><i class="fas fa-bell"></i><span class="badge" id="notif-badge" style="display:none">0</span></button>
+                    <div class="header-user" onclick="window.location.href='/perfil'"><div class="avatar" id="header-avatar">--</div><div class="user-meta"><h4 id="header-user-name">Cargando...</h4><p id="header-user-role">-</p></div></div>
+                    <button class="btn btn-sm btn-outlined" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </header>
+            <div class="content">
+                <div class="toolbar">
+                    <div class="toolbar-left">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="search-input" placeholder="Buscar curso..." onkeyup="filterTable()">
+                        </div>
+                    </div>
+                    <div class="toolbar-right">
+                        <button class="btn btn-primary" onclick="openCreateModal()"><i class="fas fa-plus"></i> Nuevo Curso</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Grado</th>
+                                <th>Jornada</th>
+                                <th>Director</th>
+                                <th>Estudiantes</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body"></tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="pagination"></div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="create-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Nuevo Curso</h3>
+                <button class="modal-close" onclick="closeModal('create-modal')">&times;</button>
+            </div>
+            <form id="create-form" onsubmit="createCurso(event)">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nombre *</label>
+                        <input type="text" name="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Grado *</label>
+                        <input type="text" name="grado" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Jornada *</label>
+                        <select name="jornada" required>
+                            <option value="Mañana">Mañana</option>
+                            <option value="Tarde">Tarde</option>
+                            <option value="Noche">Noche</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Director</label>
+                        <select name="director_id" id="select-director"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Estado *</label>
+                        <select name="estado" required>
+                            <option value="Activo">Activo</option>
+                            <option value="Inactivo">Inactivo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outlined" onclick="closeModal('create-modal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="edit-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Editar Curso</h3>
+                <button class="modal-close" onclick="closeModal('edit-modal')">&times;</button>
+            </div>
+            <form id="edit-form" onsubmit="updateCurso(event)">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="edit-id">
+                    <div class="form-group">
+                        <label>Nombre *</label>
+                        <input type="text" name="nombre" id="edit-nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Grado *</label>
+                        <input type="text" name="grado" id="edit-grado" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Jornada *</label>
+                        <select name="jornada" id="edit-jornada" required>
+                            <option value="Mañana">Mañana</option>
+                            <option value="Tarde">Tarde</option>
+                            <option value="Noche">Noche</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Director</label>
+                        <select name="director_id" id="edit-director"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Estado *</label>
+                        <select name="estado" id="edit-estado" required>
+                            <option value="Activo">Activo</option>
+                            <option value="Inactivo">Inactivo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outlined" onclick="closeModal('edit-modal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="students-modal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3 id="students-modal-title">Estudiantes del Curso</h3>
+                <button class="modal-close" onclick="closeModal('students-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="toolbar" style="margin-bottom:1rem;">
+                    <button class="btn btn-primary btn-sm" id="btn-add-student" onclick="openAddStudentModal()"><i class="fas fa-plus"></i> Agregar Estudiante</button>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr><th>ID</th><th>Nombre</th><th>Email</th><th>Acciones</th></tr>
+                    </thead>
+                    <tbody id="students-body"></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outlined" onclick="closeModal('students-modal')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="add-student-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Agregar Estudiante</h3>
+                <button class="modal-close" onclick="closeModal('add-student-modal')">&times;</button>
+            </div>
+            <form id="add-student-form" onsubmit="addStudent(event)">
+                <div class="modal-body">
+                    <input type="hidden" id="add-student-curso-id">
+                    <div class="form-group">
+                        <label>Nombre *</label>
+                        <input type="text" name="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Apellido *</label>
+                        <input type="text" name="apellido" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Documento</label>
+                        <input type="text" name="documento">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outlined" onclick="closeModal('add-student-modal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Agregar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+    <script>
+        if (!checkAuth()) throw new Error('No auth');
+        let allCursos = [];
+        let currentPage = 1;
+        let currentCursoId = null;
+
+        async function loadDirectors() {
+            try {
+                const data = await apiRequest('/usuarios');
+                const usuarios = data.usuarios || data || [];
+                const options = '<option value="">Seleccionar...</option>' +
+                    usuarios.map(u => `<option value="${u.id}">${u.nombre} ${u.apellido || ''}</option>`).join('');
+                document.getElementById('select-director').innerHTML = options;
+                document.getElementById('edit-director').innerHTML = options;
+            } catch (e) {}
+        }
+
+        async function loadData() {
+            try {
+                const data = await apiRequest('/cursos');
+                allCursos = data.cursos || data || [];
+                renderTable();
+            } catch (e) {
+                showToast('Error al cargar cursos', 'error');
+            }
+        }
+
+        function renderTable() {
+            const search = document.getElementById('search-input').value.toLowerCase();
+            let filtered = allCursos.filter(c => c.nombre.toLowerCase().includes(search));
+            const perPage = 10;
+            const total = filtered.length;
+            const totalPages = Math.ceil(total / perPage) || 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+            const start = (currentPage - 1) * perPage;
+            const pageData = filtered.slice(start, start + perPage);
+            const tbody = document.getElementById('table-body');
+            if (pageData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center">No se encontraron cursos</td></tr>';
+            } else {
+                tbody.innerHTML = pageData.map(c => `
+                    <tr>
+                        <td>${c.id}</td>
+                        <td>${c.nombre}</td>
+                        <td>${c.grado}</td>
+                        <td>${c.jornada}</td>
+                        <td>${c.director_nombre || c.director?.nombre || '-'}</td>
+                        <td><a href="#" onclick="viewStudents(${c.id}, '${c.nombre}'); return false;" style="color:var(--primary-color);cursor:pointer;">${c.estudiantes_count || 0}</a></td>
+                        <td>${getStatusBadge(c.estado)}</td>
+                        <td class="actions">
+                            <button class="btn btn-sm btn-info" onclick="editCurso(${c.id})"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteCurso(${c.id})"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+            renderPagination(totalPages);
+        }
+
+        function renderPagination(totalPages) {
+            const div = document.getElementById('pagination');
+            if (totalPages <= 1) { div.innerHTML = ''; return; }
+            let html = `<button class="btn btn-sm" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${currentPage - 1})"><i class="fas fa-chevron-left"></i></button>`;
+            for (let i = 1; i <= totalPages; i++) {
+                html += `<button class="btn btn-sm ${i === currentPage ? 'btn-primary' : ''}" onclick="goToPage(${i})">${i}</button>`;
+            }
+            html += `<button class="btn btn-sm" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${currentPage + 1})"><i class="fas fa-chevron-right"></i></button>`;
+            div.innerHTML = html;
+        }
+
+        function goToPage(page) { currentPage = page; renderTable(); }
+        function filterTable() { currentPage = 1; renderTable(); }
+
+        function openCreateModal() {
+            document.getElementById('create-form').reset();
+            openModal('create-modal');
+        }
+
+        async function createCurso(e) {
+            e.preventDefault();
+            const form = e.target;
+            const body = {
+                nombre: form.nombre.value,
+                grado: form.grado.value,
+                jornada: form.jornada.value,
+                director_id: form.director_id.value ? parseInt(form.director_id.value) : null,
+                estado: form.estado.value
+            };
+            try {
+                await apiRequest('/cursos', { method: 'POST', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } });
+                showToast('Curso creado exitosamente', 'success');
+                closeModal('create-modal');
+                loadData();
+            } catch (e) {
+                showToast('Error al crear curso', 'error');
+            }
+        }
+
+        async function editCurso(id) {
+            try {
+                const data = await apiRequest('/cursos/' + id);
+                const c = data.curso || data;
+                document.getElementById('edit-id').value = c.id;
+                document.getElementById('edit-nombre').value = c.nombre;
+                document.getElementById('edit-grado').value = c.grado;
+                document.getElementById('edit-jornada').value = c.jornada;
+                document.getElementById('edit-director').value = c.director_id || '';
+                document.getElementById('edit-estado').value = c.estado;
+                openModal('edit-modal');
+            } catch (e) {
+                showToast('Error al cargar curso', 'error');
+            }
+        }
+
+        async function updateCurso(e) {
+            e.preventDefault();
+            const form = e.target;
+            const body = {
+                nombre: form.nombre.value,
+                grado: form.grado.value,
+                jornada: form.jornada.value,
+                director_id: form.director_id.value ? parseInt(form.director_id.value) : null,
+                estado: form.estado.value
+            };
+            try {
+                await apiRequest('/cursos/' + form.id.value, { method: 'PUT', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } });
+                showToast('Curso actualizado exitosamente', 'success');
+                closeModal('edit-modal');
+                loadData();
+            } catch (e) {
+                showToast('Error al actualizar curso', 'error');
+            }
+        }
+
+        async function deleteCurso(id) {
+            confirmDelete(async () => {
+                try {
+                    await apiRequest('/cursos/' + id, { method: 'DELETE' });
+                    showToast('Curso eliminado exitosamente', 'success');
+                    loadData();
+                } catch (e) {
+                    showToast('Error al eliminar curso', 'error');
+                }
+            });
+        }
+
+        async function viewStudents(cursoId, cursoNombre) {
+            currentCursoId = cursoId;
+            document.getElementById('students-modal-title').textContent = 'Estudiantes - ' + cursoNombre;
+            try {
+                const data = await apiRequest('/cursos/' + cursoId + '/estudiantes');
+                const estudiantes = data.estudiantes || data || [];
+                const tbody = document.getElementById('students-body');
+                if (estudiantes.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center">No hay estudiantes en este curso</td></tr>';
+                } else {
+                    tbody.innerHTML = estudiantes.map(e => `
+                        <tr>
+                            <td>${e.id}</td>
+                            <td>${e.nombre} ${e.apellido || ''}</td>
+                            <td>${e.email || '-'}</td>
+                            <td><button class="btn btn-sm btn-danger" onclick="removeStudent(${e.id})"><i class="fas fa-times"></i></button></td>
+                        </tr>
+                    `).join('');
+                }
+                openModal('students-modal');
+            } catch (e) {
+                showToast('Error al cargar estudiantes', 'error');
+            }
+        }
+
+        function openAddStudentModal() {
+            document.getElementById('add-student-form').reset();
+            document.getElementById('add-student-curso-id').value = currentCursoId;
+            openModal('add-student-modal');
+        }
+
+        async function addStudent(e) {
+            e.preventDefault();
+            const form = e.target;
+            const body = {
+                nombre: form.nombre.value,
+                apellido: form.apellido.value,
+                email: form.email.value,
+                documento: form.documento.value
+            };
+            try {
+                await apiRequest('/cursos/' + currentCursoId + '/estudiantes', { method: 'POST', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } });
+                showToast('Estudiante agregado exitosamente', 'success');
+                closeModal('add-student-modal');
+                viewStudents(currentCursoId, document.getElementById('students-modal-title').textContent.replace('Estudiantes - ', ''));
+                loadData();
+            } catch (e) {
+                showToast('Error al agregar estudiante', 'error');
+            }
+        }
+
+        async function removeStudent(studentId) {
+            confirmDelete(async () => {
+                try {
+                    await apiRequest('/cursos/estudiantes/' + studentId, { method: 'DELETE' });
+                    showToast('Estudiante removido exitosamente', 'success');
+                    viewStudents(currentCursoId, document.getElementById('students-modal-title').textContent.replace('Estudiantes - ', ''));
+                    loadData();
+                } catch (e) {
+                    showToast('Error al remover estudiante', 'error');
+                }
+            });
+        }
+
+        loadDirectors();
+        loadData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuestas - Bienestar Estudiantil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/responsive.css">
+</head>
+<body>
+    <div class="app-layout">
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header"><div class="sidebar-logo"><div class="logo-icon"><i class="fas fa-heart-pulse"></i></div><div class="logo-text"><h2>Bienestar</h2><p>Estudiantil SENA</p></div></div></div>
+        <nav class="sidebar-nav">
+            <div class="nav-section">Principal</div>
+            <a href="/dashboard" class="nav-item" data-page="dashboard"><i class="fas fa-home"></i> Inicio</a>
+            <div class="nav-section">Gestión</div>
+            <a href="/instituciones" class="nav-item" data-page="instituciones"><i class="fas fa-building"></i> Institución</a>
+            <a href="/cursos" class="nav-item" data-page="cursos"><i class="fas fa-graduation-cap"></i> Académico</a>
+            <a href="/usuarios" class="nav-item" data-page="usuarios"><i class="fas fa-users"></i> Usuarios</a>
+            <div class="nav-section">Actividades</div>
+            <a href="/actividades" class="nav-item" data-page="actividades"><i class="fas fa-calendar-alt"></i> Actividades</a>
+            <a href="/programaciones" class="nav-item" data-page="programaciones"><i class="fas fa-calendar-check"></i> Programaciones</a>
+            <div class="nav-section">Participación</div>
+            <a href="/encuestas" class="nav-item" data-page="encuestas"><i class="fas fa-clipboard-list"></i> Encuestas</a>
+            <a href="/propuestas" class="nav-item active" data-page="propuestas"><i class="fas fa-lightbulb"></i> Propuestas</a>
+            <a href="/alertas" class="nav-item" data-page="alertas"><i class="fas fa-bell"></i> Alertas</a>
+            <div class="nav-section">Sistema</div>
+            <a href="/reportes" class="nav-item" data-page="reportes"><i class="fas fa-chart-bar"></i> Reportes</a>
+            <a href="/auditoria" class="nav-item" data-page="auditoria"><i class="fas fa-history"></i> Auditoría</a>
+            <a href="/configuracion" class="nav-item" data-page="configuracion"><i class="fas fa-cog"></i> Configuración</a>
+        </nav>
+        <div class="sidebar-footer"><div class="user-info"><div class="avatar" id="sidebar-avatar">--</div><div class="user-details"><h4 id="sidebar-user-name">Cargando...</h4><p id="sidebar-user-role">-</p></div></div></div>
+    </aside>
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left"><button class="menu-toggle" id="menu-toggle"><i class="fas fa-bars"></i></button><div class="header-title"><h1>Propuestas</h1></div></div>
+                <div class="header-right">
+                    <button class="notification-btn" onclick="window.location.href='/alertas'"><i class="fas fa-bell"></i><span class="badge" id="notif-badge" style="display:none">0</span></button>
+                    <div class="header-user" onclick="window.location.href='/perfil'"><div class="avatar" id="header-avatar">--</div><div class="user-meta"><h4 id="header-user-name">Cargando...</h4><p id="header-user-role">-</p></div></div>
+                    <button class="btn btn-sm btn-outlined" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </header>
+            <div class="content">
+                <div class="toolbar">
+                    <div class="toolbar-left"></div>
+                    <div class="toolbar-right">
+                        <button class="btn btn-primary" id="btn-nueva-propuesta" onclick="openCreateModal()"><i class="fas fa-plus"></i> Nueva Propuesta</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Título</th>
+                                <th>Estudiante</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body"></tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="pagination"></div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="create-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Nueva Propuesta</h3>
+                <button class="modal-close" onclick="closeModal('create-modal')">&times;</button>
+            </div>
+            <form id="create-form" onsubmit="createPropuesta(event)">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Título *</label>
+                        <input type="text" name="titulo" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Descripción *</label>
+                        <textarea name="descripcion" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        <select name="categoria">
+                            <option value="Mejora académica">Mejora académica</option>
+                            <option value="Bienestar">Bienestar</option>
+                            <option value="Infraestructura">Infraestructura</option>
+                            <option value="Actividades">Actividades</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outlined" onclick="closeModal('create-modal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Enviar Propuesta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="evaluate-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Evaluar Propuesta</h3>
+                <button class="modal-close" onclick="closeModal('evaluate-modal')">&times;</button>
+            </div>
+            <form id="evaluate-form" onsubmit="updatePropuesta(event)">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="eval-id">
+                    <div class="form-group">
+                        <label>Estado *</label>
+                        <select name="estado" id="eval-estado" required>
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="En evaluación">En evaluación</option>
+                            <option value="Aprobada">Aprobada</option>
+                            <option value="Rechazada">Rechazada</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Observaciones del coordinador</label>
+                        <textarea name="observaciones" id="eval-observaciones" rows="4"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outlined" onclick="closeModal('evaluate-modal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Evaluación</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="detail-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Detalle de Propuesta</h3>
+                <button class="modal-close" onclick="closeModal('detail-modal')">&times;</button>
+            </div>
+            <div class="modal-body" id="detail-content"></div>
+            <div class="modal-footer">
+                <button class="btn btn-outlined" onclick="closeModal('detail-modal')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+    <script>
+        if (!checkAuth()) throw new Error('No auth');
+        let allPropuestas = [];
+        let currentUserRole = '';
+        let currentPage = 1;
+
+        async function loadData() {
+            try {
+                const data = await apiRequest('/propuestas');
+                allPropuestas = data.propuestas || data || [];
+                renderTable();
+            } catch (e) {
+                showToast('Error al cargar propuestas', 'error');
+            }
+        }
+
+        async function getUserRole() {
+            try {
+                const data = await apiRequest('/perfil');
+                currentUserRole = (data.usuario || data).rol || '';
+                const isEstudiante = currentUserRole === 'Aprendiz' || currentUserRole === 'Estudiante';
+                if (!isEstudiante) {
+                    document.getElementById('btn-nueva-propuesta').style.display = 'none';
+                }
+            } catch (e) {}
+        }
+
+        function renderTable() {
+            const perPage = 10;
+            const total = allPropuestas.length;
+            const totalPages = Math.ceil(total / perPage) || 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+            const start = (currentPage - 1) * perPage;
+            const pageData = allPropuestas.slice(start, start + perPage);
+            const tbody = document.getElementById('table-body');
+            const isCoordinador = currentUserRole === 'Coordinador' || currentUserRole === 'Admin' || currentUserRole === 'Administrador';
+            if (pageData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center">No se encontraron propuestas</td></tr>';
+            } else {
+                tbody.innerHTML = pageData.map(p => `
+                    <tr>
+                        <td>${p.id}</td>
+                        <td>${p.titulo}</td>
+                        <td>${p.estudiante_nombre || p.usuario?.nombre || '-'}</td>
+                        <td>${formatDate(p.fecha_creacion || p.fecha)}</td>
+                        <td>${getStatusBadge(p.estado)}</td>
+                        <td class="actions">
+                            <button class="btn btn-sm btn-info" onclick="viewPropuesta(${p.id})" title="Ver"><i class="fas fa-eye"></i></button>
+                            ${isCoordinador ? `<button class="btn btn-sm btn-warning" onclick="evaluatePropuesta(${p.id})" title="Evaluar"><i class="fas fa-check-circle"></i></button>` : ''}
+                        </td>
+                    </tr>
+                `).join('');
+            }
+            renderPagination(totalPages);
+        }
+
+        function renderPagination(totalPages) {
+            const div = document.getElementById('pagination');
+            if (totalPages <= 1) { div.innerHTML = ''; return; }
+            let html = `<button class="btn btn-sm" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${currentPage - 1})"><i class="fas fa-chevron-left"></i></button>`;
+            for (let i = 1; i <= totalPages; i++) {
+                html += `<button class="btn btn-sm ${i === currentPage ? 'btn-primary' : ''}" onclick="goToPage(${i})">${i}</button>`;
+            }
+            html += `<button class="btn btn-sm" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${currentPage + 1})"><i class="fas fa-chevron-right"></i></button>`;
+            div.innerHTML = html;
+        }
+
+        function goToPage(page) { currentPage = page; renderTable(); }
+
+        function openCreateModal() {
+            document.getElementById('create-form').reset();
+            openModal('create-modal');
+        }
+
+        async function createPropuesta(e) {
+            e.preventDefault();
+            const form = e.target;
+            const body = {
+                titulo: form.titulo.value,
+                descripcion: form.descripcion.value,
+                categoria: form.categoria.value
+            };
+            try {
+                await apiRequest('/propuestas', { method: 'POST', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } });
+                showToast('Propuesta enviada exitosamente', 'success');
+                closeModal('create-modal');
+                loadData();
+            } catch (e) {
+                showToast('Error al crear propuesta', 'error');
+            }
+        }
+
+        async function viewPropuesta(id) {
+            try {
+                const data = await apiRequest('/propuestas/' + id);
+                const p = data.propuesta || data;
+                let html = `<h4>${p.titulo}</h4>`;
+                html += `<p><strong>Estado:</strong> ${getStatusBadge(p.estado)}</p>`;
+                html += `<p><strong>Estudiante:</strong> ${p.estudiante_nombre || p.usuario?.nombre || '-'}</p>`;
+                html += `<p><strong>Fecha:</strong> ${formatDate(p.fecha_creacion || p.fecha)}</p>`;
+                if (p.categoria) html += `<p><strong>Categoría:</strong> ${p.categoria}</p>`;
+                html += `<p><strong>Descripción:</strong></p><p>${p.descripcion}</p>`;
+                if (p.observaciones) html += `<p><strong>Observaciones:</strong></p><p>${p.observaciones}</p>`;
+                document.getElementById('detail-content').innerHTML = html;
+                openModal('detail-modal');
+            } catch (e) {
+                showToast('Error al cargar propuesta', 'error');
+            }
+        }
+
+        async function evaluatePropuesta(id) {
+            try {
+                const data = await apiRequest('/propuestas/' + id);
+                const p = data.propuesta || data;
+                document.getElementById('eval-id').value = p.id;
+                document.getElementById('eval-estado').value = p.estado;
+                document.getElementById('eval-observaciones').value = p.observaciones || '';
+                openModal('evaluate-modal');
+            } catch (e) {
+                showToast('Error al cargar propuesta', 'error');
+            }
+        }
+
+        async function updatePropuesta(e) {
+            e.preventDefault();
+            const form = e.target;
+            const body = {
+                estado: form.estado.value,
+                observaciones: form.observaciones.value
+            };
+            try {
+                await apiRequest('/propuestas/' + form.id.value, { method: 'PUT', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } });
+                showToast('Propuesta actualizada exitosamente', 'success');
+                closeModal('evaluate-modal');
+                loadData();
+            } catch (e) {
+                showToast('Error al actualizar propuesta', 'error');
+            }
+        }
+
+        getUserRole();
+        loadData();
+    </script>
+</body>
+</html>

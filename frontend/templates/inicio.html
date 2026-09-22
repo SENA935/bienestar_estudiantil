@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienestar Estudiantil - Salud Mental y Pausas Activas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/landing.css">
+</head>
+<body>
+    <header class="landing-header">
+        <a href="/" class="logo">
+            <img src="/static/img/logoo1.png" alt="Logo" style="height:40px;width:auto">
+            <span>Salud Mental y Pausas Activas</span>
+        </a>
+        <nav>
+            <a href="#inicio">Inicio</a>
+            <a href="#servicios">Servicios</a>
+            <a href="#blog">Blog</a>
+            <a href="/login" class="btn-login-nav">Iniciar sesión</a>
+        </nav>
+        <button class="menu-toggle" onclick="document.querySelector('.landing-header nav').classList.toggle('mobile-open')">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <section class="hero" id="inicio">
+        <div class="hero-left">
+            <h1>Tu bienestar mental es <span>importante</span></h1>
+            <p>Un espacio de escucha, orientación y crecimiento personal.</p>
+            <div class="hero-buttons">
+                <a href="#servicios" class="btn btn-primary"><i class="fas fa-info-circle"></i> Conoce nuestros servicios</a>
+            </div>
+        </div>
+        <div class="hero-right">
+            <div class="hero-img">
+                <img src="/static/img/logoo1.png" alt="Logo" style="width:100%;max-width:300px;height:auto;opacity:0.8">
+            </div>
+        </div>
+    </section>
+
+    <section class="services-section" id="servicios">
+        <div class="section-title">
+            <h2>Nuestros Servicios</h2>
+            <p>Herramientas y espacios diseñados para tu bienestar integral</p>
+        </div>
+        <div class="services-grid">
+            <a href="https://colectivoaquiyahora.org/que-es-la-terapia-individual/" target="_blank" class="service-card">
+                <div class="icon" style="background:#e0f2fe;color:#0284c7"><i class="fas fa-brain"></i></div>
+                <h3>Salud Mental</h3>
+                <p>Espacios de escucha, orientacion psicologica y apoyo emocional para todos los estudiantes.</p>
+            </a>
+            <a href="https://es.scribd.com/document/562516258/Triptico-pausas-activas" target="_blank" class="service-card">
+                <div class="icon" style="background:var(--success-bg);color:var(--success)"><i class="fas fa-heart"></i></div>
+                <h3>Pausas Activas</h3>
+                <p>Ejercicios guiados de estiramiento y respiracion para recargar energias durante el dia.</p>
+            </a>
+            <a href="https://www.escritosdepsicologia.es/test-para-evaluar-estado-emocional/" target="_blank" class="service-card">
+                <div class="icon" style="background:var(--warning-bg);color:var(--warning)"><i class="fas fa-poll"></i></div>
+                <h3>Encuestas</h3>
+                <p>Instrumentos de diagnostico para conocer el estado emocional y las necesidades de la comunidad.</p>
+            </a>
+            <a href="https://positivepsychology.com/es/libros-de-hojas-de-trabajo-sobre-actividades-de-salud-mental/" target="_blank" class="service-card">
+                <div class="icon" style="background:#f3e8ff;color:#9333ea"><i class="fas fa-running"></i></div>
+                <h3>Actividades</h3>
+                <p>Programas de bienestar con actividades recreativas, deportivas y de formacion integral.</p>
+            </a>
+            <a href="https://positivepsychology.com/es/libros-de-hojas-de-trabajo-sobre-actividades-de-salud-mental/" target="_blank" class="service-card">
+                <div class="icon" style="background:var(--info-bg);color:var(--info)"><i class="fas fa-book-open"></i></div>
+                <h3>Recursos</h3>
+                <p>Material educativo, guias de autocuidado y herramientas para el manejo del estres.</p>
+            </a>
+            <a href="https://www.minsalud.gov.co/salud/publica/salud-mental/Paginas/linea-106.aspx" target="_blank" class="service-card">
+                <div class="icon" style="background:#ccfbf1;color:var(--primary)"><i class="fas fa-hands-helping"></i></div>
+                <h3>Orientacion</h3>
+                <p>Red de apoyo y canal de referenciacion para situaciones que requieran atencion especializada.</p>
+            </a>
+        </div>
+    </section>
+
+    <section class="blog-section" id="blog">
+        <div class="section-title">
+            <h2>Blog</h2>
+            <p>Artículos y novedades sobre bienestar estudiantil</p>
+        </div>
+        <div class="blog-grid">
+            <a href="https://terapeutaia.com/blog/tecnicas-respiracion-ansiedad/" target="_blank" class="blog-card">
+                <div class="img" style="background:linear-gradient(135deg,#dcfce7,#a5f3fc)"><i class="fas fa-spa" style="color:var(--primary);font-size:40px"></i></div>
+                <div class="content">
+                    <span class="badge badge-success" style="background:var(--success-bg);color:#15803d">Bienestar</span>
+                    <h4>5 tecnicas de respiracion para reducir la ansiedad</h4>
+                    <p>Aprende sencillas tecnicas de respiracion que puedes practicar en cualquier momento del dia.</p>
+                    <span class="date"><i class="fas fa-calendar"></i> 20 Agosto, 2026</span>
+                </div>
+            </a>
+            <a href="https://psicologianova.com/psicologia-del-sueno-y-rendimiento-academico/" target="_blank" class="blog-card">
+                <div class="img" style="background:linear-gradient(135deg,#fef3c7,#fde68a)"><i class="fas fa-brain" style="color:var(--warning);font-size:40px"></i></div>
+                <div class="content">
+                    <span class="badge badge-warning" style="background:var(--warning-bg);color:#b45309">Salud Mental</span>
+                    <h4>El impacto del sueno en el rendimiento academico</h4>
+                    <p>Descubre por que dormir bien es clave para tu concentracion y aprendizaje.</p>
+                    <span class="date"><i class="fas fa-calendar"></i> 18 Agosto, 2026</span>
+                </div>
+            </a>
+            <a href="https://nuevaescuelamexicana.sep.gob.mx/contenido/coleccion/construccion-de-entornos-saludables-en-la-escuela/" target="_blank" class="blog-card">
+                <div class="img" style="background:linear-gradient(135deg,#e0f2fe,#bae6fd)"><i class="fas fa-users" style="color:#0284c7;font-size:40px"></i></div>
+                <div class="content">
+                    <span class="badge badge-info" style="background:var(--info-bg);color:#0891b2">Comunidad</span>
+                    <h4>Como construir relaciones saludables en el entorno escolar</h4>
+                    <p>Estrategias para fomentar la empatia y el respeto entre companeros.</p>
+                    <span class="date"><i class="fas fa-calendar"></i> 15 Agosto, 2026</span>
+                </div>
+            </a>
+            <a href="https://actosenlaescuela.com/mindfulness-en-el-aula/" target="_blank" class="blog-card">
+                <div class="img" style="background:linear-gradient(135deg,#f3e8ff,#e9d5ff)"><i class="fas fa-om" style="color:#9333ea;font-size:40px"></i></div>
+                <div class="content">
+                    <span class="badge badge-purple" style="background:#f3e8ff;color:#9333ea">Mindfulness</span>
+                    <h4>Mindfulness en el aula: beneficios comprobados</h4>
+                    <p>La practica de atencion plena puede transformar el clima del aula y mejorar el bienestar.</p>
+                    <span class="date"><i class="fas fa-calendar"></i> 12 Agosto, 2026</span>
+                </div>
+            </a>
+            <a href="https://www.selia.co/blog/senales-prestar-atencion-salud-mental" target="_blank" class="blog-card">
+                <div class="img" style="background:linear-gradient(135deg,#fee2e2,#fecaca)"><i class="fas fa-hand-holding-heart" style="color:var(--danger);font-size:40px"></i></div>
+                <div class="content">
+                    <span class="badge badge-danger" style="background:var(--danger-bg);color:#dc2626">Cuidado</span>
+                    <h4>Senales de alerta: cuando pedir ayuda profesional</h4>
+                    <p>Identifica las senales tempranas y conoce los recursos disponibles de apoyo.</p>
+                    <span class="date"><i class="fas fa-calendar"></i> 10 Agosto, 2026</span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <footer class="landing-footer">
+        <p>&copy; 2026 Bienestar Estudiantil - Salud Mental y Pausas Activas. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

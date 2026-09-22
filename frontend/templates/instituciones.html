@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instituciones - Bienestar Estudiantil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/responsive.css">
+</head>
+<body>
+    <div class="app-layout">
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="logo-icon"><i class="fas fa-heart-pulse"></i></div>
+                    <div class="logo-text"><h2>Bienestar</h2><p>Estudiantil SENA</p></div>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">Principal</div>
+                <a href="/dashboard" class="nav-item" data-page="dashboard"><i class="fas fa-home"></i> Inicio</a>
+                <div class="nav-section">Gestión</div>
+                <a href="/instituciones" class="nav-item active" data-page="instituciones"><i class="fas fa-building"></i> Institución</a>
+                <a href="/cursos" class="nav-item" data-page="cursos"><i class="fas fa-graduation-cap"></i> Académico</a>
+                <a href="/usuarios" class="nav-item" data-page="usuarios"><i class="fas fa-users"></i> Usuarios</a>
+                <div class="nav-section">Actividades</div>
+                <a href="/actividades" class="nav-item" data-page="actividades"><i class="fas fa-calendar-alt"></i> Actividades</a>
+                <a href="/programaciones" class="nav-item" data-page="programaciones"><i class="fas fa-calendar-check"></i> Programaciones</a>
+                <div class="nav-section">Participación</div>
+                <a href="/encuestas" class="nav-item" data-page="encuestas"><i class="fas fa-clipboard-list"></i> Encuestas</a>
+                <a href="/propuestas" class="nav-item" data-page="propuestas"><i class="fas fa-lightbulb"></i> Propuestas</a>
+                <a href="/alertas" class="nav-item" data-page="alertas"><i class="fas fa-bell"></i> Alertas</a>
+                <div class="nav-section">Sistema</div>
+                <a href="/reportes" class="nav-item" data-page="reportes"><i class="fas fa-chart-bar"></i> Reportes</a>
+                <a href="/auditoria" class="nav-item" data-page="auditoria"><i class="fas fa-history"></i> Auditoría</a>
+                <a href="/configuracion" class="nav-item" data-page="configuracion"><i class="fas fa-cog"></i> Configuración</a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="avatar" id="sidebar-avatar">--</div>
+                    <div class="user-details"><h4 id="sidebar-user-name">Cargando...</h4><p id="sidebar-user-role">-</p></div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menu-toggle"><i class="fas fa-bars"></i></button>
+                    <div class="header-title"><h1>Instituciones</h1></div>
+                </div>
+                <div class="header-right">
+                    <button class="notification-btn" onclick="window.location.href='/alertas'"><i class="fas fa-bell"></i><span class="badge" id="notif-badge" style="display:none">0</span></button>
+                    <div class="header-user" onclick="window.location.href='/perfil'">
+                        <div class="avatar" id="header-avatar">--</div>
+                        <div class="user-meta"><h4 id="header-user-name">Cargando...</h4><p id="header-user-role">-</p></div>
+                    </div>
+                    <button class="btn btn-sm btn-outline" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </header>
+            <div class="content">
+                <div class="toolbar">
+                    <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Buscar institución..." oninput="loadInstituciones()"></div>
+                    <button class="btn btn-primary" onclick="openModal('modalInstitucion')"><i class="fas fa-plus"></i> Nueva Institución</button>
+                </div>
+                <div class="card">
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr><th>ID</th><th>Nombre</th><th>NIT</th><th>Teléfono</th><th>Email</th><th>Sedes</th><th>Estado</th><th>Acciones</th></tr>
+                            </thead>
+                            <tbody id="instituciones-table"><tr><td colspan="8"><div class="loading"><div class="spinner"></div></div></td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="modalInstitucion">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modal-title">Nueva Institución</h3>
+                <button class="modal-close" onclick="closeModal('modalInstitucion')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="inst-id">
+                <div class="form-group"><label>Nombre *</label><input type="text" class="form-control" id="inst-nombre"></div>
+                <div class="form-row">
+                    <div class="form-group"><label>NIT *</label><input type="text" class="form-control" id="inst-nit"></div>
+                    <div class="form-group"><label>Teléfono</label><input type="text" class="form-control" id="inst-telefono"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Email</label><input type="email" class="form-control" id="inst-email"></div>
+                    <div class="form-group"><label>Estado</label>
+                        <select class="form-control" id="inst-estado"><option value="Activa">Activa</option><option value="Inactiva">Inactiva</option></select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('modalInstitucion')">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveInstitucion()"><i class="fas fa-save"></i> Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+    <script>
+        if (!checkAuth()) throw new Error('No auth');
+
+        async function loadInstituciones() {
+            const search = document.getElementById('searchInput').value;
+            const res = await apiRequest(`/instituciones?search=${encodeURIComponent(search)}`);
+            const tbody = document.getElementById('instituciones-table');
+            if (!res || !res.success || res.data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><i class="fas fa-building"></i><h3>No hay instituciones</h3></div></td></tr>';
+                return;
+            }
+            tbody.innerHTML = res.data.map(i => `
+                <tr>
+                    <td>${i.id}</td>
+                    <td><strong>${i.nombre}</strong></td>
+                    <td>${i.nit}</td>
+                    <td>${i.telefono || '-'}</td>
+                    <td>${i.email || '-'}</td>
+                    <td>${i.sedes_count || 0}</td>
+                    <td>${getStatusBadge(i.estado)}</td>
+                    <td class="actions">
+                        <button class="btn btn-icon btn-outline" onclick="editInstitucion(${i.id})" title="Editar"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-icon btn-danger" onclick="deleteInstitucion(${i.id})" title="Eliminar"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function openNewInstitucion() {
+            document.getElementById('inst-id').value = '';
+            document.getElementById('inst-nombre').value = '';
+            document.getElementById('inst-nit').value = '';
+            document.getElementById('inst-telefono').value = '';
+            document.getElementById('inst-email').value = '';
+            document.getElementById('inst-estado').value = 'Activa';
+            document.getElementById('modal-title').textContent = 'Nueva Institución';
+            openModal('modalInstitucion');
+        }
+
+        async function editInstitucion(id) {
+            const res = await apiRequest('/instituciones');
+            const inst = res.data.find(i => i.id === id);
+            if (!inst) return;
+            document.getElementById('inst-id').value = inst.id;
+            document.getElementById('inst-nombre').value = inst.nombre;
+            document.getElementById('inst-nit').value = inst.nit;
+            document.getElementById('inst-telefono').value = inst.telefono || '';
+            document.getElementById('inst-email').value = inst.email || '';
+            document.getElementById('inst-estado').value = inst.estado;
+            document.getElementById('modal-title').textContent = 'Editar Institución';
+            openModal('modalInstitucion');
+        }
+
+        async function saveInstitucion() {
+            const id = document.getElementById('inst-id').value;
+            const data = {
+                nombre: document.getElementById('inst-nombre').value,
+                nit: document.getElementById('inst-nit').value,
+                telefono: document.getElementById('inst-telefono').value,
+                email: document.getElementById('inst-email').value,
+                estado: document.getElementById('inst-estado').value
+            };
+            if (!data.nombre || !data.nit) { showToast('Nombre y NIT son requeridos', 'error'); return; }
+            let res;
+            if (id) { res = await apiRequest(`/instituciones/${id}`, { method: 'PUT', body: JSON.stringify(data) }); }
+            else { res = await apiRequest('/instituciones', { method: 'POST', body: JSON.stringify(data) }); }
+            if (res && res.success) {
+                showToast(res.message);
+                closeModal('modalInstitucion');
+                loadInstituciones();
+            } else {
+                showToast(res?.message || 'Error al guardar', 'error');
+            }
+        }
+
+        async function deleteInstitucion(id) {
+            confirmDelete(async () => {
+                const res = await apiRequest(`/instituciones/${id}`, { method: 'DELETE' });
+                if (res && res.success) { showToast(res.message); loadInstituciones(); }
+                else showToast(res?.message || 'Error al eliminar', 'error');
+            });
+        }
+
+        loadInstituciones();
+    </script>
+</body>
+</html>

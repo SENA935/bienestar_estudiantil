@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pausas Activas - Bienestar Estudiantil</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/pausas.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#hero" class="nav-logo">
+                <div class="logo-icon"><i class="fas fa-heart-pulse"></i></div>
+                <span>Bienestar <strong>Estudiantil</strong></span>
+            </a>
+            <div class="nav-links" id="navLinks">
+                <a href="#hero">Inicio</a>
+                <a href="#que-es">Qué es</a>
+                <a href="#ejercicios">Ejercicios</a>
+                <a href="#beneficios">Beneficios</a>
+                <a href="#temporizador">Temporizador</a>
+                <a href="#tips">Tips</a>
+            </div>
+            <div class="nav-actions">
+                <a href="/login" class="btn-login"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
+                <button class="nav-toggle" id="navToggle"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+        <div class="hero-bg">
+            <div class="hero-shape shape-1"></div>
+            <div class="hero-shape shape-2"></div>
+            <div class="hero-shape shape-3"></div>
+        </div>
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge"><i class="fas fa-bolt"></i> Salud y Bienestar</div>
+                <h1>Toma una <span class="text-gradient">Pausa Activa</span> y recarga tu energía</h1>
+                <p>Ejercicios breves de estiramiento y movimiento diseñados para reducir el estrés, mejorar la circulación y mantener tu bienestar durante la jornada académica.</p>
+                <div class="hero-buttons">
+                    <a href="#ejercicios" class="btn btn-primary btn-lg"><i class="fas fa-play"></i> Comenzar Ahora</a>
+                    <a href="#que-es" class="btn btn-outline btn-lg"><i class="fas fa-info-circle"></i> Saber Más</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat"><div class="stat-num" data-target="10">0</div><div class="stat-label">Minutos máx.</div></div>
+                    <div class="stat"><div class="stat-num" data-target="15">0</div><div class="stat-label">Ejercicios</div></div>
+                    <div class="stat"><div class="stat-num" data-target="5">0</div><div class="stat-label">Categorías</div></div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-card floating">
+                    <div class="pulse-ring"></div>
+                    <i class="fas fa-person-running"></i>
+                </div>
+                <div class="hero-card floating-delayed">
+                    <i class="fas fa-spa"></i>
+                </div>
+                <div class="hero-card floating-slow">
+                    <i class="fas fa-brain"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- QUÉ ES -->
+    <section class="section" id="que-es">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag"><i class="fas fa-question-circle"></i> ¿Qué son?</span>
+                <h2>Pausas Activas</h2>
+                <p>Movimientos cortos que rompen la rutina sedentaria y activan tu cuerpo y mente</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon" style="background:rgba(37,99,235,0.1);color:#2563EB"><i class="fas fa-clock"></i></div>
+                    <h3>Duración corta</h3>
+                    <p>Cada pausa dura entre 3 y 10 minutos. Ideal para hacer entre clases o durante los descansos.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" style="background:rgba(16,185,129,0.1);color:#10B981"><i class="fas fa-chair"></i></div>
+                    <h3>Sin equipamiento</h3>
+                    <p>No necesitas nada especial. Puedes hacerlos sentado, parado o de pie, en cualquier espacio.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" style="background:rgba(245,158,11,0.1);color:#F59E0B"><i class="fas fa-users"></i></div>
+                    <h3>En grupo o solo</h3>
+                    <p>Puedes realizarlas individualmente o acompañado. Son perfectas para hacer en grupo.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" style="background:rgba(139,92,246,0.1);color:#8B5CF6"><i class="fas fa-shield-heart"></i></div>
+                    <h3>Prevención</h3>
+                    <p>Ayudan a prevenir dolores de espalda, cuello, cabeza y problemas posturales a largo plazo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EJERCICIOS -->
+    <section class="section section-dark" id="ejercicios">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag"><i class="fas fa-dumbbell"></i> Ejercicios</span>
+                <h2>Elige tu Pausa Activa</h2>
+                <p>Categorías de ejercicios diseñados para diferentes necesidades</p>
+            </div>
+
+            <div class="exercise-filters">
+                <button class="filter-btn active" data-filter="all"><i class="fas fa-th"></i> Todos</button>
+                <button class="filter-btn" data-filter="estiramiento"><i class="fas fa-hand-sparkles"></i> Estiramientos</button>
+                <button class="filter-btn" data-filter="respiracion"><i class="fas fa-wind"></i> Respiración</button>
+                <button class="filter-btn" data-filter="ojos"><i class="fas fa-eye"></i> Ojos</button>
+                <button class="filter-btn" data-filter="activo"><i class="fas fa-person-running"></i> Activo</button>
+                <button class="filter-btn" data-filter="mental"><i class="fas fa-brain"></i> Mental</button>
+            </div>
+
+            <div class="exercises-grid" id="exercisesGrid">
+                <!-- Estiramientos -->
+                <div class="exercise-card" data-category="estiramiento">
+                    <div class="exercise-number">01</div>
+                    <div class="exercise-emoji">🙆</div>
+                    <h4>Estiramiento de Cuello</h4>
+                    <p>Inclina suavemente la cabeza hacia cada lado, manteniendo 15 segundos por lado.</p>
+                    <div class="exercise-meta">
+                        <span><i class="fas fa-clock"></i> 2 min</span>
+                        <span><i class="fas fa-signal"></i> Fácil</span>
+                    </div>
+                    <button class="btn btn-sm btn-primary" onclick="startExercise(this, 120, 'Estiramiento de Cuello', 'Inclina suavemente la cabeza a la derecha, mantén 15 segundos. Luego a la izquierda. Repite 4 veces.')"><i class="fas fa-play"></i> Iniciar</button>
+                </div>
+
+                <div class="exercise-card" data-category="estiramiento">
+                    <div class="exercise-number">02</div>
+                    <div class="exercise-emoji">💆</div>
+                    <h4>Estiramiento de Hombros</h4>
+                    <p>Rota los hombros hacia adelante y hacia atrás, 10 veces en cada dirección.</p>
+                    <div class="exercise-meta">
+                        <span><i class="fas fa-clock"></i> 2 min</span>
+                        <span><i class="fas fa-signal"></i> Fácil</span>
+                    </div>
+                    <button class="btn btn-sm btn-primary" onclick="startExercise(this, 120, 'Estiramiento de Hombros', 'Rota los hombros 10 veces hacia adelante, luego 10 veces hacia atrás. Mantén la espalda recta.')"><i class="fas fa-play"></i> Iniciar</button>
+                </div>
+
+                <div class="exercise-card" data-category="estiramiento">
+                    <div class="exercise-number">03</div>
+                    <div class="exercise-emoji">🤲</div>
+                    <h4>Estiramiento de Muñecas</h4>
+                    <p>Extiende un brazo, con la otra mano jala los dedos hacia atrás suavemente.</p>
+                    <div class="exercise-meta">
+                        <span><i class="fas fa-clock"></i> 2 min</span>
+                        <span><i class="fas fa-signal"></i> Fácil</span>
+                    </div>
+                    <button class="btn btn-sm btn-primary" onclick="startExercise(this, 120, 'Estiramiento de Muñecas', 'Extiende el brazo derecho, jala los dedos hacia atrás con la mano izquierda. Mantén 15 seg. Cambia de mano.')"><i class="fas fa-play"></i> Iniciar</button>
+                </div>
+
+                <div class="exercise-card" data-category="estiramiento">
+                    <div class="exercise-number">04</div>
+                    <div class="exercise-emoji">🧘</div>
+                    <h4>Estiramiento de Espalda</h4>
+                    <p>De pie, junta las manos detrás y abre el pecho. Mantén 20 segundos.</p>
+                    <div class="exercise-meta">
+                        <span><i class="fas fa-clock"></i> 3 min</span>
+                        <span><i class="fas fa-signal"></i> Fácil</span>
+                    </div>
+                    <button class="btn btn-sm btn-primary" onclick="startExercise(this, 180, 'Estiramiento de Espalda', 'De pie, junta las manos detrás de tu espalda. Abre el pecho y levanta ligeramente los brazos. Mantén 20 segundos.')"><i class="fas fa-play"></i> Iniciar</button>
+                </div>
+
+                <!-- Respiración -->
+                <div class="exercise-card" data-category="respiracion">
+                    <div class="exercise-number">05</div>
+                    <div class="exercise-emoji">🌬️</div>
+                    <h4>Respiración 4-7-8</h4>
+                    <p>Inhala 4 seg, sostén 7 seg, exhala 8 seg. Repite 4 ciclos.</p>
+                    <div class="exercise-meta">
+                        <span><i class="fas fa-clock"></i> 3 min</span>
+                        <span><i class="fas fa-signal"></i> Fácil</span>
+                    </div>
+                    <button class="btn btn-sm btn-primary" onclick="startExercise(this, 180, 'Respiración 4-7-8', 'Inhala por la nariz contando 4 segundos. Sostén el aire 7 segundos. Exhala por la boca contando 8 segundos. Repite 4 veces.')"><i class="fas fa-play"></i> Iniciar</button>
+                </div>
+
+                <div class="exercise-card" data-category="respiracion">
+                    <div class="exercise-number">06</div>
+                    <div class="exercise-emoji">🫁</div>
+                    <h4>Respiración Diafragmática</h4>
+                    <p>Coloca una mano en el pecho y otra en el abdomen. Respira hondo por la nariz.</p>
+                    <div class="exercise-meta">
+                        <span><i class="fas fa-clock"></i> 4 min</span>
+                        <span><i class="fas fa-signal"></i> Moderado</span>
+                    </div>
+                    <button class="btn btn-sm btn-primary" onclick="startExercise(this, 240, 'Respiración Diafragmática', 'Coloca una mano en el pecho y otra en el abdomen. Inhala por la nariz sintiendo cómo se infla el abdomen. Exhala lentamente. Repite 10 veces.')"><i class="fas fa-play"></i> Iniciar</button>
+                </div>
+
+                <!-- Ojos -->
+                <div class="exercise-card" data-category="ojos">
+                    <div class="exercise-number">07</div>
+                    <div class="exercise-emoji">👀</div>
+                    <h4>Regla 20-20-20</h4>
+                    <p>Cada 20 minutos, mira un objeto a 20 pies (6m) durante 20 segundos.</p>
+                    <div class="exercise-meta">
+                        <span><i class="fas fa-clock"></i> 1 min</span>
+                        <span><i class="fas fa-signal"></i> Fácil</span>
+                    </div>
+                    <button class="btn btn-sm btn-primary" onclick="startExercise(this, 60, 'Regla 20-20-20', 'Mira un punto lejano (al menos 6 metros). Parpadea suavemente durante 20 segundos. Esto relaja los músculos oculares.')"><i class="fas fa-play"></i> Iniciar</button>
+                </div>
+
+                <div class="exercise-card" data-category="ojos">
+                    <div class="exercise-number">08</div>
+                    <div class="exercise-emoji">🙈</div>
+                    <h4>Palming Visual</h4>
+                    <p>Frota las manos para calentarlas y colócalas sobre los ojos cerrados.</p>
+                    <div class="exercise-meta">
+                        <span><i class="fas fa-clock"></i> 2 min</span>
+                        <span><i class="fas fa-signal"></i> Fácil</span>
+                    </div>
+                    <button class="btn btn-sm btn-primary" onclick="startExercise(this, 120, 'Palming Visual', 'Frota tus manos una contra otra durante 10 segundos. Cierra los ojos y coloca las palmas sobre ellos. Respira profundamente durante 1 minuto.')"><i class="fas fa-play"></i> Iniciar</button>
+                </div>
+
+                <!-- Activos -->
+                <div class="exercise-card" data-category="activo">
+                    <div class="exercise-number">09</div>
+                    <div class="exercise-emoji">🏃</div>
+                    <h4>Marcha en el Lugar</h4>
+                    <p>Camina elevando las rodillas alternadamente, 30 segundos rápido y 30 lento.</p>
+                    <div class="exercise-meta">
+                        <span><i class="fas fa-clock"></i> 5 min</span>
+                        <span><i class="fas fa-signal"></i> Moderado</span>
+                    </div>
+                    <button class="btn btn-sm btn-primary" onclick="startExercise(this, 300, 'Marcha en el Lugar', 'Camina en el lugar elevando las rodillas. 30 segundos rápido, 30 segundos lento. Mantén el ritmo por 5 minutos.')"><i class="fas fa-play"></i> Iniciar</button>
+                </div>
+
+                <div class="exercise-card" data-category="activo">
+                    <div class="exercise-number">10</div>
+                    <div class="exercise-emoji">💪</div>
+                    <h4>Sentadillas</h4>
+                    <p>Realiza 10 sentadillas lentas manteniendo la espalda recta y los brazos al frente.</p>
+                    <div class="exercise-meta">
+                        <span><i class="fas fa-clock"></i> 3 min</span>
+                        <span><i class="fas fa-signal"></i> Moderado</span>
+                    </div>
+                    <button class="btn btn-sm btn-primary" onclick="startExercise(this, 180, 'Sentadillas', 'Baja flexionando las rodillas como si te sentaras. Mantén la espalda recta. Sube lentamente. Haz 10 repeticiones, descansa 30 seg, repite.')"><i class="fas fa-play"></i> Iniciar</button>
+                </div>
+
+                <div class="exercise-card" data-category="activo">
+                    <div class="exercise-number">11</div>
+                    <div class="exercise-emoji">🦵</div>
+                    <h4>Saltos de Tijera</h4>
+                    <p>Abre y cierra los brazos y piernas simultáneamente. 20 repeticiones.</p>
+                    <div class="exercise-meta">
+                        <span><i class="fas fa-clock"></i> 4 min</span>
+                        <span><i class="fas fa-signal"></i> Intenso</span>
+                    </div>
+                    <button class="btn btn-sm btn-primary" onclick="startExercise(this, 240, 'Saltos de Tijera', 'Salta abriendo piernas y brazos a la vez. Luego salta cerrando. Haz 20 repeticiones. Descansa 30 seg. Repite 3 series.')"><i class="fas fa-play"></i> Iniciar</button>
+                </div>
+
+                <!-- Mental -->
+                <div class="exercise-card" data-category="mental">
+                    <div class="exercise-number">12</div>
+                    <div class="exercise-emoji">🧠</div>
+                    <h4>Meditación Guiada</h4>
+                    <p>Cierra los ojos, enfócate en tu respiración y observes tus pensamientos sin juzgar.</p>
+                    <div class="exercise-meta">
+                        <span><i class="fas fa-clock"></i> 5 min</span>
+                        <span><i class="fas fa-signal"></i> Fácil</span>
+                    </div>
+                    <button class="btn btn-sm btn-primary" onclick="startExercise(this, 300, 'Meditación Guiada', 'Cierra los ojos. Respira profundamente. Observa cada inhalación y exhalación. Si tu mente divaga, vuelve a enfocarte en la respiración. 5 minutos.')"><i class="fas fa-play"></i> Iniciar</button>
+                </div>
+
+                <div class="exercise-card" data-category="mental">
+                    <div class="exercise-number">13</div>
+                    <div class="exercise-emoji">🌈</div>
+                    <h4>Visualización Positiva</h4>
+                    <p>Imagina un lugar tranquilo y seguro. Describe mentalmente cada detalle.</p>
+                    <div class="exercise-meta">
+                        <span><i class="fas fa-clock"></i> 4 min</span>
+                        <span><i class="fas fa-signal"></i> Fácil</span>
+                    </div>
+                    <button class="btn btn-sm btn-primary" onclick="startExercise(this, 240, 'Visualización Positiva', 'Cierra los ojos. Imagina un lugar que te haga sentir en paz. Observa los colores, escucha los sonidos, siente la brisa. Disfruta ese momento por 4 minutos.')"><i class="fas fa-play"></i> Iniciar</button>
+                </div>
+
+                <div class="exercise-card" data-category="estiramiento">
+                    <div class="exercise-number">14</div>
+                    <div class="exercise-emoji">🙆‍♀️</div>
+                    <h4>Estiramiento de Piernas</h4>
+                    <p>De pie, lleva un talón al glúteo, sostén 15 seg. Cambia de pierna.</p>
+                    <div class="exercise-meta">
+                        <span><i class="fas fa-clock"></i> 3 min</span>
+                        <span><i class="fas fa-signal"></i> Fácil</span>
+                    </div>
+                    <button class="btn btn-sm btn-primary" onclick="startExercise(this, 180, 'Estiramiento de Piernas', 'De pie, dobla la rodilla derecha llevando el talón al glúteo. Sostén 15 segundos con la mano. Cambia de pierna. Repite 3 veces cada una.')"><i class="fas fa-play"></i> Iniciar</button>
+                </div>
+
+                <div class="exercise-card" data-category="respiracion">
+                    <div class="exercise-number">15</div>
+                    <div class="exercise-emoji">😮‍💨</div>
+                    <h4>Respiración con Conteo</h4>
+                    <p>Inhala contando del 1 al 5, exhala del 5 al 1. Repite 6 veces.</p>
+                    <div class="exercise-meta">
+                        <span><i class="fas fa-clock"></i> 3 min</span>
+                        <span><i class="fas fa-signal"></i> Fácil</span>
+                    </div>
+                    <button class="btn btn-sm btn-primary" onclick="startExercise(this, 180, 'Respiración con Conteo', 'Inhala por la nariz contando 1-2-3-4-5. Sostén un instante. Exhala por la boca contando 5-4-3-2-1. Repite 6 veces.')"><i class="fas fa-play"></i> Iniciar</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BENEFICIOS -->
+    <section class="section" id="beneficios">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag"><i class="fas fa-star"></i> Beneficios</span>
+                <h2>¿Por qué hacer Pausas Activas?</h2>
+                <p>Los beneficios respaldados por la ciencia</p>
+            </div>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-num">01</div>
+                    <div class="benefit-icon"><i class="fas fa-brain"></i></div>
+                    <h3>Reduce el estrés</h3>
+                    <p>Las pausas activas disminuyen los niveles de cortisol y promueven la relajación mental.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-num">02</div>
+                    <div class="benefit-icon"><i class="fas fa-heart-pulse"></i></div>
+                    <h3>Mejora la circulación</h3>
+                    <p>El movimiento continuo activa el flujo sanguíneo y previene la hinchazón en piernas y pies.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-num">03</div>
+                    <div class="benefit-icon"><i class="fas fa-bolt"></i></div>
+                    <h3>Aumenta la energía</h3>
+                    <p>Un breve movimiento libera endorfinas que incrementan tu nivel de energía y motivación.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-num">04</div>
+                    <div class="benefit-icon"><i class="fas fa-eye"></i></div>
+                    <h3>Protege la vista</h3>
+                    <p>Descansos visuales previenen el ojo seco, la fatiga visual y los dolores de cabeza.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-num">05</div>
+                    <div class="benefit-icon"><i class="fas fa-arrows-left-right"></i></div>
+                    <h3>Mejora la postura</h3>
+                    <p>Los estiramientos corrigen malas posturas y fortalecen los músculos de la espalda.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-num">06</div>
+                    <div class="benefit-icon"><i class="fas fa-lightbulb"></i></div>
+                    <h3>Incrementa la concentración</h3>
+                    <p>Después de una pausa activa, la capacidad de enfoque y productividad aumenta notablemente.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TEMPORIZADOR -->
+    <section class="section section-gradient" id="temporizador">
+        <div class="container">
+            <div class="timer-wrapper">
+                <div class="timer-content">
+                    <span class="section-tag tag-light"><i class="fas fa-stopwatch"></i> Temporizador</span>
+                    <h2>Tu Pausa Activa</h2>
+                    <p>Configura el tiempo de tu pausa y sigue las instrucciones</p>
+
+                    <div class="timer-presets">
+                        <button class="preset-btn" data-time="60">1 min</button>
+                        <button class="preset-btn active" data-time="180">3 min</button>
+                        <button class="preset-btn" data-time="300">5 min</button>
+                        <button class="preset-btn" data-time="600">10 min</button>
+                    </div>
+
+                    <div class="timer-circle">
+                        <svg viewBox="0 0 200 200">
+                            <circle class="timer-bg" cx="100" cy="100" r="90"/>
+                            <circle class="timer-progress" id="timerProgress" cx="100" cy="100" r="90"/>
+                        </svg>
+                        <div class="timer-display">
+                            <div class="timer-time" id="timerDisplay">03:00</div>
+                            <div class="timer-status" id="timerStatus">Listo</div>
+                        </div>
+                    </div>
+
+                    <div class="timer-instruction" id="timerInstruction">
+                        Selecciona un tiempo y presiona Iniciar para comenzar tu pausa activa
+                    </div>
+
+                    <div class="timer-buttons">
+                        <button class="btn btn-light btn-lg" id="btnStartTimer" onclick="toggleTimer()"><i class="fas fa-play"></i> Iniciar</button>
+                        <button class="btn btn-outline-light btn-lg" id="btnResetTimer" onclick="resetTimer()"><i class="fas fa-redo"></i> Reiniciar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TIPS -->
+    <section class="section" id="tips">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag"><i class="fas fa-lightbulb"></i> Consejos</span>
+                <h2>Tips para tu Bienestar</h2>
+                <p>Pequeños cambios que hacen una gran diferencia</p>
+            </div>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon"><i class="fas fa-tint"></i></div>
+                    <h4>Toma agua</h4>
+                    <p>Mínimo 8 vasos diarios. Lleva siempre una botella contigo.</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon"><i class="fas fa-mobile-screen"></i></div>
+                    <h4>Reduce pantallas</h4>
+                    <p>Cada 20 minutos, aparta la vista de la pantalla por al menos 20 segundos.</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon"><i class="fas fa-bed"></i></div>
+                    <h4>Duerme bien</h4>
+                    <p>7-8 horas de sueño reparador son esenciales para tu rendimiento.</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon"><i class="fas fa-apple-whole"></i></div>
+                    <h4>Alimentación</h4>
+                    <p>Frutas, verduras y proteínas. Evita el exceso de azúcar y grasas.</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon"><i class="fas fa-face-smile"></i></div>
+                    <h4>Sonríe</h4>
+                    <p>Una actitud positiva mejora tu salud mental y la de quienes te rodean.</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon"><i class="fas fa-people-arrows"></i></div>
+                    <h4>Comparte</h4>
+                    <p>Practica las pausas activas con tus compañeros. Es más divertido en grupo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-card">
+                <div class="cta-content">
+                    <h2>¿Listo para comenzar?</h2>
+                    <p>Accede a la plataforma completa de Bienestar Estudiantil. Registra tus actividades, responde encuestas y propón nuevas ideas.</p>
+                    <a href="/login" class="btn btn-light btn-lg"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
+                </div>
+                <div class="cta-visual">
+                    <i class="fas fa-heart-pulse"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <div class="logo-icon"><i class="fas fa-heart-pulse"></i></div>
+                        <span>Bienestar <strong>Estudiantil</strong></span>
+                    </div>
+                    <p>Plataforma institucional para el cuidado de la salud mental y el bienestar de la comunidad educativa SENA.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Navegación</h4>
+                    <a href="#hero">Inicio</a>
+                    <a href="#que-es">Qué es</a>
+                    <a href="#ejercicios">Ejercicios</a>
+                    <a href="#beneficios">Beneficios</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Recursos</h4>
+                    <a href="#temporizador">Temporizador</a>
+                    <a href="#tips">Tips de Bienestar</a>
+                    <a href="/login">Plataforma</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Contacto</h4>
+                    <a href="#"><i class="fas fa-envelope"></i> bienestar@sena.edu.co</a>
+                    <a href="#"><i class="fas fa-phone"></i> (601) 5461500</a>
+                    <a href="#"><i class="fas fa-location-dot"></i> Bogotá D.C., Colombia</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SENA - Bienestar Estudiantil. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL EJERCICIO -->
+    <div class="modal-overlay" id="exerciseModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="exerciseModalTitle">Ejercicio</h3>
+                <button class="modal-close" onclick="closeExerciseModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="exercise-timer-circle">
+                    <svg viewBox="0 0 200 200">
+                        <circle class="timer-bg" cx="100" cy="100" r="90"/>
+                        <circle class="timer-progress" id="exerciseProgress" cx="100" cy="100" r="90"/>
+                    </svg>
+                    <div class="timer-display">
+                        <div class="timer-time" id="exerciseTime">00:00</div>
+                        <div class="timer-status" id="exerciseStatus">En progreso</div>
+                    </div>
+                </div>
+                <div class="exercise-instruction-box" id="exerciseInstruction"></div>
+                <div class="exercise-modal-buttons">
+                    <button class="btn btn-primary btn-lg" id="btnExercisePause" onclick="pauseExercise()"><i class="fas fa-pause"></i> Pausar</button>
+                    <button class="btn btn-danger btn-lg" onclick="stopExercise()"><i class="fas fa-stop"></i> Detener</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/pausas.js"></script>
+</body>
+</html>
