@@ -4,8 +4,8 @@ services:
     runtime: python
     plan: free
     buildCommand: pip install -r backend/requirements.txt
-    startCommand: cd backend && gunicorn run:app
-    postDeployCommand: cd backend && python provision.py
+    startCommand: cd backend && gunicorn run:app --bind 0.0.0.0:$PORT
+    preDeployCommand: cd backend && python provision.py
     envVars:
       - key: SECRET_KEY
         generateValue: true
