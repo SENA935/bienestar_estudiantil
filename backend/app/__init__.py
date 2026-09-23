@@ -55,4 +55,17 @@ def create_app():
     from .routes.pages import pages_bp
     app.register_blueprint(pages_bp)
 
+    _auto_provision(app)
+
     return app
+
+
+def _auto_provision(app):
+    with app.app_context():
+        try:
+            from .extensions import db
+            db.create_all()
+            from ..seed import seed
+            seed()
+        except Exception as e:
+            app.logger.warning('Auto-provision no completo: %s', e)
