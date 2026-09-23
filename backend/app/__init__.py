@@ -66,6 +66,6 @@ def _auto_provision(app):
             from .extensions import db
             db.create_all()
             from ..seed import seed
-            seed()
+            seed(app)
         except Exception as e:
             app.logger.warning('Auto-provision no completo: %s', e)
