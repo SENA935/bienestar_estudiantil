@@ -61,11 +61,20 @@ def create_app():
 
 
 def _auto_provision(app):
+    import traceback as _tb
     with app.app_context():
         try:
             from .extensions import db
             db.create_all()
             from ..seed import seed
             seed(app)
+            print("== seed(app) completado ==")
+            _SEED_RESULT['trace'] = None
+            _SEED_RESULT['ok'] = True
         except Exception as e:
+            _SEED_RESULT['trace'] = _tb.format_exc()
+            _SEED_RESULT['ok'] = False
             app.logger.warning('Auto-provision no completo: %s', e)
+
+
+_SEED_RESULT = {'ok': False, 'trace': None}
