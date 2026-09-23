@@ -8,6 +8,7 @@ pages_bp = Blueprint('pages', __name__)
 def diag():
     from ..extensions import db
     from ..models.usuario import Usuario
+    import traceback
     out = {}
     try:
         insp = inspect(db.engine)
@@ -37,6 +38,15 @@ def diag():
                 out['admin_todict_err'] = str(e)
     except Exception as e:
         out['admin_err'] = str(e)
+
+    out['seed_run'] = False
+    try:
+        from ...seed import seed
+        seed(create_app())
+        out['seed_run'] = True
+    except Exception as e:
+        out['seed_err'] = traceback.format_exc()
+
     return jsonify(out)
 
 
