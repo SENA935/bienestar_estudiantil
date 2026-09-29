@@ -152,6 +152,7 @@
 
         function renderCharts(data) {
             if (chartCursos) chartCursos.destroy();
+            if (typeof Chart === 'undefined') return;
             if (chartCategorias) chartCategorias.destroy();
             const participacionCursos = data.participacion_por_curso || [];
             const actividadesCat = data.actividades_por_categoria || [];

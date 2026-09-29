@@ -208,6 +208,26 @@ function logout() {
     });
 }
 
+function showFatalError(title, detail) {
+    let box = document.getElementById('fatal-error-box');
+    if (!box) {
+        box = document.createElement('div');
+        box.id = 'fatal-error-box';
+        box.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#fee2e2;color:#991b1b;border-bottom:2px solid #dc2626;padding:10px 14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;white-space:pre-wrap;word-break:break-word;max-height:45vh;overflow:auto;';
+        document.body.appendChild(box);
+    }
+    box.textContent = 'ERROR: ' + title + '\n' + (detail || '');
+}
+
+window.addEventListener('error', function (e) {
+    showFatalError(e.message, (e.filename || '') + ':' + (e.lineno || '') + (e.colno ? ':' + e.colno : ''));
+});
+
+window.addEventListener('unhandledrejection', function (e) {
+    const r = e.reason;
+    showFatalError('Promesa rechazada', (r && (r.stack || r.message)) || String(r));
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('sidebar')) {
         initSidebar();

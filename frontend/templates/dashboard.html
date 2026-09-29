@@ -190,7 +190,7 @@
             }
 
             const catCtx = document.getElementById('chartCategorias');
-            if (catCtx) {
+            if (catCtx && typeof Chart !== 'undefined') {
                 new Chart(catCtx, {
                     type: 'doughnut',
                     data: {
@@ -210,7 +210,7 @@
             }
 
             const cursoCtx = document.getElementById('chartCursos');
-            if (cursoCtx) {
+            if (cursoCtx && typeof Chart !== 'undefined') {
                 new Chart(cursoCtx, {
                     type: 'bar',
                     data: {
