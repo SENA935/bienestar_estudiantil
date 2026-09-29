@@ -38,6 +38,13 @@ def get_propuestas():
     })
 
 
+@propuestas_bp.route('/<int:id>', methods=['GET'])
+@jwt_required()
+def get_propuesta(id):
+    prop = Propuesta.query.get_or_404(id)
+    return jsonify({'success': True, 'data': prop.to_dict()})
+
+
 @propuestas_bp.route('', methods=['POST'])
 @jwt_required()
 def create_propuesta():

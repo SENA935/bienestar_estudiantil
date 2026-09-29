@@ -20,6 +20,13 @@ def get_cursos():
     return jsonify({'success': True, 'data': [c.to_dict() for c in cursos]})
 
 
+@cursos_bp.route('/<int:id>', methods=['GET'])
+@jwt_required()
+def get_curso(id):
+    curso = Curso.query.get_or_404(id)
+    return jsonify({'success': True, 'data': curso.to_dict()})
+
+
 @cursos_bp.route('', methods=['POST'])
 @jwt_required()
 def create_curso():

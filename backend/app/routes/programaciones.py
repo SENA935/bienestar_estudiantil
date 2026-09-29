@@ -37,6 +37,13 @@ def get_programaciones():
     })
 
 
+@programaciones_bp.route('/<int:id>', methods=['GET'])
+@jwt_required()
+def get_programacion(id):
+    prog = Programacion.query.get_or_404(id)
+    return jsonify({'success': True, 'data': prog.to_dict()})
+
+
 @programaciones_bp.route('', methods=['POST'])
 @jwt_required()
 def create_programacion():

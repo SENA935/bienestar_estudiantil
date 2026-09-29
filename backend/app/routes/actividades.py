@@ -39,6 +39,13 @@ def get_actividades():
     })
 
 
+@actividades_bp.route('/<int:id>', methods=['GET'])
+@jwt_required()
+def get_actividad(id):
+    act = Actividad.query.get_or_404(id)
+    return jsonify({'success': True, 'data': act.to_dict()})
+
+
 @actividades_bp.route('', methods=['POST'])
 @jwt_required()
 def create_actividad():
