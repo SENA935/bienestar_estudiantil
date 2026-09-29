@@ -1361,3 +1361,74 @@ textarea:focus {
         transition-duration: 0.01ms !important;
     }
 }
+/* ============================================================
+   ALERTAS (extrabido de alertas.html)
+   ============================================================ */
+.alert-list { display: flex; flex-direction: column; gap: 8px; }
+.alert-item {
+    display: flex; align-items: flex-start; gap: 16px; padding: 16px;
+    border-radius: var(--radius); background: var(--background);
+    cursor: pointer; border-left: 4px solid transparent;
+    transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+.alert-item:hover { background: #E2E8F0; transform: translateX(2px); }
+.alert-item.unread { border-left-color: var(--primary); background: rgba(37, 99, 235, 0.06); }
+.alert-icon { font-size: 1.5rem; width: 40px; text-align: center; padding-top: 4px; }
+.alert-body { flex: 1; min-width: 0; }
+.alert-body h4 { margin: 0 0 4px; font-size: 0.95rem; font-weight: 600; }
+.alert-body p { margin: 0; color: var(--text-secondary); font-size: 0.85rem; }
+.alert-date { font-size: 0.8rem; color: var(--text-light); white-space: nowrap; }
+
+/* ============================================================
+   PESTAÑAS / TABS (extrabido de configuracion.html)
+   ============================================================ */
+.tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 24px; overflow-x: auto; }
+.tab-btn {
+    padding: 12px 24px; border: none; background: none; cursor: pointer;
+    font-size: 0.95rem; font-weight: 500; color: var(--text-secondary);
+    border-bottom: 2px solid transparent; margin-bottom: -2px; white-space: nowrap;
+    transition: color 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+}
+.tab-btn:hover { color: var(--text); background: rgba(37, 99, 235, 0.04); }
+.tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: tabFade 0.24s ease; }
+@keyframes tabFade {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   PERFIL (extrabido de perfil.html)
+   ============================================================ */
+.profile-card { max-width: 700px; margin: 0 auto; }
+.profile-avatar {
+    width: 120px; height: 120px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white; display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem; font-weight: 700; margin: 0 auto 24px;
+    box-shadow: var(--shadow-md);
+}
+.profile-info { text-align: center; margin-bottom: 32px; }
+.profile-info h2 { margin: 0 0 4px; }
+.profile-info p { color: var(--text-secondary); margin: 0; }
+.profile-details { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+.profile-details .detail-item {
+    padding: 12px; background: var(--background); border-radius: var(--radius);
+    border: 1px solid var(--border);
+}
+.profile-details .detail-item label {
+    font-size: 0.8rem; color: var(--text-secondary);
+    display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.03em;
+}
+.profile-details .detail-item span { font-weight: 600; }
+.section-title {
+    font-size: 1.1rem; font-weight: 600; margin: 24px 0 16px;
+    padding-bottom: 8px; border-bottom: 2px solid var(--border);
+}
+
+/* Utilidades de texto usadas en varias pantallas */
+.text-muted { color: var(--text-secondary); }
+.text-center { text-align: center; }
+.p-4 { padding: 16px; }
+.mt-2 { margin-top: 8px; }
