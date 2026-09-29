@@ -87,6 +87,7 @@
                 <button class="modal-close" onclick="closeModal('modalInstitucion')">&times;</button>
             </div>
             <div class="modal-body">
+                <form id="form-institucion">
                 <input type="hidden" id="inst-id">
                 <div class="form-group"><label>Nombre *</label><input type="text" class="form-control" id="inst-nombre"></div>
                 <div class="form-row">
@@ -99,15 +100,16 @@
                         <select class="form-control" id="inst-estado"><option value="Activa">Activa</option><option value="Inactiva">Inactiva</option></select>
                     </div>
                 </div>
+                </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-outline" onclick="closeModal('modalInstitucion')">Cancelar</button>
-                <button class="btn btn-primary" onclick="saveInstitucion()"><i class="fas fa-save"></i> Guardar</button>
+                <button type="button" class="btn btn-outline" onclick="closeModal('modalInstitucion')">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="saveInstitucion()"><i class="fas fa-save"></i> Guardar</button>
             </div>
         </div>
     </div>
 
-    <script src="/static/js/app.js"></script>
+    <script src="/static/js/app.js"></script>`r`n    <script src="/static/js/form-standard.js"></script>
     <script>
         if (!checkAuth()) throw new Error('No auth');
 
@@ -170,7 +172,16 @@
                 email: document.getElementById('inst-email').value,
                 estado: document.getElementById('inst-estado').value
             };
-            if (!data.nombre || !data.nit) { showToast('Nombre y NIT son requeridos', 'error'); return; }
+            if (!fsValidateFormFields('form-institucion', {
+                'inst-nombre': { required: true, requiredMessage: 'El nombre es obligatorio', minLength: 3 },
+                'inst-nit': { required: true, requiredMessage: 'El NIT es obligatorio', minLength: 5 },
+                'inst-email': { email: true }
+            })) { return; }
+            const instNombre = document.getElementById('inst-nombre').value.trim();
+            const instNit = document.getElementById('inst-nit').value.trim();
+            data.nombre = instNombre;
+            data.nit = instNit;
+            data.email = document.getElementById('inst-email').value.trim();
             let res;
             if (id) { res = await apiRequest(`/instituciones/${id}`, { method: 'PUT', body: JSON.stringify(data) }); }
             else { res = await apiRequest('/instituciones', { method: 'POST', body: JSON.stringify(data) }); }

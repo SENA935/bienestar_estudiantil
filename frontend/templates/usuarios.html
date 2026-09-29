@@ -68,6 +68,7 @@
         <div class="modal">
             <div class="modal-header"><h3 id="modal-title">Nuevo Usuario</h3><button class="modal-close" onclick="closeModal('modalUsuario')">&times;</button></div>
             <div class="modal-body">
+                <form id="form-usuario">
                 <input type="hidden" id="usr-id">
                 <div class="form-row">
                     <div class="form-group"><label>Nombre *</label><input type="text" class="form-control" id="usr-nombre"></div>
@@ -84,12 +85,13 @@
                 <div class="form-row">
                     <div class="form-group"><label>Estado</label><select class="form-control" id="usr-estado"><option value="Activo">Activo</option><option value="Inactivo">Inactivo</option></select></div>
                 </div>
+                </form>
             </div>
-            <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('modalUsuario')">Cancelar</button><button class="btn btn-primary" onclick="saveUsuario()"><i class="fas fa-save"></i> Guardar</button></div>
+            <div class="modal-footer"><button type="button" class="btn btn-outline" onclick="closeModal('modalUsuario')">Cancelar</button><button type="button" class="btn btn-primary" onclick="saveUsuario()"><i class="fas fa-save"></i> Guardar</button></div>
         </div>
     </div>
 
-    <script src="/static/js/app.js"></script>
+    <script src="/static/js/app.js"></script>`r`n    <script src="/static/js/form-standard.js"></script>
     <script>
         if (!checkAuth()) throw new Error('No auth');
         let currentPage = 1;
@@ -167,8 +169,19 @@
             };
             const pwd = document.getElementById('usr-password').value;
             if (pwd) data.password = pwd;
-            if (!id && !pwd) { showToast('La contraseña es requerida para nuevos usuarios', 'error'); return; }
-            if (!data.nombre || !data.apellido || !data.username || !data.email) { showToast('Todos los campos marcados son requeridos', 'error'); return; }
+            if (!id && !pwd) { fsFieldError('usr-password', 'La contraseña es obligatoria para nuevos usuarios'); return; }
+            const rules = {
+                'usr-nombre': { required: true, requiredMessage: 'El nombre es obligatorio', minLength: 2 },
+                'usr-apellido': { required: true, requiredMessage: 'El apellido es obligatorio', minLength: 2 },
+                'usr-username': { required: true, requiredMessage: 'El usuario es obligatorio', username: true },
+                'usr-email': { required: true, requiredMessage: 'El email es obligatorio', email: true }
+            };
+            if (pwd) rules['usr-password'] = { minLength: 6 };
+            if (!fsValidateFormFields('form-usuario', rules)) { return; }
+            data.nombre = data.nombre.trim();
+            data.apellido = data.apellido.trim();
+            data.username = data.username.trim();
+            data.email = data.email.trim();
             let res;
             if (id) { res = await apiRequest(`/usuarios/${id}`, { method: 'PUT', body: JSON.stringify(data) }); }
             else { res = await apiRequest('/usuarios', { method: 'POST', body: JSON.stringify(data) }); }

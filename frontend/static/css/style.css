@@ -1432,3 +1432,186 @@ textarea:focus {
 .text-center { text-align: center; }
 .p-4 { padding: 16px; }
 .mt-2 { margin-top: 8px; }
+/* ============================================================
+   ESTANDAR UNICO DE FORMULARIOS
+   (aplicado automaticamente por form-standard.js)
+   ============================================================ */
+
+/* Grupo: label + control */
+.form-group { margin-bottom: 18px; }
+.form-group:last-child { margin-bottom: 0; }
+
+.form-group > label,
+.form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+    letter-spacing: 0.01em;
+}
+
+.form-label .req {
+    color: var(--danger);
+    margin-left: 3px;
+    font-weight: 700;
+}
+
+/* Control base unico para toda la app */
+.form-control {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 14px;
+    font-family: inherit;
+    line-height: 1.5;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+    appearance: none;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* Placeholder coherente en todos los navegadores */
+.form-control::placeholder { color: var(--text-light); }
+
+/* Select con flecha propia */
+select.form-control {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+    padding-right: 34px;
+    cursor: pointer;
+}
+
+/* Checkbox y radio */
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: var(--text);
+    cursor: pointer;
+}
+
+.form-check input[type="checkbox"],
+.form-check input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary);
+    cursor: pointer;
+    margin: 0;
+}
+
+/* Campo obligatorio: marca visible en el borde */
+.form-control.is-invalid {
+    border-color: var(--danger);
+    background: var(--danger-light);
+}
+
+.form-control.is-invalid:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+/* Texto de ayuda / error bajo el campo */
+.form-hint {
+    display: block;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 5px;
+}
+
+.form-hint.error { color: var(--danger); font-weight: 500; }
+.form-hint.success { color: #059669; font-weight: 500; }
+
+/* Rejilla de dos columnas para formularios largos */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 16px;
+}
+
+@media (max-width: 640px) {
+    .form-row { grid-template-columns: 1fr; }
+}
+
+/* Acciones del formulario (sticky al pie en modales) */
+.form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding-top: 20px;
+    margin-top: 20px;
+    border-top: 1px solid var(--border);
+}
+
+.form-actions .btn { min-width: 96px; }
+
+/* Boton de alternar contrasena */
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-light);
+    font-size: 16px;
+    padding: 6px;
+    border-radius: 4px;
+    transition: color 0.18s ease, background-color 0.18s ease;
+}
+
+.toggle-password:hover { color: var(--primary); background: var(--background); }
+
+/* Contenedor relativo para inputs con icono */
+.input-wrapper { position: relative; }
+
+.input-wrapper .form-control { padding-left: 38px; }
+
+.input-wrapper > i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+    font-size: 15px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Estado de envio en boton */
+.btn.is-loading {
+    pointer-events: none;
+    opacity: 0.7;
+    position: relative;
+    color: transparent !important;
+}
+
+.btn.is-loading::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: btnSpin 0.6s linear infinite;
+}
+
+.btn-outline.is-loading::after,
+.btn-secondary.is-loading::after {
+    border-color: rgba(37, 99, 235, 0.3);
+    border-top-color: var(--primary);
+}
+
+@keyframes btnSpin { to { transform: rotate(360deg); } }
