@@ -244,11 +244,12 @@
 
         async function loadData() {
             try {
+                showSkeleton(document.getElementById('table-body'), 8, 5);
                 const data = await apiRequest('/cursos');
                 allCursos = unwrap(data, 'cursos') || [];
                 renderTable();
             } catch (e) {
-                showToast('Error al cargar cursos', 'error');
+                showLoadError('Error al cargar cursos', e);
             }
         }
 
@@ -335,7 +336,7 @@
                 document.getElementById('edit-estado').value = c.estado;
                 openModal('edit-modal');
             } catch (e) {
-                showToast('Error al cargar curso', 'error');
+                showLoadError('Error al cargar curso', e);
             }
         }
 
@@ -392,7 +393,7 @@
                 }
                 openModal('students-modal');
             } catch (e) {
-                showToast('Error al cargar estudiantes', 'error');
+                showLoadError('Error al cargar estudiantes', e);
             }
         }
 

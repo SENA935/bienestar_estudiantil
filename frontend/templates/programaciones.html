@@ -217,7 +217,7 @@
                 populateSelect('edit-select-curso', cursosList, 'id', 'nombre');
                 populateSelect('edit-select-docente', docentesList, 'id', 'nombre');
             } catch (e) {
-                showToast('Error al cargar datos de selects', 'error');
+                showLoadError('Error al cargar datos de selects', e);
             }
         }
 
@@ -229,11 +229,12 @@
 
         async function loadData() {
             try {
+                showSkeleton(document.getElementById('table-body'), 8, 5);
                 const data = await apiRequest('/programaciones');
                 allProgramaciones = unwrap(data, 'programaciones') || [];
                 renderTable();
             } catch (e) {
-                showToast('Error al cargar programaciones', 'error');
+                showLoadError('Error al cargar programaciones', e);
             }
         }
 
@@ -328,7 +329,7 @@
                 document.getElementById('edit-estado').value = p.estado;
                 openModal('edit-modal');
             } catch (e) {
-                showToast('Error al cargar programación', 'error');
+                showLoadError('Error al cargar programación', e);
             }
         }
 

@@ -116,7 +116,7 @@
                 profileData = unwrap(data, 'usuario') || unwrap(data) || {};
                 renderProfile();
             } catch (e) {
-                showToast('Error al cargar perfil', 'error');
+                showLoadError('Error al cargar perfil', e);
             }
         }
 

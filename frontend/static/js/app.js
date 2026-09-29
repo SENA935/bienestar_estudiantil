@@ -217,6 +217,27 @@ function unwrap(res, key) {
     return d[key] === undefined ? null : d[key];
 }
 
+function showLoadError(message, err) {
+    const detail = err ? (err.message || String(err)) : '';
+    showToast(detail ? `${message}: ${detail}` : message, 'error');
+    if (err) console.error(message, err);
+}
+
+function showSkeleton(container, cols, rows) {
+    if (!container) return;
+    const r = rows || 5;
+    const c = cols || 5;
+    let html = '';
+    for (let i = 0; i < r; i++) {
+        html += '<tr>';
+        for (let j = 0; j < c; j++) {
+            html += `<td><div class="skeleton-row"></div></td>`;
+        }
+        html += '</tr>';
+    }
+    container.innerHTML = html;
+}
+
 function showFatalError(title, detail) {
     let box = document.getElementById('fatal-error-box');
     if (!box) {

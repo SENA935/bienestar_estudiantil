@@ -104,11 +104,12 @@
 
         async function loadData() {
             try {
+                showSkeleton(document.getElementById('alert-list'), 1, 4);
                 const data = await apiRequest('/alertas');
                 allAlertas = unwrap(data, 'alertas') || [];
                 renderAlertas();
             } catch (e) {
-                showToast('Error al cargar alertas', 'error');
+                showLoadError('Error al cargar alertas', e);
             }
         }
 

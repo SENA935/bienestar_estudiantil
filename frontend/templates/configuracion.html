@@ -267,7 +267,7 @@
                     }).join('');
                 }
             } catch (e) {
-                showToast('Error al cargar periodos', 'error');
+                showLoadError('Error al cargar periodos', e);
             }
         }
 
@@ -306,7 +306,7 @@
                 document.getElementById('edit-periodo-estado').value = p.estado;
                 openModal('edit-periodo-modal');
             } catch (e) {
-                showToast('Error al cargar periodo', 'error');
+                showLoadError('Error al cargar periodo', e);
             }
         }
 
@@ -362,7 +362,7 @@
                     }).join('');
                 }
             } catch (e) {
-                showToast('Error al cargar categor&#237;as', 'error');
+                showLoadError('Error al cargar categor&#237;as', e);
             }
         }
 
@@ -399,7 +399,7 @@
                 document.getElementById('edit-categoria-color').value = c.color || '#4f46e5';
                 openModal('edit-categoria-modal');
             } catch (e) {
-                showToast('Error al cargar categor&#237;a', 'error');
+                showLoadError('Error al cargar categor&#237;a', e);
             }
         }
 
@@ -450,7 +450,7 @@
                     }).join('');
                 }
             } catch (e) {
-                showToast('Error al cargar roles', 'error');
+                showLoadError('Error al cargar roles', e);
             }
         }
 

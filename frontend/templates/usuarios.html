@@ -101,7 +101,8 @@
             const estado = document.getElementById('filterEstado').value;
             const res = await apiRequest(`/usuarios?search=${encodeURIComponent(search)}&rol=${rol}&estado=${estado}&page=${page}&per_page=10`);
             const tbody = document.getElementById('usuarios-table');
-            if (!res || !res.success) { tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><i class="fas fa-users"></i><h3>Error al cargar</h3></div></td></tr>'; return; }
+            showSkeleton(tbody, 7, 5);
+            if (!res || !res.success) { showLoadError('Error al cargar usuarios', null); tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><i class="fas fa-users"></i><h3>Error al cargar</h3></div></td></tr>'; return; }
             if (res.data.usuarios.length === 0) { tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><i class="fas fa-users"></i><h3>No hay usuarios</h3></div></td></tr>'; return; }
             tbody.innerHTML = res.data.usuarios.map(u => `
                 <tr>

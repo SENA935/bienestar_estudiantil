@@ -1074,3 +1074,290 @@ textarea.form-control {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+/* ============================================================
+   MEJORAS VISUALES (capa de refinamiento)
+   ============================================================ */
+
+/* --- Transiciones y suavizado global --- */
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'cv02', 'cv03', 'cv04';
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #CBD5E1 transparent;
+}
+
+/* --- Tarjetas: elevación y borde más definido --- */
+.card {
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: #CBD5E1;
+}
+
+/* --- Stat cards: acento lateral + micro-interaccion --- */
+.stat-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--primary-light));
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    border-color: #CBD5E1;
+}
+
+.stat-card:hover::before { opacity: 1; }
+
+.stat-card .stat-value {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+}
+
+.stat-card .stat-icon {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat-card:hover .stat-icon { transform: scale(1.08) rotate(-4deg); }
+
+/* --- Tablas: encabezado fijo visual y zebra sutil --- */
+.table-container {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.table thead th {
+    background: linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 100%);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.table tbody tr {
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: rgba(248, 250, 252, 0.7);
+}
+
+.table tbody tr:hover {
+    background-color: #EFF6FF;
+    box-shadow: inset 3px 0 0 var(--primary);
+}
+
+.table td {
+    font-variant-numeric: tabular-nums;
+}
+
+/* --- Badges: peso y legibilidad --- */
+.badge {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* --- Botones: feedback tactile --- */
+.btn {
+    transition: background-color 0.18s ease, color 0.18s ease,
+                border-color 0.18s ease, box-shadow 0.18s ease,
+                transform 0.12s ease;
+    will-change: transform;
+}
+
+.btn:active { transform: translateY(1px) scale(0.985); }
+
+.btn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.btn-primary {
+    box-shadow: 0 1px 2px 0 rgba(37, 99, 235, 0.2);
+}
+
+.btn-primary:hover {
+    box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.4);
+    transform: translateY(-1px);
+}
+
+.btn-icon {
+    transition: transform 0.15s ease, background-color 0.18s ease, color 0.18s ease;
+}
+
+.btn-icon:hover { transform: translateY(-1px) scale(1.05); }
+
+.actions .btn-icon:hover {
+    transform: translateY(-1px) scale(1.08);
+}
+
+/* --- Inputs: focus consistente --- */
+.search-box,
+.filter-select,
+.form-control,
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+.search-box:focus-within {
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    border-color: var(--primary);
+}
+
+.filter-select:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    outline: none;
+}
+
+/* --- Toasts: entrada animada y mas legibles --- */
+.toast {
+    animation: toastIn 0.32s cubic-bezier(0.21, 1.02, 0.73, 1);
+    box-shadow: var(--shadow-lg);
+    border-radius: var(--radius);
+    font-weight: 500;
+    border-left: 4px solid rgba(255, 255, 255, 0.35);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+@keyframes toastIn {
+    from { opacity: 0; transform: translateX(120%); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+/* --- Modal: entrada con escala --- */
+.modal-overlay.active .modal {
+    animation: modalIn 0.28s cubic-bezier(0.21, 1.02, 0.73, 1);
+}
+
+@keyframes modalIn {
+    from { opacity: 0; transform: translateY(16px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.modal-header {
+    background: linear-gradient(180deg, #F8FAFC, #FFFFFF);
+    border-bottom: 1px solid var(--border);
+}
+
+/* --- Estado vacio: mas amable --- */
+.empty-state {
+    padding: 48px 24px;
+}
+
+.empty-state i {
+    opacity: 0.35;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.empty-state:hover i {
+    opacity: 0.5;
+    transform: scale(1.05);
+}
+
+.empty-state h3 {
+    letter-spacing: -0.01em;
+}
+
+/* --- Paginacion --- */
+.pagination button {
+    transition: background-color 0.18s ease, color 0.18s ease,
+                border-color 0.18s ease, transform 0.12s ease;
+    font-variant-numeric: tabular-nums;
+}
+
+.pagination button:not(:disabled):hover {
+    transform: translateY(-1px);
+}
+
+.pagination button.active {
+    box-shadow: 0 2px 8px -1px rgba(37, 99, 235, 0.4);
+}
+
+/* --- Sidebar: indicador activo mas claro --- */
+.nav-item {
+    transition: background-color 0.18s ease, color 0.18s ease,
+                padding-left 0.18s ease, border-color 0.18s ease;
+    position: relative;
+}
+
+.nav-item.active {
+    box-shadow: inset 3px 0 0 var(--primary-light);
+}
+
+/* --- Skeleton para carga (usado por JS) --- */
+.skeleton-row {
+    height: 14px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #F1F5F9 25%, #E2E8F0 50%, #F1F5F9 75%);
+    background-size: 200% 100%;
+    animation: skeletonPulse 1.4s ease-in-out infinite;
+    margin: 12px 0;
+}
+
+@keyframes skeletonPulse {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* --- Respeta preferencia de reducir movimiento --- */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

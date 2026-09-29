@@ -119,7 +119,7 @@
                 renderTable(registros);
                 renderPagination(totalPages);
             } catch (e) {
-                showToast('Error al cargar auditoría', 'error');
+                showLoadError('Error al cargar auditoría', e);
             }
         }
 

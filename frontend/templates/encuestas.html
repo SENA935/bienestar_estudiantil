@@ -182,11 +182,12 @@
 
         async function loadData() {
             try {
+                showSkeleton(document.getElementById('table-body'), 7, 5);
                 const data = await apiRequest('/encuestas');
                 allEncuestas = unwrap(data, 'encuestas') || [];
                 renderTable();
             } catch (e) {
-                showToast('Error al cargar encuestas', 'error');
+                showLoadError('Error al cargar encuestas', e);
             }
         }
 
@@ -390,7 +391,7 @@
                 document.getElementById('view-content').innerHTML = html;
                 openModal('view-modal');
             } catch (err) {
-                showToast('Error al cargar encuesta', 'error');
+                showLoadError('Error al cargar encuesta', e);
             }
         }
 
@@ -431,7 +432,7 @@
                 }
                 openModal('response-modal');
             } catch (e) {
-                showToast('Error al cargar encuesta', 'error');
+                showLoadError('Error al cargar encuesta', e);
             }
         }
 
@@ -481,7 +482,7 @@
                 }
                 openModal('edit-modal');
             } catch (e) {
-                showToast('Error al cargar encuesta', 'error');
+                showLoadError('Error al cargar encuesta', e);
             }
         }
 

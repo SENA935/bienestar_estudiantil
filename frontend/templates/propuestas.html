@@ -159,11 +159,12 @@
 
         async function loadData() {
             try {
+                showSkeleton(document.getElementById('table-body'), 7, 5);
                 const data = await apiRequest('/propuestas');
                 allPropuestas = unwrap(data, 'propuestas') || [];
                 renderTable();
             } catch (e) {
-                showToast('Error al cargar propuestas', 'error');
+                showLoadError('Error al cargar propuestas', e);
             }
         }
 
@@ -258,7 +259,7 @@
                 document.getElementById('detail-content').innerHTML = html;
                 openModal('detail-modal');
             } catch (e) {
-                showToast('Error al cargar propuesta', 'error');
+                showLoadError('Error al cargar propuesta', e);
             }
         }
 
@@ -271,7 +272,7 @@
                 document.getElementById('eval-observaciones').value = p.observaciones || '';
                 openModal('evaluate-modal');
             } catch (e) {
-                showToast('Error al cargar propuesta', 'error');
+                showLoadError('Error al cargar propuesta', e);
             }
         }
 
