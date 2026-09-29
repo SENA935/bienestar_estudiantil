@@ -52,7 +52,24 @@ async function apiRequest(url, options = {}) {
             return;
         }
 
-        const data = await response.json();
+        const text = await response.text();
+        if (!text) {
+            return { success: response.ok, message: response.ok ? 'Operación completada' : `Error ${response.status}` };
+        }
+
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (parseError) {
+            if (response.status === 404) {
+                return { success: false, message: 'El recurso solicitado no existe' };
+            }
+            if (!response.ok) {
+                return { success: false, message: `Error del servidor (${response.status})` };
+            }
+            showFatalError('Respuesta no válida del servidor', text.slice(0, 300));
+            return { success: false, message: 'Respuesta inválida del servidor' };
+        }
         return data;
     } catch (error) {
         console.error('API Error:', error);

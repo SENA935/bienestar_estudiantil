@@ -69,6 +69,20 @@ def update_periodo(id):
     return jsonify({'success': True, 'message': 'Periodo actualizado', 'data': periodo.to_dict()})
 
 
+@configuracion_bp.route('/periodos/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_periodo(id):
+    user_id = int(get_jwt_identity())
+    user = Usuario.query.get(user_id)
+    if not user or user.rol.nombre != 'Administrador':
+        return jsonify({'success': False, 'message': 'Sin permisos'}), 403
+
+    periodo = PeriodoAcademico.query.get_or_404(id)
+    db.session.delete(periodo)
+    db.session.commit()
+    return jsonify({'success': True, 'message': 'Periodo eliminado correctamente'})
+
+
 @configuracion_bp.route('/categorias', methods=['GET'])
 @jwt_required()
 def get_categorias():
@@ -121,6 +135,20 @@ def update_categoria(id):
 
     db.session.commit()
     return jsonify({'success': True, 'message': 'Categoría actualizada', 'data': cat.to_dict()})
+
+
+@configuracion_bp.route('/categorias/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_categoria(id):
+    user_id = int(get_jwt_identity())
+    user = Usuario.query.get(user_id)
+    if not user or user.rol.nombre not in ['Administrador', 'Coordinador']:
+        return jsonify({'success': False, 'message': 'Sin permisos'}), 403
+
+    cat = CategoriaActividad.query.get_or_404(id)
+    db.session.delete(cat)
+    db.session.commit()
+    return jsonify({'success': True, 'message': 'Categoría eliminada correctamente'})
 
 
 @configuracion_bp.route('/roles', methods=['GET'])
