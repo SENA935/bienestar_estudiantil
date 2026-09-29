@@ -208,6 +208,15 @@ function logout() {
     });
 }
 
+function unwrap(res, key) {
+    if (!res || res.success === false) return null;
+    const d = res.data;
+    if (d === undefined || d === null) return null;
+    if (key === undefined || key === null) return d;
+    if (Array.isArray(d)) return d;
+    return d[key] === undefined ? null : d[key];
+}
+
 function showFatalError(title, detail) {
     let box = document.getElementById('fatal-error-box');
     if (!box) {

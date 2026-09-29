@@ -115,7 +115,7 @@
         async function loadCursos() {
             try {
                 const data = await apiRequest('/cursos');
-                const cursos = data.cursos || data || [];
+                const cursos = unwrap(data, 'cursos') || [];
                 const sel = document.getElementById('filter-curso');
                 cursos.forEach(c => {
                     const opt = document.createElement('option');
@@ -140,11 +140,12 @@
             if (estado) params.set('estado', estado);
             try {
                 const data = await apiRequest('/reportes?' + params.toString());
-                document.getElementById('stat-actividades').textContent = data.actividades_realizadas || 0;
-                document.getElementById('stat-programadas').textContent = data.programadas || 0;
-                document.getElementById('stat-canceladas').textContent = data.canceladas || 0;
-                document.getElementById('stat-encuestas').textContent = data.encuestas_respondidas || 0;
-                renderCharts(data);
+                const rep = unwrap(data) || {};
+                document.getElementById('stat-actividades').textContent = rep.actividades_realizadas || 0;
+                document.getElementById('stat-programadas').textContent = rep.actividades_programadas || 0;
+                document.getElementById('stat-canceladas').textContent = rep.actividades_canceladas || 0;
+                document.getElementById('stat-encuestas').textContent = rep.encuestas_respondidas || 0;
+                renderCharts(rep);
             } catch (e) {
                 showToast('Error al generar reporte', 'error');
             }

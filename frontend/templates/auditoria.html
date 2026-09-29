@@ -113,8 +113,8 @@
             if (accion) params.set('accion', accion);
             try {
                 const data = await apiRequest('/auditoria?' + params.toString());
-                const registros = data.auditoria || data.registros || data || [];
-                const total = data.total || registros.length;
+                const registros = unwrap(data, 'registros') || [];
+                const total = (data.data && data.data.total) || registros.length;
                 const totalPages = Math.ceil(total / 15) || 1;
                 renderTable(registros);
                 renderPagination(totalPages);

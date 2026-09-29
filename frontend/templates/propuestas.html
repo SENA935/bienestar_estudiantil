@@ -160,7 +160,7 @@
         async function loadData() {
             try {
                 const data = await apiRequest('/propuestas');
-                allPropuestas = data.propuestas || data || [];
+                allPropuestas = unwrap(data, 'propuestas') || [];
                 renderTable();
             } catch (e) {
                 showToast('Error al cargar propuestas', 'error');
@@ -170,7 +170,8 @@
         async function getUserRole() {
             try {
                 const data = await apiRequest('/perfil');
-                currentUserRole = (data.usuario || data).rol || '';
+                const perfil = unwrap(data) || {};
+                currentUserRole = perfil.rol_nombre || perfil.rol || '';
                 const isEstudiante = currentUserRole === 'Aprendiz' || currentUserRole === 'Estudiante';
                 if (!isEstudiante) {
                     document.getElementById('btn-nueva-propuesta').style.display = 'none';
@@ -246,7 +247,7 @@
         async function viewPropuesta(id) {
             try {
                 const data = await apiRequest('/propuestas/' + id);
-                const p = data.propuesta || data;
+                const p = unwrap(data, 'propuesta');
                 let html = `<h4>${p.titulo}</h4>`;
                 html += `<p><strong>Estado:</strong> ${getStatusBadge(p.estado)}</p>`;
                 html += `<p><strong>Estudiante:</strong> ${p.estudiante_nombre || p.usuario?.nombre || '-'}</p>`;
@@ -264,7 +265,7 @@
         async function evaluatePropuesta(id) {
             try {
                 const data = await apiRequest('/propuestas/' + id);
-                const p = data.propuesta || data;
+                const p = unwrap(data, 'propuesta');
                 document.getElementById('eval-id').value = p.id;
                 document.getElementById('eval-estado').value = p.estado;
                 document.getElementById('eval-observaciones').value = p.observaciones || '';

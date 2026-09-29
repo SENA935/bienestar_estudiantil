@@ -248,7 +248,7 @@
         async function loadPeriodos() {
             try {
                 var data = await apiRequest('/configuracion/periodos');
-                var periodos = data.periodos || data || [];
+                var periodos = unwrap(data, 'periodos') || [];
                 var tbody = document.getElementById('periodos-body');
                 if (periodos.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="6" class="text-center">No hay periodos configurados</td></tr>';
@@ -298,7 +298,7 @@
         async function editPeriodo(id) {
             try {
                 var data = await apiRequest('/configuracion/periodos/' + id);
-                var p = data.periodo || data;
+                var p = unwrap(data, 'periodo');
                 document.getElementById('edit-periodo-id').value = p.id;
                 document.getElementById('edit-periodo-nombre').value = p.nombre;
                 document.getElementById('edit-periodo-fecha_inicio').value = p.fecha_inicio ? p.fecha_inicio.split('T')[0] : '';
@@ -344,7 +344,7 @@
         async function loadCategorias() {
             try {
                 var data = await apiRequest('/configuracion/categorias');
-                var categorias = data.categorias || data || [];
+                var categorias = unwrap(data, 'categorias') || [];
                 var tbody = document.getElementById('categorias-body');
                 if (categorias.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="5" class="text-center">No hay categor&#237;as configuradas</td></tr>';
@@ -392,7 +392,7 @@
         async function editCategoria(id) {
             try {
                 var data = await apiRequest('/configuracion/categorias/' + id);
-                var c = data.categoria || data;
+                var c = unwrap(data, 'categoria');
                 document.getElementById('edit-categoria-id').value = c.id;
                 document.getElementById('edit-categoria-nombre').value = c.nombre;
                 document.getElementById('edit-categoria-descripcion').value = c.descripcion || '';
@@ -436,7 +436,7 @@
         async function loadRoles() {
             try {
                 var data = await apiRequest('/configuracion/roles');
-                var roles = data.roles || data || [];
+                var roles = unwrap(data, 'roles') || [];
                 var tbody = document.getElementById('roles-body');
                 if (roles.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="3" class="text-center">No hay roles configurados</td></tr>';

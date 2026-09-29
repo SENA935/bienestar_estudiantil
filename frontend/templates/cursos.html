@@ -234,7 +234,7 @@
         async function loadDirectors() {
             try {
                 const data = await apiRequest('/usuarios');
-                const usuarios = data.usuarios || data || [];
+                const usuarios = unwrap(data, 'usuarios') || [];
                 const options = '<option value="">Seleccionar...</option>' +
                     usuarios.map(u => `<option value="${u.id}">${u.nombre} ${u.apellido || ''}</option>`).join('');
                 document.getElementById('select-director').innerHTML = options;
@@ -245,7 +245,7 @@
         async function loadData() {
             try {
                 const data = await apiRequest('/cursos');
-                allCursos = data.cursos || data || [];
+                allCursos = unwrap(data, 'cursos') || [];
                 renderTable();
             } catch (e) {
                 showToast('Error al cargar cursos', 'error');
@@ -326,7 +326,7 @@
         async function editCurso(id) {
             try {
                 const data = await apiRequest('/cursos/' + id);
-                const c = data.curso || data;
+                const c = unwrap(data, 'curso');
                 document.getElementById('edit-id').value = c.id;
                 document.getElementById('edit-nombre').value = c.nombre;
                 document.getElementById('edit-grado').value = c.grado;
@@ -376,7 +376,7 @@
             document.getElementById('students-modal-title').textContent = 'Estudiantes - ' + cursoNombre;
             try {
                 const data = await apiRequest('/cursos/' + cursoId + '/estudiantes');
-                const estudiantes = data.estudiantes || data || [];
+                const estudiantes = unwrap(data, 'estudiantes') || [];
                 const tbody = document.getElementById('students-body');
                 if (estudiantes.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="4" class="text-center">No hay estudiantes en este curso</td></tr>';

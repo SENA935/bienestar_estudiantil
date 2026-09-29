@@ -113,7 +113,7 @@
         async function loadProfile() {
             try {
                 var data = await apiRequest('/perfil');
-                profileData = data.usuario || data;
+                profileData = unwrap(data, 'usuario') || unwrap(data) || {};
                 renderProfile();
             } catch (e) {
                 showToast('Error al cargar perfil', 'error');

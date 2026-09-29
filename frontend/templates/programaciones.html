@@ -230,7 +230,7 @@
         async function loadData() {
             try {
                 const data = await apiRequest('/programaciones');
-                allProgramaciones = data.programaciones || data || [];
+                allProgramaciones = unwrap(data, 'programaciones') || [];
                 renderTable();
             } catch (e) {
                 showToast('Error al cargar programaciones', 'error');
@@ -316,7 +316,7 @@
         async function editProgramacion(id) {
             try {
                 const data = await apiRequest('/programaciones/' + id);
-                const p = data.programacion || data;
+                const p = unwrap(data, 'programacion');
                 document.getElementById('edit-id').value = p.id;
                 document.getElementById('edit-select-actividad').value = p.actividad_id || '';
                 document.getElementById('edit-select-curso').value = p.curso_id || '';

@@ -194,7 +194,7 @@
         async function loadData() {
             try {
                 const data = await apiRequest('/actividades');
-                allActividades = data.actividades || data || [];
+                allActividades = unwrap(data, 'actividades') || [];
                 renderTable();
             } catch (e) {
                 showToast('Error al cargar actividades', 'error');
@@ -283,7 +283,7 @@
         async function editActividad(id) {
             try {
                 const data = await apiRequest('/actividades/' + id);
-                const a = data.actividad || data;
+                const a = unwrap(data, 'actividad');
                 document.getElementById('edit-id').value = a.id;
                 document.getElementById('edit-titulo').value = a.titulo;
                 document.getElementById('edit-descripcion').value = a.descripcion || '';

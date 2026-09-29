@@ -105,7 +105,7 @@
         async function loadData() {
             try {
                 const data = await apiRequest('/alertas');
-                allAlertas = data.alertas || data || [];
+                allAlertas = unwrap(data, 'alertas') || [];
                 renderAlertas();
             } catch (e) {
                 showToast('Error al cargar alertas', 'error');
