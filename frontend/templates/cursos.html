@@ -327,7 +327,8 @@
         async function editCurso(id) {
             try {
                 const data = await apiRequest('/cursos/' + id);
-                const c = unwrap(data, 'curso');
+                const c = unwrap(data, 'curso') || {};
+                if (!c.id) { showLoadError('No se pudo cargar el curso', null); return; }
                 document.getElementById('edit-id').value = c.id;
                 document.getElementById('edit-nombre').value = c.nombre;
                 document.getElementById('edit-grado').value = c.grado;

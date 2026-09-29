@@ -248,7 +248,8 @@
         async function viewPropuesta(id) {
             try {
                 const data = await apiRequest('/propuestas/' + id);
-                const p = unwrap(data, 'propuesta');
+                const p = unwrap(data, 'propuesta') || {};
+                if (!p.id) { showLoadError('No se pudo cargar la propuesta', null); return; }
                 let html = `<h4>${p.titulo}</h4>`;
                 html += `<p><strong>Estado:</strong> ${getStatusBadge(p.estado)}</p>`;
                 html += `<p><strong>Estudiante:</strong> ${p.estudiante_nombre || p.usuario?.nombre || '-'}</p>`;
@@ -266,7 +267,8 @@
         async function evaluatePropuesta(id) {
             try {
                 const data = await apiRequest('/propuestas/' + id);
-                const p = unwrap(data, 'propuesta');
+                const p = unwrap(data, 'propuesta') || {};
+                if (!p.id) { showLoadError('No se pudo cargar la propuesta', null); return; }
                 document.getElementById('eval-id').value = p.id;
                 document.getElementById('eval-estado').value = p.estado;
                 document.getElementById('eval-observaciones').value = p.observaciones || '';

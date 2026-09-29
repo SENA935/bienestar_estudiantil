@@ -298,7 +298,8 @@
         async function editPeriodo(id) {
             try {
                 var data = await apiRequest('/configuracion/periodos/' + id);
-                var p = unwrap(data, 'periodo');
+                var p = unwrap(data, 'periodo') || {};
+                if (!p.id) { showLoadError('No se pudo cargar el periodo', null); return; }
                 document.getElementById('edit-periodo-id').value = p.id;
                 document.getElementById('edit-periodo-nombre').value = p.nombre;
                 document.getElementById('edit-periodo-fecha_inicio').value = p.fecha_inicio ? p.fecha_inicio.split('T')[0] : '';
@@ -392,7 +393,8 @@
         async function editCategoria(id) {
             try {
                 var data = await apiRequest('/configuracion/categorias/' + id);
-                var c = unwrap(data, 'categoria');
+                var c = unwrap(data, 'categoria') || {};
+                if (!c.id) { showLoadError('No se pudo cargar la categoría', null); return; }
                 document.getElementById('edit-categoria-id').value = c.id;
                 document.getElementById('edit-categoria-nombre').value = c.nombre;
                 document.getElementById('edit-categoria-descripcion').value = c.descripcion || '';

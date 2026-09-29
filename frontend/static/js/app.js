@@ -214,7 +214,9 @@ function unwrap(res, key) {
     if (d === undefined || d === null) return null;
     if (key === undefined || key === null) return d;
     if (Array.isArray(d)) return d;
-    return d[key] === undefined ? null : d[key];
+    if (d[key] !== undefined) return d[key];
+    if (typeof d === 'object' && d.id !== undefined) return d;
+    return null;
 }
 
 function showLoadError(message, err) {

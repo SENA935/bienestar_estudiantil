@@ -317,7 +317,8 @@
         async function editProgramacion(id) {
             try {
                 const data = await apiRequest('/programaciones/' + id);
-                const p = unwrap(data, 'programacion');
+                const p = unwrap(data, 'programacion') || {};
+                if (!p.id) { showLoadError('No se pudo cargar la programación', null); return; }
                 document.getElementById('edit-id').value = p.id;
                 document.getElementById('edit-select-actividad').value = p.actividad_id || '';
                 document.getElementById('edit-select-curso').value = p.curso_id || '';

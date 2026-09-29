@@ -284,7 +284,8 @@
         async function editActividad(id) {
             try {
                 const data = await apiRequest('/actividades/' + id);
-                const a = unwrap(data, 'actividad');
+                const a = unwrap(data, 'actividad') || {};
+                if (!a.id) { showLoadError('No se pudo cargar la actividad', null); return; }
                 document.getElementById('edit-id').value = a.id;
                 document.getElementById('edit-titulo').value = a.titulo;
                 document.getElementById('edit-descripcion').value = a.descripcion || '';

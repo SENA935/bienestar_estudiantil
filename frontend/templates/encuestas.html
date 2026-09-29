@@ -368,7 +368,8 @@
         async function viewEncuesta(id) {
             try {
                 const data = await apiRequest('/encuestas/' + id);
-                const e = unwrap(data, 'encuesta');
+                const e = unwrap(data, 'encuesta') || {};
+                if (!e.id) { showLoadError('No se pudo cargar la encuesta', null); return; }
                 let html = `<h4>${e.titulo}</h4><p>${e.descripcion || ''}</p>`;
                 if (e.preguntas && e.preguntas.length) {
                     e.preguntas.forEach((p, i) => {
@@ -398,7 +399,8 @@
         async function openResponseModal(id) {
             try {
                 const data = await apiRequest('/encuestas/' + id);
-                const e = unwrap(data, 'encuesta');
+                const e = unwrap(data, 'encuesta') || {};
+                if (!e.id) { showLoadError('No se pudo cargar la encuesta', null); return; }
                 document.getElementById('response-encuesta-id').value = id;
                 const container = document.getElementById('response-questions');
                 if (!e.preguntas || !e.preguntas.length) {
@@ -459,7 +461,8 @@
         async function editEncuesta(id) {
             try {
                 const data = await apiRequest('/encuestas/' + id);
-                const e = unwrap(data, 'encuesta');
+                const e = unwrap(data, 'encuesta') || {};
+                if (!e.id) { showLoadError('No se pudo cargar la encuesta', null); return; }
                 document.getElementById('edit-id').value = e.id;
                 document.getElementById('edit-titulo').value = e.titulo;
                 document.getElementById('edit-descripcion').value = e.descripcion || '';
