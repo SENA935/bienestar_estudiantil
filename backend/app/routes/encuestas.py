@@ -153,6 +153,21 @@ def responder_encuesta(id):
     data = request.get_json()
     respuestas_data = data.get('respuestas', [])
 
+    if not respuestas_data:
+        return jsonify({'success': False, 'message': 'Debe responder al menos una pregunta'}), 400
+
+    ya_respondio = RespuestaEncuesta.query.filter_by(
+        encuesta_id=id, usuario_id=user_id
+    ).first()
+    if ya_respondio:
+        return jsonify({'success': False, 'message': 'Ya respondiste esta encuesta'}), 409
+
+    ids_encuesta = {p.id for p in enc.preguntas}
+    for r in respuestas_data:
+        pid = r.get('pregunta_id')
+        if not pid or pid not in ids_encuesta:
+            return jsonify({'success': False, 'message': 'Pregunta no valida en esta encuesta'}), 400
+
     resp_enc = RespuestaEncuesta(encuesta_id=id, usuario_id=user_id)
     db.session.add(resp_enc)
     db.session.flush()
@@ -166,6 +181,17 @@ def responder_encuesta(id):
             valor_numerico=r.get('valor_numerico')
         )
         db.session.add(resp_preg)
+        db.session.flush()
+
+        pregunta = next(p for p in enc.preguntas if p.id == r['pregunta_id'])
+        if pregunta.requerida and not (
+            r.get('opcion_id') or r.get('texto_respuesta') or r.get('valor_numerico') is not None
+        ):
+            db.session.rollback()
+            return jsonify({
+                'success': False,
+                'message': f'La pregunta "{pregunta.texto}" es obligatoria'
+            }), 400
 
     aud = Auditoria(usuario_id=user_id, modulo='Encuestas', accion='RESPONDER',
                     descripcion=f'Encuesta respondida: {enc.titulo}', ip=request.remote_addr)

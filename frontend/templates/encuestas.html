@@ -402,6 +402,7 @@
                 const e = unwrap(data, 'encuesta') || {};
                 if (!e.id) { showLoadError('No se pudo cargar la encuesta', null); return; }
                 document.getElementById('response-encuesta-id').value = id;
+                currentQuestions = e.preguntas || [];
                 const container = document.getElementById('response-questions');
                 if (!e.preguntas || !e.preguntas.length) {
                     container.innerHTML = '<p>Esta encuesta no tiene preguntas.</p>';
@@ -424,7 +425,7 @@
                                     <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select>`;
                                 break;
                             case 'opcion_multiple':
-                                input = (p.opciones || []).map(o => `<label><input type="radio" name="respuesta_${i}" value="${o}" ${p.requerida ? 'required' : ''}> ${o}</label>`).join('<br>');
+                                input = (p.opciones || []).map(o => `<label><input type="radio" name="respuesta_${i}" value="${o.texto}" data-opcion-id="${o.id}" ${p.requerida ? 'required' : ''}> ${o.texto}</label>`).join('<br>');
                                 break;
                             default:
                                 input = `<input type="text" name="respuesta_${i}" class="form-control" ${p.requerida ? 'required' : ''}>`;
@@ -438,17 +439,35 @@
             }
         }
 
+        let currentQuestions = [];
+
         async function submitResponse(e) {
             e.preventDefault();
             const id = document.getElementById('response-encuesta-id').value;
             const form = e.target;
             const respuestas = [];
-            let i = 0;
-            while (form.elements['respuesta_' + i] !== undefined) {
-                respuestas.push({ pregunta_orden: i + 1, valor: form.elements['respuesta_' + i].value });
-                i++;
-            }
+            currentQuestions.forEach((p, i) => {
+                const el = form.elements['respuesta_' + i];
+                if (!el) return;
+                const valor = el.value;
+                if (valor === '' || valor === undefined) return;
+                const item = { pregunta_id: p.id };
+                if (p.tipo === 'escala') {
+                    item.valor_numerico = parseInt(valor, 10);
+                } else if (p.tipo === 'opcion_multiple') {
+                    const optId = el.dataset ? el.dataset.opcionId : null;
+                    if (optId) item.opcion_id = parseInt(optId, 10);
+                    item.texto_respuesta = valor;
+                } else {
+                    item.texto_respuesta = valor;
+                }
+                respuestas.push(item);
+            });
             try {
+                if (!respuestas.length) {
+                    showToast('Responde al menos una pregunta', 'error');
+                    return;
+                }
                 await apiRequest('/encuestas/' + id + '/responder', { method: 'POST', body: JSON.stringify({ respuestas }), headers: { 'Content-Type': 'application/json' } });
                 showToast('Respuestas enviadas exitosamente', 'success');
                 closeModal('response-modal');
