@@ -41,8 +41,11 @@ def diag():
 
     out['seed_run'] = False
     try:
-        from ...seed import seed
-        seed(create_app())
+        import sys, os
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
+        from seed import seed
+        from flask import current_app
+        seed(current_app._get_current_object())
         out['seed_run'] = True
     except Exception as e:
         out['seed_err'] = traceback.format_exc()
