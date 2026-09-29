@@ -8,6 +8,7 @@ class Propuesta(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     titulo = db.Column(db.String(200), nullable=False)
     descripcion = db.Column(db.Text)
+    categoria = db.Column(db.String(100))
     estudiante_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
     fecha = db.Column(db.DateTime, default=datetime.utcnow)
     estado = db.Column(db.String(20), default='Pendiente')
@@ -20,6 +21,7 @@ class Propuesta(db.Model):
             'id': self.id,
             'titulo': self.titulo,
             'descripcion': self.descripcion,
+            'categoria': self.categoria,
             'estudiante_id': self.estudiante_id,
             'estudiante_nombre': f"{self.estudiante.nombre} {self.estudiante.apellido}" if self.estudiante else None,
             'fecha': self.fecha.isoformat() if self.fecha else None,

@@ -125,6 +125,17 @@ def delete_encuesta(id):
         return jsonify({'success': False, 'message': 'Sin permisos'}), 403
 
     enc = Encuesta.query.get_or_404(id)
+
+    for resp in list(enc.respuestas):
+        for rp in list(resp.respuestas):
+            db.session.delete(rp)
+        db.session.delete(resp)
+    db.session.flush()
+
+    aud = Auditoria(usuario_id=user_id, modulo='Encuestas', accion='ELIMINAR',
+                    descripcion=f'Encuesta eliminada: {enc.titulo}', ip=request.remote_addr)
+    db.session.add(aud)
+
     db.session.delete(enc)
     db.session.commit()
     return jsonify({'success': True, 'message': 'Encuesta eliminada correctamente'})

@@ -150,6 +150,16 @@ def delete_usuario(id):
     user = Usuario.query.get_or_404(id)
     username = user.username
 
+    if user.id == admin.id:
+        return jsonify({'success': False, 'message': 'No puedes eliminar tu propia cuenta'}), 400
+
+    if user.rol.nombre == 'Administrador':
+        otros = Usuario.query.filter(
+            Usuario.rol.has(nombre='Administrador'), Usuario.id != user.id
+        ).count()
+        if otros == 0:
+            return jsonify({'success': False, 'message': 'No se puede eliminar el único administrador'}), 400
+
     auditoria = Auditoria(
         usuario_id=admin.id, modulo='Usuarios', accion='ELIMINAR',
         descripcion=f'Usuario eliminado: {username}', ip=request.remote_addr

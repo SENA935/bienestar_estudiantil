@@ -233,10 +233,12 @@
 
         async function loadDirectors() {
             try {
-                const data = await apiRequest('/usuarios');
+                const data = await apiRequest('/usuarios?per_page=100');
                 const usuarios = unwrap(data, 'usuarios') || [];
+                const docentes = usuarios.filter(u =>
+                    String(u.rol_nombre || '').toLowerCase() !== 'estudiante');
                 const options = '<option value="">Seleccionar...</option>' +
-                    usuarios.map(u => `<option value="${u.id}">${u.nombre} ${u.apellido || ''}</option>`).join('');
+                    docentes.map(u => `<option value="${u.id}">${u.nombre} ${u.apellido || ''}</option>`).join('');
                 document.getElementById('select-director').innerHTML = options;
                 document.getElementById('edit-director').innerHTML = options;
             } catch (e) {}

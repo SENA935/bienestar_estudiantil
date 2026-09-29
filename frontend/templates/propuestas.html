@@ -256,7 +256,7 @@
                 html += `<p><strong>Fecha:</strong> ${formatDate(p.fecha_creacion || p.fecha)}</p>`;
                 if (p.categoria) html += `<p><strong>Categoría:</strong> ${p.categoria}</p>`;
                 html += `<p><strong>Descripción:</strong></p><p>${p.descripcion}</p>`;
-                if (p.observaciones) html += `<p><strong>Observaciones:</strong></p><p>${p.observaciones}</p>`;
+                if (p.observaciones_coordinador) html += `<p><strong>Observaciones:</strong></p><p>${p.observaciones_coordinador}</p>`;
                 document.getElementById('detail-content').innerHTML = html;
                 openModal('detail-modal');
             } catch (e) {
@@ -283,7 +283,7 @@
             const form = e.target;
             const body = {
                 estado: form.estado.value,
-                observaciones: form.observaciones.value
+                observaciones_coordinador: form.observaciones.value
             };
             try {
                 await apiRequest('/propuestas/' + form.id.value, { method: 'PUT', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } });

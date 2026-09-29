@@ -12,7 +12,7 @@ class Encuesta(db.Model):
     fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
 
     preguntas = db.relationship('PreguntaEncuesta', backref='encuesta', lazy=True, cascade='all, delete-orphan')
-    respuestas = db.relationship('RespuestaEncuesta', backref='encuesta', lazy=True)
+    respuestas = db.relationship('RespuestaEncuesta', backref='encuesta', lazy=True, cascade='all, delete-orphan')
 
     def to_dict(self):
         return {

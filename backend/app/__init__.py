@@ -1,5 +1,6 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
+from sqlalchemy.exc import IntegrityError
 from .config import Config
 from .extensions import db, migrate, jwt, cors
 
@@ -55,6 +56,20 @@ def create_app():
     from .routes.pages import pages_bp
     app.register_blueprint(pages_bp)
 
+    @app.errorhandler(IntegrityError)
+    def _handle_integrity_error(err):
+        db.session.rollback()
+        return jsonify({
+            'success': False,
+            'message': 'No se puede completar la operacion: el registro esta asociado a otros datos.'
+        }), 409
+
+    @app.errorhandler(404)
+    def _handle_404(err):
+        if str(getattr(err, 'description', '')).lower().startswith('no api'):
+            return jsonify({'success': False, 'message': 'Recurso no encontrado'}), 404
+        return err
+
     _auto_provision(app)
 
     return app
@@ -66,6 +81,7 @@ def _auto_provision(app):
         try:
             from .extensions import db
             db.create_all()
+            _sync_schema(app)
             from ..seed import seed
             seed(app)
             print("== seed(app) completado ==")
@@ -75,6 +91,26 @@ def _auto_provision(app):
             _SEED_RESULT['trace'] = _tb.format_exc()
             _SEED_RESULT['ok'] = False
             app.logger.warning('Auto-provision no completo: %s', e)
+
+
+_SCHEMA_PATCHES = [
+    ('cursos', 'director_id', 'INTEGER'),
+    ('propuestas', 'categoria', 'VARCHAR(100)'),
+]
+
+
+def _sync_schema(app):
+    from sqlalchemy import inspect, text
+    from .extensions import db
+    insp = inspect(db.engine)
+    for table, column, ddl_type in _SCHEMA_PATCHES:
+        if table not in insp.get_table_names():
+            continue
+        if column in {c['name'] for c in insp.get_columns(table)}:
+            continue
+        db.session.execute(text(f'ALTER TABLE {table} ADD COLUMN {column} {ddl_type}'))
+        db.session.commit()
+        app.logger.info('Esquema: columna %s.%s agregada', table, column)
 
 
 _SEED_RESULT = {'ok': False, 'trace': None}

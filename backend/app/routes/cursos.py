@@ -43,6 +43,7 @@ def create_curso():
         nombre=data['nombre'], grado=data['grado'],
         jornada=data.get('jornada', 'Mañana'),
         director_grupo=data.get('director_grupo'),
+        director_id=data.get('director_id'),
         estado=data.get('estado', 'Activo')
     )
     db.session.add(curso)
@@ -68,6 +69,8 @@ def update_curso(id):
     curso.grado = data.get('grado', curso.grado)
     curso.jornada = data.get('jornada', curso.jornada)
     curso.director_grupo = data.get('director_grupo', curso.director_grupo)
+    if 'director_id' in data:
+        curso.director_id = data['director_id'] or None
     curso.estado = data.get('estado', curso.estado)
 
     aud = Auditoria(usuario_id=user_id, modulo='Cursos', accion='ACTUALIZAR',

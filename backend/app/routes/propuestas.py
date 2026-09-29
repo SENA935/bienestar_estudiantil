@@ -57,6 +57,7 @@ def create_propuesta():
     prop = Propuesta(
         titulo=data['titulo'],
         descripcion=data['descripcion'],
+        categoria=data.get('categoria'),
         estudiante_id=user_id,
         estado='Pendiente'
     )
@@ -93,6 +94,7 @@ def update_propuesta(id):
     data = request.get_json()
 
     prop.estado = data.get('estado', prop.estado)
+    prop.categoria = data.get('categoria', prop.categoria)
     prop.observaciones_coordinador = data.get('observaciones_coordinador', prop.observaciones_coordinador)
 
     alerta = Alerta(

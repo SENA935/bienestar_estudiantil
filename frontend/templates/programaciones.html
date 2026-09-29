@@ -207,15 +207,15 @@
                     apiRequest('/cursos'),
                     apiRequest('/usuarios?rol=Docente')
                 ]);
-                actividadesList = actRes.actividades || actRes || [];
-                cursosList = curRes.cursos || curRes || [];
-                docentesList = docRes.usuarios || docRes || [];
+                actividadesList = unwrap(actRes, 'actividades') || [];
+                cursosList = unwrap(curRes, 'cursos') || [];
+                docentesList = unwrap(docRes, 'usuarios') || [];
                 populateSelect('select-actividad', actividadesList, 'id', 'titulo');
                 populateSelect('select-curso', cursosList, 'id', 'nombre');
-                populateSelect('select-docente', docentesList, 'id', 'nombre');
+                populateSelect('select-docente', docentesList, 'id', '_full');
                 populateSelect('edit-select-actividad', actividadesList, 'id', 'titulo');
                 populateSelect('edit-select-curso', cursosList, 'id', 'nombre');
-                populateSelect('edit-select-docente', docentesList, 'id', 'nombre');
+                populateSelect('edit-select-docente', docentesList, 'id', '_full');
             } catch (e) {
                 showLoadError('Error al cargar datos de selects', e);
             }
@@ -224,7 +224,12 @@
         function populateSelect(id, items, valueKey, labelKey) {
             const sel = document.getElementById(id);
             sel.innerHTML = '<option value="">Seleccionar...</option>' +
-                items.map(i => `<option value="${i[valueKey]}">${i[labelKey]}</option>`).join('');
+                items.map(i => {
+                    const label = labelKey === '_full'
+                        ? `${i.nombre} ${i.apellido || ''}`.trim()
+                        : i[labelKey];
+                    return `<option value="${i[valueKey]}">${label}</option>`;
+                }).join('');
         }
 
         async function loadData() {
