@@ -111,7 +111,8 @@
         align-items: flex-start;
     }
 
-    .table th, .table td {
+    .table th, .table td,
+    .data-table th, .data-table td {
         padding: 8px 10px;
         font-size: 13px;
     }
