@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Bienestar Estudiantil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/responsive.css">
+</head>
+<body>
+    <div class="sidebar-overlay"></div>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-icon"><img src="/static/img/logoo1.png" alt="Logo" style="width:90%;max-width:100px;height:auto"></div>
+            <div>
+                <h2>Bienestar Estudiantil</h2>
+                <small>Salud Mental y Pausas Activas</small>
+            </div>
+        </div>
+        <nav class="sidebar-nav"></nav>
+    </aside>
+    <header class="header">
+        <div class="header-left">
+            <button class="menu-toggle"><i class="fas fa-bars"></i></button>
+            <a href="/" title="Volver a la página principal" style="color:var(--text-primary);margin-right:10px;font-size:18px"><i class="fas fa-home"></i></a>
+            <h2 class="header-title">Mi Perfil</h2>
+        </div>
+        <div class="header-right">
+            <button class="notification-btn" onclick="window.location.href='/alertas'">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge" style="display:none">0</span>
+            </button>
+            <div class="user-menu">
+                <div class="user-avatar"></div>
+                <div class="user-info">
+                    <div class="name"></div>
+                    <div class="role"></div>
+                </div>
+                <div class="user-dropdown">
+                    <a href="/perfil"><i class="fas fa-user"></i> Mi perfil</a>
+                    <a href="#" onclick="event.preventDefault();logout()"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Mi Perfil</h1>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+            <div class="card">
+                <div class="card-header"><h3><i class="fas fa-user"></i> Información Personal</h3></div>
+                <div class="card-body">
+                    <div style="text-align:center;margin-bottom:24px">
+                        <div class="user-avatar" id="profileAvatar" style="width:80px;height:80px;font-size:28px;margin:0 auto 12px"></div>
+                        <h3 id="profileName" style="font-size:20px;font-weight:700;margin-bottom:4px"></h3>
+                        <span class="badge badge-primary" id="profileRole"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" class="form-control" id="profileNombre" readonly style="background:var(--background)">
+                    </div>
+                    <div class="form-group">
+                        <label>Apellido</label>
+                        <input type="text" class="form-control" id="profileApellido" readonly style="background:var(--background)">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" class="form-control" id="profileEmail" readonly style="background:var(--background)">
+                    </div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" class="form-control" id="profileUsername" readonly style="background:var(--background)">
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><h3><i class="fas fa-lock"></i> Cambiar Contraseña</h3></div>
+                <div class="card-body">
+                    <div id="passwordError" class="alert-inline error" style="display:none"></div>
+                    <form id="passwordForm">
+                        <div class="form-group">
+                            <label>Contraseña Actual</label>
+                            <div class="input-icon">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" name="current_password" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Nueva Contraseña</label>
+                            <div class="input-icon">
+                                <i class="fas fa-key"></i>
+                                <input type="password" name="new_password" class="form-control" minlength="6" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Confirmar Contraseña</label>
+                            <div class="input-icon">
+                                <i class="fas fa-key"></i>
+                                <input type="password" name="confirm_password" class="form-control" minlength="6" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-save"></i> Actualizar Contraseña</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="/static/js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded',async()=>{if(!Auth.checkAuth())return;initLayout();const u=Auth.getUsuario();if(u){document.getElementById('profileAvatar').textContent=u.nombre.charAt(0)+u.apellido.charAt(0);document.getElementById('profileName').textContent=u.nombre+' '+u.apellido;document.getElementById('profileRole').textContent=u.rol_nombre;document.getElementById('profileNombre').value=u.nombre;document.getElementById('profileApellido').value=u.apellido;document.getElementById('profileEmail').value=u.email;document.getElementById('profileUsername').value=u.username}document.getElementById('passwordForm').addEventListener('submit',async e=>{e.preventDefault();const f=e.target,err=document.getElementById('passwordError');if(f.new_password.value!==f.confirm_password.value){err.textContent='Las contraseñas no coinciden';err.style.display='block';return}err.style.display='none';const r=await Api.post('/api/auth/change-password',{current_password:f.current_password.value,new_password:f.new_password.value});if(r&&r.success){Toast.show('Contraseña actualizada','success');f.reset()}else{err.textContent=r?r.message:'Error';err.style.display='block'}})});
+    </script>
+</body>
+</html>

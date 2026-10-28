@@ -1,23 +1,13 @@
-from datetime import datetime
 from ..extensions import db
 
 
 class CategoriaActividad(db.Model):
     __tablename__ = 'categorias_actividad'
-
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nombre = db.Column(db.String(100), nullable=False, unique=True)
-    descripcion = db.Column(db.Text)
-    color = db.Column(db.String(20), default='#3B82F6')
-    estado = db.Column(db.String(20), default='Activa')
-    fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
+    descripcion = db.Column(db.String(200))
+    color = db.Column(db.String(20), default='#087f8c')
+    actividades = db.relationship('Actividad', backref='categoria', lazy=True)
 
     def to_dict(self):
-        return {
-            'id': self.id,
-            'nombre': self.nombre,
-            'descripcion': self.descripcion,
-            'color': self.color,
-            'estado': self.estado,
-            'fecha_creacion': self.fecha_creacion.isoformat() if self.fecha_creacion else None
-        }
+        return {'id': self.id, 'nombre': self.nombre, 'descripcion': self.descripcion, 'color': self.color}

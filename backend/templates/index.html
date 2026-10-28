@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienestar Estudiantil - Salud Mental y Pausas Activas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/responsive.css">
+</head>
+<body>
+    <header class="landing-header">
+        <a href="/" class="logo">
+            <img src="/static/img/logoo1.png" alt="Logo" style="height:40px;width:auto">
+            <span>Salud Mental y Pausas Activas</span>
+        </a>
+        <nav>
+            <a href="#inicio">Inicio</a>
+            <a href="#servicios">Servicios</a>
+            <a href="#blog">Blog</a>
+            <a href="/login" class="btn-login-nav">Iniciar sesión</a>
+        </nav>
+        <button class="menu-toggle" onclick="document.querySelector('.landing-header nav').classList.toggle('mobile-open')">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <section class="hero" id="inicio">
+        <div class="hero-left">
+            <h1>Tu bienestar mental es <span>importante</span></h1>
+            <p>Un espacio de escucha, orientación y crecimiento personal.</p>
+            <div class="hero-buttons">
+                <a href="#servicios" class="btn btn-primary"><i class="fas fa-info-circle"></i> Conoce nuestros servicios</a>
+            </div>
+        </div>
+        <div class="hero-right">
+            <div class="hero-img">
+                <img src="/static/img/logoo1.png" alt="Logo" style="width:100%;max-width:300px;height:auto;opacity:0.8">
+            </div>
+        </div>
+    </section>
+
+    <section class="services-section" id="servicios">
+        <div class="section-title">
+            <h2>Nuestros Servicios</h2>
+            <p>Herramientas y espacios diseñados para tu bienestar integral</p>
+        </div>
+        <div class="services-grid">
+            <a href="https://colectivoaquiyahora.org/que-es-la-terapia-individual/" target="_blank" class="service-card">
+                <div class="icon" style="background:#e0f2fe;color:#0284c7"><i class="fas fa-brain"></i></div>
+                <h3>Salud Mental</h3>
+                <p>Espacios de escucha, orientacion psicologica y apoyo emocional para todos los estudiantes.</p>
+            </a>
+            <a href="https://es.scribd.com/document/562516258/Triptico-pausas-activas" target="_blank" class="service-card">
+                <div class="icon" style="background:var(--success-bg);color:var(--success)"><i class="fas fa-heart"></i></div>
+                <h3>Pausas Activas</h3>
+                <p>Ejercicios guiados de estiramiento y respiracion para recargar energias durante el dia.</p>
+            </a>
+            <a href="https://www.escritosdepsicologia.es/test-para-evaluar-estado-emocional/" target="_blank" class="service-card">
+                <div class="icon" style="background:var(--warning-bg);color:var(--warning)"><i class="fas fa-poll"></i></div>
+                <h3>Encuestas</h3>
+                <p>Instrumentos de diagnostico para conocer el estado emocional y las necesidades de la comunidad.</p>
+            </a>
+            <a href="https://positivepsychology.com/es/libros-de-hojas-de-trabajo-sobre-actividades-de-salud-mental/" target="_blank" class="service-card">
+                <div class="icon" style="background:#f3e8ff;color:#9333ea"><i class="fas fa-running"></i></div>
+                <h3>Actividades</h3>
+                <p>Programas de bienestar con actividades recreativas, deportivas y de formacion integral.</p>
+            </a>
+            <a href="https://positivepsychology.com/es/libros-de-hojas-de-trabajo-sobre-actividades-de-salud-mental/" target="_blank" class="service-card">
+                <div class="icon" style="background:var(--info-bg);color:var(--info)"><i class="fas fa-book-open"></i></div>
+                <h3>Recursos</h3>
+                <p>Material educativo, guias de autocuidado y herramientas para el manejo del estres.</p>
+            </a>
+            <a href="https://www.minsalud.gov.co/salud/publica/salud-mental/Paginas/linea-106.aspx" target="_blank" class="service-card">
+                <div class="icon" style="background:#ccfbf1;color:var(--primary)"><i class="fas fa-hands-helping"></i></div>
+                <h3>Orientacion</h3>
+                <p>Red de apoyo y canal de referenciacion para situaciones que requieran atencion especializada.</p>
+            </a>
+        </div>
+    </section>
+
+    <section class="blog-section" id="blog">
+        <div class="section-title">
+            <h2>Blog</h2>
+            <p>Artículos y novedades sobre bienestar estudiantil</p>
+        </div>
+        <div class="blog-grid">
+            <a href="https://terapeutaia.com/blog/tecnicas-respiracion-ansiedad/" target="_blank" class="blog-card">
+                <div class="img" style="background:linear-gradient(135deg,#dcfce7,#a5f3fc)"><i class="fas fa-spa" style="color:var(--primary);font-size:40px"></i></div>
+                <div class="content">
+                    <span class="badge badge-success" style="background:var(--success-bg);color:#15803d">Bienestar</span>
+                    <h4>5 tecnicas de respiracion para reducir la ansiedad</h4>
+                    <p>Aprende sencillas tecnicas de respiracion que puedes practicar en cualquier momento del dia.</p>
+                    <span class="date"><i class="fas fa-calendar"></i> 20 Agosto, 2026</span>
+                </div>
+            </a>
+            <a href="https://psicologianova.com/psicologia-del-sueno-y-rendimiento-academico/" target="_blank" class="blog-card">
+                <div class="img" style="background:linear-gradient(135deg,#fef3c7,#fde68a)"><i class="fas fa-brain" style="color:var(--warning);font-size:40px"></i></div>
+                <div class="content">
+                    <span class="badge badge-warning" style="background:var(--warning-bg);color:#b45309">Salud Mental</span>
+                    <h4>El impacto del sueno en el rendimiento academico</h4>
+                    <p>Descubre por que dormir bien es clave para tu concentracion y aprendizaje.</p>
+                    <span class="date"><i class="fas fa-calendar"></i> 18 Agosto, 2026</span>
+                </div>
+            </a>
+            <a href="https://nuevaescuelamexicana.sep.gob.mx/contenido/coleccion/construccion-de-entornos-saludables-en-la-escuela/" target="_blank" class="blog-card">
+                <div class="img" style="background:linear-gradient(135deg,#e0f2fe,#bae6fd)"><i class="fas fa-users" style="color:#0284c7;font-size:40px"></i></div>
+                <div class="content">
+                    <span class="badge badge-info" style="background:var(--info-bg);color:#0891b2">Comunidad</span>
+                    <h4>Como construir relaciones saludables en el entorno escolar</h4>
+                    <p>Estrategias para fomentar la empatia y el respeto entre companeros.</p>
+                    <span class="date"><i class="fas fa-calendar"></i> 15 Agosto, 2026</span>
+                </div>
+            </a>
+            <a href="https://actosenlaescuela.com/mindfulness-en-el-aula/" target="_blank" class="blog-card">
+                <div class="img" style="background:linear-gradient(135deg,#f3e8ff,#e9d5ff)"><i class="fas fa-om" style="color:#9333ea;font-size:40px"></i></div>
+                <div class="content">
+                    <span class="badge badge-purple" style="background:#f3e8ff;color:#9333ea">Mindfulness</span>
+                    <h4>Mindfulness en el aula: beneficios comprobados</h4>
+                    <p>La practica de atencion plena puede transformar el clima del aula y mejorar el bienestar.</p>
+                    <span class="date"><i class="fas fa-calendar"></i> 12 Agosto, 2026</span>
+                </div>
+            </a>
+            <a href="https://www.selia.co/blog/senales-prestar-atencion-salud-mental" target="_blank" class="blog-card">
+                <div class="img" style="background:linear-gradient(135deg,#fee2e2,#fecaca)"><i class="fas fa-hand-holding-heart" style="color:var(--danger);font-size:40px"></i></div>
+                <div class="content">
+                    <span class="badge badge-danger" style="background:var(--danger-bg);color:#dc2626">Cuidado</span>
+                    <h4>Senales de alerta: cuando pedir ayuda profesional</h4>
+                    <p>Identifica las senales tempranas y conoce los recursos disponibles de apoyo.</p>
+                    <span class="date"><i class="fas fa-calendar"></i> 10 Agosto, 2026</span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <footer class="landing-footer">
+        <p>&copy; 2026 Bienestar Estudiantil - Salud Mental y Pausas Activas. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- Chatbot -->
+    <button class="chatbot-toggle" id="chatbotToggle" onclick="toggleChatbot()">
+        <i class="fas fa-comments"></i>
+    </button>
+    <div class="chatbot-window" id="chatbotWindow">
+        <div class="chatbot-header">
+            <div class="chatbot-header-info">
+                <div class="chatbot-avatar"><i class="fas fa-robot"></i></div>
+                <div>
+                    <h4>Asistente Bienestar</h4>
+                    <small><span class="chatbot-status-dot"></span> En línea</small>
+                </div>
+            </div>
+            <button class="chatbot-close" onclick="toggleChatbot()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages"></div>
+        <div class="chatbot-quick" id="chatbotQuick"></div>
+        <form class="chatbot-input" id="chatbotForm">
+            <input type="text" id="chatbotInput" placeholder="Escribe tu pregunta..." autocomplete="off">
+            <button type="submit"><i class="fas fa-paper-plane"></i></button>
+        </form>
+    </div>
+
+    <style>
+        .chatbot-toggle{position:fixed;bottom:24px;right:24px;width:60px;height:60px;border-radius:50%;background:var(--primary);color:#fff;border:none;font-size:22px;cursor:pointer;box-shadow:0 4px 20px rgba(8,127,140,.4);z-index:9999;transition:transform .3s}
+        .chatbot-toggle:hover{transform:scale(1.1)}
+        .chatbot-window{position:fixed;bottom:96px;right:24px;width:380px;height:520px;background:var(--card-bg,#fff);border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,.18);z-index:9999;display:none;flex-direction:column;overflow:hidden;border:1px solid var(--border,#e2e8f0)}
+        .chatbot-window.active{display:flex}
+        .chatbot-header{background:var(--primary,#087f8c);color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+        .chatbot-header-info{display:flex;align-items:center;gap:10px}
+        .chatbot-avatar{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center}
+        .chatbot-header h4{margin:0;font-size:15px}
+        .chatbot-header small{opacity:.85;font-size:11px}
+        .chatbot-status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#4ade80;margin-right:4px}
+        .chatbot-close{background:none;border:none;color:#fff;font-size:18px;cursor:pointer;opacity:.8}
+        .chatbot-close:hover{opacity:1}
+        .chatbot-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+        .cb-msg{max-width:85%;padding:10px 14px;border-radius:14px;font-size:13px;line-height:1.5;animation:cbIn .3s ease}
+        @keyframes cbIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        .cb-bot{background:#f1f5f9;color:#1e293b;border-bottom-left-radius:4px;align-self:flex-start}
+        .cb-user{background:var(--primary,#087f8c);color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+        .cb-typing{display:flex;gap:4px;padding:12px 16px;align-self:flex-start}
+        .cb-typing span{width:7px;height:7px;border-radius:50%;background:#94a3b8;animation:cbDot 1.2s infinite}
+        .cb-typing span:nth-child(2){animation-delay:.2s}
+        .cb-typing span:nth-child(3){animation-delay:.4s}
+        @keyframes cbDot{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+        .chatbot-quick{padding:8px 12px;display:flex;flex-wrap:wrap;gap:6px;border-top:1px solid var(--border,#e2e8f0)}
+        .cb-quick-btn{background:var(--bg-secondary,#f8fafc);border:1px solid var(--border,#e2e8f0);border-radius:20px;padding:5px 12px;font-size:11px;cursor:pointer;color:var(--text-secondary,#475569);transition:all .2s}
+        .cb-quick-btn:hover{background:var(--primary,#087f8c);color:#fff;border-color:var(--primary,#087f8c)}
+        .chatbot-input{display:flex;padding:10px 12px;border-top:1px solid var(--border,#e2e8f0);gap:8px}
+        .chatbot-input input{flex:1;border:1px solid var(--border,#e2e8f0);border-radius:20px;padding:9px 14px;font-size:13px;outline:none;font-family:inherit}
+        .chatbot-input input:focus{border-color:var(--primary,#087f8c)}
+        .chatbot-input button{width:40px;height:40px;border-radius:50%;background:var(--primary,#087f8c);color:#fff;border:none;cursor:pointer;font-size:14px;flex-shrink:0}
+        @media(max-width:480px){.chatbot-window{right:8px;left:8px;width:auto;bottom:88px;height:70vh}}
+    </style>
+
+    <script>
+        const CB_SYSTEM_PROMPT=`Eres el asistente virtual de "Bienestar Estudiantil", una plataforma web de salud mental y pausas activas para instituciones educativas en Colombia. Respondes en español, de forma amable, cálida y profesional. Siempre orientas sobre: salud mental (estrés, ansiedad, emociones, sueño, alimentación, relaciones), pausas activas y ejercicios de respiración/estiramiento, la plataforma (registro, roles, encuestas, actividades, propuestas, reportes), y bienestar general. En situaciones de crisis o emergencia (suicidio, autolesiones, violencia), SIEMPRE mencionas la Línea 106 de salud mental de Colombia (24/7) y la Línea 123. Mantienes respuestas breves y útiles (2-4 oraciones máximo), usando emojis con moderación. Si no sabes algo, lo admites amablemente.`;
+
+        let cbOpen=false;
+        let cbHistory=[];
+
+        function toggleChatbot(){
+            cbOpen=!cbOpen;
+            const w=document.getElementById('chatbotWindow');
+            w.classList.toggle('active',cbOpen);
+            if(cbOpen&&document.getElementById('chatbotMessages').children.length===0){
+                setTimeout(()=>cbAdd('bot','¡Hola! 👋 Soy el asistente de Bienestar Estudiantil. Puedo responder cualquier pregunta sobre salud mental, pausas activas, la plataforma o lo que necesites. ¿En qué puedo ayudarte?'),400);
+                renderQuick();
+            }
+        }
+
+        function cbAdd(who,text){
+            const c=document.getElementById('chatbotMessages');
+            const d=document.createElement('div');
+            d.className='cb-msg '+(who==='bot'?'cb-bot':'cb-user');
+            d.innerHTML=text.replace(/\n/g,'<br>');
+            c.appendChild(d);
+            c.scrollTop=c.scrollHeight;
+        }
+
+        function cbTyping(){
+            const c=document.getElementById('chatbotMessages');
+            const d=document.createElement('div');
+            d.className='cb-typing';
+            d.innerHTML='<span></span><span></span><span></span>';
+            c.appendChild(d);
+            c.scrollTop=c.scrollHeight;
+            return d;
+        }
+
+        async function cbAskAI(userMsg){
+            cbHistory.push({role:'user',content:userMsg});
+            const messages=[{role:'system',content:CB_SYSTEM_PROMPT},...cbHistory.slice(-10)];
+            try{
+                const resp=await fetch('https://text.pollinations.ai/openai',{
+                    method:'POST',
+                    headers:{'Content-Type':'application/json'},
+                    body:JSON.stringify({model:'openai',messages:messages})
+                });
+                if(!resp.ok)throw new Error('API error');
+                const data=await resp.json();
+                const reply=data.choices&&data.choices[0]&&data.choices[0].message?data.choices[0].message.content:'No pude generar una respuesta. Intenta de nuevo.';
+                cbHistory.push({role:'assistant',content:reply});
+                return reply;
+            }catch(e){
+                console.error('Chatbot AI error:',e);
+                cbHistory.pop();
+                return 'Lo siento, tuve un problema al conectar. ¿Podrías intentar de nuevo? 🔄';
+            }
+        }
+
+        function renderQuick(){
+            const q=document.getElementById('chatbotQuick');
+            const tips=['¿Qué es Bienestar?','Consejos de estrés','Pausa de respiración','Cómo registro','Línea 106','Tips para dormir'];
+            q.innerHTML=tips.map(t=>`<button class="cb-quick-btn" onclick="cbQuick('${t}')">${t}</button>`).join('');
+        }
+
+        function cbQuick(text){
+            document.getElementById('chatbotInput').value=text;
+            document.getElementById('chatbotForm').dispatchEvent(new Event('submit'));
+        }
+
+        document.getElementById('chatbotForm').addEventListener('submit',async function(e){
+            e.preventDefault();
+            const inp=document.getElementById('chatbotInput');
+            const msg=inp.value.trim();
+            if(!msg)return;
+            cbAdd('user',msg);
+            inp.value='';
+            document.getElementById('chatbotQuick').innerHTML='';
+            const typing=cbTyping();
+            const reply=await cbAskAI(msg);
+            typing.remove();
+            cbAdd('bot',reply);
+        });
+    </script>
+</body>
+</html>

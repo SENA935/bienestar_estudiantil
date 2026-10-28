@@ -1,7 +1,11 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from ..models.usuario import Usuario
 from ..models.actividad import Actividad
+from ..models.categoria_actividad import CategoriaActividad
+from ..models.programacion import Programacion
+from ..models.actividad_realizada import ActividadRealizada
+from ..models.estudiante import Estudiante
+from ..models.usuario import Usuario
 from ..models.auditoria import Auditoria
 from ..extensions import db
 
@@ -10,112 +14,88 @@ actividades_bp = Blueprint('actividades', __name__)
 
 @actividades_bp.route('', methods=['GET'])
 @jwt_required()
-def get_actividades():
-    page = request.args.get('page', 1, type=int)
-    per_page = request.args.get('per_page', 10, type=int)
+def listar():
     search = request.args.get('search', '')
-    categoria = request.args.get('categoria', '')
-    estado = request.args.get('estado', '')
-
-    query = Actividad.query
+    cat = request.args.get('categoria', '')
+    q = Actividad.query
     if search:
-        query = query.filter(Actividad.titulo.ilike(f'%{search}%'))
-    if categoria:
-        query = query.filter_by(categoria=categoria)
-    if estado:
-        query = query.filter_by(estado=estado)
-
-    pagination = query.order_by(Actividad.id.desc()).paginate(
-        page=page, per_page=per_page, error_out=False
-    )
-    return jsonify({
-        'success': True,
-        'data': {
-            'actividades': [a.to_dict() for a in pagination.items],
-            'total': pagination.total,
-            'pages': pagination.pages,
-            'current_page': page
-        }
-    })
-
-
-@actividades_bp.route('/<int:id>', methods=['GET'])
-@jwt_required()
-def get_actividad(id):
-    act = Actividad.query.get_or_404(id)
-    return jsonify({'success': True, 'data': act.to_dict()})
+        q = q.filter(Actividad.titulo.ilike(f'%{search}%'))
+    if cat:
+        q = q.join(CategoriaActividad).filter(CategoriaActividad.nombre == cat)
+    items = q.order_by(Actividad.fecha_creacion.desc()).all()
+    data = []
+    for a in items:
+        d = a.to_dict()
+        progs = Programacion.query.filter_by(actividad_id=a.id).all()
+        d['programaciones_count'] = len(progs)
+        participantes = []
+        for p in progs:
+            curso = p.curso
+            if curso:
+                estudiantes = Estudiante.query.filter_by(curso_id=curso.id, estado='Activo').all()
+                for est in estudiantes:
+                    nombre_completo = f'{est.nombre} {est.apellido}'
+                    if nombre_completo not in participantes:
+                        participantes.append(nombre_completo)
+            if p.docente:
+                docente_nombre = f'{p.docente.nombre} {p.docente.apellido}'
+                if docente_nombre not in participantes:
+                    participantes.append(docente_nombre)
+        d['participantes'] = participantes
+        d['participantes_count'] = len(participantes)
+        data.append(d)
+    return jsonify({'success': True, 'data': {'actividades': data}})
 
 
 @actividades_bp.route('', methods=['POST'])
 @jwt_required()
-def create_actividad():
-    user_id = int(get_jwt_identity())
-    user = Usuario.query.get(user_id)
-    if not user or user.rol.nombre not in ['Administrador', 'Coordinador']:
-        return jsonify({'success': False, 'message': 'Sin permisos'}), 403
-
+def crear():
+    uid = int(get_jwt_identity())
     data = request.get_json()
-    if not data.get('titulo') or not data.get('categoria'):
-        return jsonify({'success': False, 'message': 'Título y categoría son requeridos'}), 400
-
-    act = Actividad(
-        titulo=data['titulo'], descripcion=data.get('descripcion'),
-        categoria=data['categoria'], duracion=data.get('duracion', 30),
-        instrucciones=data.get('instrucciones'),
-        estado=data.get('estado', 'Activa')
-    )
-    db.session.add(act)
-    aud = Auditoria(usuario_id=user_id, modulo='Actividades', accion='CREAR',
-                    descripcion=f'Actividad creada: {act.titulo}', ip=request.remote_addr)
-    db.session.add(aud)
+    a = Actividad(titulo=data['titulo'], descripcion=data.get('descripcion'), categoria_id=data['categoria_id'], duracion=data.get('duracion', 30), instrucciones=data.get('instrucciones'), estado=data.get('estado', 'Activa'))
+    db.session.add(a)
+    db.session.add(Auditoria(usuario_id=uid, modulo='Actividades', accion='CREAR', descripcion=f'Creó actividad {a.titulo}'))
     db.session.commit()
-    return jsonify({'success': True, 'message': 'Actividad creada correctamente', 'data': act.to_dict()}), 201
+    return jsonify({'success': True, 'message': 'Actividad creada', 'data': a.to_dict()}), 201
 
 
 @actividades_bp.route('/<int:id>', methods=['PUT'])
 @jwt_required()
-def update_actividad(id):
-    user_id = int(get_jwt_identity())
-    user = Usuario.query.get(user_id)
-    if not user or user.rol.nombre not in ['Administrador', 'Coordinador']:
-        return jsonify({'success': False, 'message': 'Sin permisos'}), 403
-
-    act = Actividad.query.get_or_404(id)
+def actualizar(id):
+    a = Actividad.query.get_or_404(id)
     data = request.get_json()
-
-    act.titulo = data.get('titulo', act.titulo)
-    act.descripcion = data.get('descripcion', act.descripcion)
-    act.categoria = data.get('categoria', act.categoria)
-    act.duracion = data.get('duracion', act.duracion)
-    act.instrucciones = data.get('instrucciones', act.instrucciones)
-    act.estado = data.get('estado', act.estado)
-
-    aud = Auditoria(usuario_id=user_id, modulo='Actividades', accion='ACTUALIZAR',
-                    descripcion=f'Actividad actualizada: {act.titulo}', ip=request.remote_addr)
-    db.session.add(aud)
+    a.titulo = data.get('titulo', a.titulo)
+    a.descripcion = data.get('descripcion', a.descripcion)
+    a.categoria_id = data.get('categoria_id', a.categoria_id)
+    a.duracion = data.get('duracion', a.duracion)
+    a.instrucciones = data.get('instrucciones', a.instrucciones)
+    a.estado = data.get('estado', a.estado)
     db.session.commit()
-    return jsonify({'success': True, 'message': 'Actividad actualizada correctamente', 'data': act.to_dict()})
+    return jsonify({'success': True, 'message': 'Actividad actualizada', 'data': a.to_dict()})
 
 
 @actividades_bp.route('/<int:id>', methods=['DELETE'])
 @jwt_required()
-def delete_actividad(id):
-    user_id = int(get_jwt_identity())
-    user = Usuario.query.get(user_id)
-    if not user or user.rol.nombre not in ['Administrador', 'Coordinador']:
-        return jsonify({'success': False, 'message': 'Sin permisos'}), 403
-
-    act = Actividad.query.get_or_404(id)
-    aud = Auditoria(usuario_id=user_id, modulo='Actividades', accion='ELIMINAR',
-                    descripcion=f'Actividad eliminada: {act.titulo}', ip=request.remote_addr)
-    db.session.add(aud)
-    db.session.delete(act)
+def eliminar(id):
+    uid = int(get_jwt_identity())
+    a = Actividad.query.get_or_404(id)
+    db.session.add(Auditoria(usuario_id=uid, modulo='Actividades', accion='ELIMINAR', descripcion=f'Eliminó actividad {a.titulo}'))
+    db.session.delete(a)
     db.session.commit()
-    return jsonify({'success': True, 'message': 'Actividad eliminada correctamente'})
+    return jsonify({'success': True, 'message': 'Actividad eliminada'})
 
 
-@actividades_bp.route('/all', methods=['GET'])
+@actividades_bp.route('/categorias', methods=['GET'])
 @jwt_required()
-def get_all_actividades():
-    acts = Actividad.query.filter_by(estado='Activa').all()
-    return jsonify({'success': True, 'data': [a.to_dict() for a in acts]})
+def listar_categorias():
+    return jsonify({'success': True, 'data': [c.to_dict() for c in CategoriaActividad.query.all()]})
+
+
+@actividades_bp.route('/categorias', methods=['POST'])
+@jwt_required()
+def crear_categoria():
+    data = request.get_json()
+    c = CategoriaActividad(nombre=data['nombre'], descripcion=data.get('descripcion'), color=data.get('color', '#087f8c'))
+    db.session.add(c)
+    db.session.commit()
+    return jsonify({'success': True, 'message': 'Categoría creada', 'data': c.to_dict()}), 201

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Blog - Bienestar Estudiantil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/responsive.css">
+</head>
+<body>
+    <header class="landing-header">
+        <a href="/" class="logo">
+            <i class="fas fa-leaf"></i>
+            <span>Salud Mental y Pausas Activas</span>
+        </a>
+        <nav>
+            <a href="/">Inicio</a>
+            <a href="/#servicios">Servicios</a>
+            <a href="/#blog">Blog</a>
+            <a href="/login" class="btn-login-nav">Iniciar sesion</a>
+        </nav>
+        <button class="menu-toggle" onclick="document.querySelector('.landing-header nav').classList.toggle('mobile-open')">
+            <img src="/static/img/logoo1.png" alt="Logo" style="width:90%;max-width:100px;height:auto">
+        </button>
+    </header>
+
+    <main class="blog-article-page">
+        <div class="blog-article-container">
+            <a href="/#blog" class="blog-back"><i class="fas fa-arrow-left"></i> Volver al Blog</a>
+            <div id="blogContent" class="blog-article-content">
+                <p>Cargando...</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="landing-footer">
+        <p>&copy; 2026 Bienestar Estudiantil - Salud Mental y Pausas Activas. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        const articles = {
+            'respiracion': {
+                title: '5 tecnicas de respiracion para reducir la ansiedad',
+                category: 'Bienestar',
+                categoryColor: '#15803d',
+                categoryBg: 'var(--success-bg)',
+                date: '20 Agosto, 2026',
+                icon: 'fas fa-spa',
+                iconColor: 'var(--primary)',
+                iconBg: 'linear-gradient(135deg,#dcfce7,#a5f3fc)',
+                content: `
+                    <p>La respiracion es una de las herramientas mas poderosas y accesibles para manejar la ansiedad en el dia a dia. Aqui te presentamos 5 tecnicas simples que puedes practicar en cualquier momento.</p>
+
+                    <h3>1. Respiracion Diafragmatica</h3>
+                    <p>Coloca una mano en el pecho y otra en el abdomen. Inhala lentamente por la nariz durante 4 segundos, sintiendo como se infla el abdomen. Exhala por la boca durante 6 segundos. Repite 10 veces.</p>
+
+                    <h3>2. Respiracion 4-7-8</h3>
+                    <p>Inhala por la nariz contando hasta 4, mantén la respiracion contando hasta 7, y exhala por la boca contando hasta 8. Esta tecnica activa el sistema nervioso parasimpatico y reduce la ansiedad rapidamente.</p>
+
+                    <h3>3. Respiracion Caja (Box Breathing)</h3>
+                    <p>Inhala 4 segundos, mantén 4 segundos, exhala 4 segundos, mantén vacio 4 segundos. Repite el ciclo 4 veces. Utilizada por militares y atletas para mantener la calma bajo presion.</p>
+
+                    <h3>4. Respiracion Alternada</h3>
+                    <p>Cierra la fosa nasal derecha con el pulgar, inhala por la izquierda. Cierra la izquierda con el anular, exhala por la derecha. Alterna durante 5 minutos. Equilibra ambos hemisferios cerebrales.</p>
+
+                    <h3>5. Respiracion del Sapito</h3>
+                    <p>Inhala profundo, y al exhalar emite un sonido de "rrr" como un sapo, manteniendo la boca abierta y los labios relajados. Repite 5 veces. Excelente para liberar tension facial.</p>
+
+                    <div class="blog-tip">
+                        <i class="fas fa-lightbulb"></i>
+                        <p><strong>Consejo:</strong> Practica estas tecnicas al menos 5 minutos al dia. Con el tiempo, tu cuerpo aprendera a relajarse mas rapido y la ansiedad disminuira notablemente.</p>
+                    </div>
+                `
+            },
+            'sueno': {
+                title: 'El impacto del sueno en el rendimiento academico',
+                category: 'Salud Mental',
+                categoryColor: '#b45309',
+                categoryBg: 'var(--warning-bg)',
+                date: '18 Agosto, 2026',
+                icon: 'fas fa-brain',
+                iconColor: 'var(--warning)',
+                iconBg: 'linear-gradient(135deg,#fef3c7,#fde68a)',
+                content: `
+                    <p>Dormir bien no es un lujo, es una necesidad biologica que impacta directamente en como aprendemos, recordamos y rendimos academicamente.</p>
+
+                    <h3>Por que el sueno es clave</h3>
+                    <p>Durante el sueno, el cerebro consolida los recuerdos aprendidos durante el dia, limpia toxinas acumuladas y prepara las conexiones neuronales para el siguiente dia de aprendizaje.</p>
+
+                    <h3>Que pasa cuando no dormimos bien</h3>
+                    <ul>
+                        <li>La capacidad de atencion se reduce hasta en un 40%</li>
+                        <li>La memoria a corto plazo se ve afectada significativamente</li>
+                        <li>Aumenta la irritabilidad y los conflictos sociales</li>
+                        <li>El rendimiento en pruebas academicas disminuye</li>
+                    </ul>
+
+                    <h3>Recomendaciones para un mejor sueno</h3>
+                    <p><strong>1.</strong> Mantén un horario regular de sueño, incluso los fines de semana.</p>
+                    <p><strong>2.</strong> Evita las pantallas al menos 1 hora antes de dormir.</p>
+                    <p><strong>3.</strong> Tu habitacion debe estar fresca, oscura y silenciosa.</p>
+                    <p><strong>4.</strong> Evita cafeina despues de las 2:00 PM.</p>
+                    <p><strong>5.</strong> Haz una rutina relajante antes de dormir: lectura, musica suave o estiramientos.</p>
+
+                    <div class="blog-tip">
+                        <i class="fas fa-lightbulb"></i>
+                        <p><strong>Dato:</strong> Los adolescentes necesitan entre 8 y 10 horas de sueno por noche para rendir optimamente.</p>
+                    </div>
+                `
+            },
+            'relaciones': {
+                title: 'Como construir relaciones saludables en el entorno escolar',
+                category: 'Comunidad',
+                categoryColor: '#0891b2',
+                categoryBg: 'var(--info-bg)',
+                date: '15 Agosto, 2026',
+                icon: 'fas fa-users',
+                iconColor: '#0284c7',
+                iconBg: 'linear-gradient(135deg,#e0f2fe,#bae6fd)',
+                content: `
+                    <p>Las relaciones saludables en la escuela son fundamentales para el bienestar emocional y el exito academico de los estudiantes.</p>
+
+                    <h3>Principios de relaciones saludables</h3>
+                    <p><strong>Respeto mutuo:</strong> Reconocer y valorar las diferencias de cada persona, sus opiniones, culturas y experiencias de vida.</p>
+                    <p><strong>Comunicacion asertiva:</strong> Expresar tus sentimientos y necesidades de forma clara y respetuosa, sin agredir niCallarse.</p>
+                    <p><strong>Empatia:</strong> Intentar comprender como se siente el otro antes de juzgar o reaccionar.</p>
+
+                    <h3>Estrategias practicas</h3>
+                    <ul>
+                        <li>Escucha activa: presta atencion cuando alguien te habla, sin interrumpir</li>
+                        <li>Ofrece ayuda cuando veas a un compañero en dificultad</li>
+                        <li>Resuelve los conflictos dialogando, no confrontando</li>
+                        <li>Celebra los logros de tus compañeros</li>
+                        <li>Establece limites sanos y respeta los de los demas</li>
+                    </ul>
+
+                    <h3>Senales de relaciones no saludables</h3>
+                    <p>Es importante identificar cuando una relacion no es sana: manipulacion, exclusión constante, bromas hirientes, presion para hacer cosas que no quieres, y falta de reciprocidad.</p>
+
+                    <div class="blog-tip">
+                        <i class="fas fa-lightbulb"></i>
+                        <p><strong>Recuerda:</strong> Si una relacion te hace sentir mal constantemente, esta bien alejarse y buscar apoyo en un adulto de confianza.</p>
+                    </div>
+                `
+            },
+            'mindfulness': {
+                title: 'Mindfulness en el aula: beneficios comprobados',
+                category: 'Mindfulness',
+                categoryColor: '#9333ea',
+                categoryBg: '#f3e8ff',
+                date: '12 Agosto, 2026',
+                icon: 'fas fa-om',
+                iconColor: '#9333ea',
+                iconBg: 'linear-gradient(135deg,#f3e8ff,#e9d5ff)',
+                content: `
+                    <p>La practica de atencion plena (mindfulness) esta transformando escuelas en todo el mundo, y los beneficios cientificamente comprobados son impresionantes.</p>
+
+                    <h3>Que es el Mindfulness</h3>
+                    <p>Es la practica de prestar atencion al momento presente de forma intencional, sin juzgar. Se puede practicar con ejercicios de respiracion, meditacion guiada o actividades conscientes.</p>
+
+                    <h3>Beneficios en el aula</h3>
+                    <ul>
+                        <li>Mejora la capacidad de concentracion hasta en un 30%</li>
+                        <li>Reduce el estres y la ansiedad en los estudiantes</li>
+                        <li>Aumenta la empatia y la inteligencia emocional</li>
+                        <li>Mejora el comportamiento y reduce conflictos</li>
+                        <li>Favorece un ambiente de aprendizaje positivo</li>
+                    </ul>
+
+                    <h3>Ejercicio practico: Aromita Consciente</h3>
+                    <p>Sientate comodo, cierra los ojos e imagina que sostienes una flor aromatica. Inhala lentamente por 4 segundos, imaginando que sientes su aroma. Exhala por 6 segundos, soltando toda la tension. Repite 5 veces. Este ejercicio dura menos de 2 minutos y puede cambiar el clima de toda una clase.</p>
+
+                    <div class="blog-tip">
+                        <i class="fas fa-lightbulb"></i>
+                        <p><strong>Para docentes:</strong> Comienza cada clase con 1 minuto de respiracion consciente. Veras cambios notables en la atencion de tus estudiantes.</p>
+                    </div>
+                `
+            },
+            'senales': {
+                title: 'Senales de alerta: cuándo pedir ayuda profesional',
+                category: 'Cuidado',
+                categoryColor: '#dc2626',
+                categoryBg: 'var(--danger-bg)',
+                date: '10 Agosto, 2026',
+                icon: 'fas fa-hand-holding-heart',
+                iconColor: 'var(--danger)',
+                iconBg: 'linear-gradient(135deg,#fee2e2,#fecaca)',
+                content: `
+                    <p>Reconocer cuando tu o alguien cercano necesita ayuda profesional es un acto de valentia y cuidado. No todas las dificultades emocionales requieren intervencion profesional, pero algunas senales si.</p>
+
+                    <h3>Senales de alerta en ti mismo</h3>
+                    <ul>
+                        <li>Tristeza persistente que dura mas de 2 semanas</li>
+                        <li>Perdida de interes en actividades que antes disfrutabas</li>
+                        <li>Dificultad para concentrarse o tomar decisiones</li>
+                        <li>Cambios importantes en el apetito o el sueno</li>
+                        <li>Aislamiento de amigos y familia</li>
+                        <li>Episodios frecuentes de ira o irritabilidad</li>
+                        <li>Pensamientos de hacerse dano</li>
+                    </ul>
+
+                    <h3>Senales en compañeros</h3>
+                    <ul>
+                        <li>Notas que bajan repentinamente</li>
+                        <li>Asistencia irregular o faltas injustificadas</li>
+                        <li> Cambios de comportamiento notorios</li>
+                        <li>Comentarios negativos sobre si mismo o el futuro</li>
+                        <li>Lesiones sospechosas o ropa que oculta el cuerpo</li>
+                    </ul>
+
+                    <h3>Donde buscar ayuda</h3>
+                    <p><strong>En la escuela:</strong> Los orientadores y psicologos escolares estan capacitados para ayudarte.</p>
+                    <p><strong>Linea de emergencia:</strong> 106 (Linea Nacional de la Infancia y Adolescencia).</p>
+                    <p><strong>En tu comunidad:</strong> Centros de salud, consultorios psicologicos, y organizaciones de apoyo.</p>
+
+                    <div class="blog-tip">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p><strong>Importante:</strong> Si tu o alguien que conoces esta en riesgo inmediato, busca ayuda de un adulto de confianza o llama a emergencias. No estas solo.</p>
+                    </div>
+                `
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const hash = window.location.hash.replace('#', '');
+            const article = articles[hash];
+            if (!article) {
+                document.getElementById('blogContent').innerHTML = '<p>Articulo no encontrado. <a href="/#blog">Volver al blog</a></p>';
+                return;
+            }
+            document.getElementById('pageTitle').textContent = article.title + ' - Blog';
+            document.getElementById('blogContent').innerHTML = `
+                <div class="blog-article-header">
+                    <div class="blog-article-icon" style="background:${article.iconBg}"><i class="${article.icon}" style="color:${article.iconColor};font-size:48px"></i></div>
+                    <span class="badge" style="background:${article.categoryBg};color:${article.categoryColor}">${article.category}</span>
+                    <h1>${article.title}</h1>
+                    <span class="date"><i class="fas fa-calendar"></i> ${article.date}</span>
+                </div>
+                <div class="blog-article-body">
+                    ${article.content}
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>

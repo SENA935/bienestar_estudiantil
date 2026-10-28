@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividades - Bienestar Estudiantil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/responsive.css">
+</head>
+<body>
+    <div class="sidebar-overlay"></div>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-icon"><img src="/static/img/logoo1.png" alt="Logo" style="width:90%;max-width:100px;height:auto"></div>
+            <div>
+                <h2>Bienestar Estudiantil</h2>
+                <small>Salud Mental y Pausas Activas</small>
+            </div>
+        </div>
+        <nav class="sidebar-nav"></nav>
+    </aside>
+    <header class="header">
+        <div class="header-left">
+            <button class="menu-toggle"><i class="fas fa-bars"></i></button>
+            <a href="/" title="Volver a la página principal" style="color:var(--text-primary);margin-right:10px;font-size:18px"><i class="fas fa-home"></i></a>
+            <h2 class="header-title">Actividades</h2>
+        </div>
+        <div class="header-right">
+            <button class="notification-btn" onclick="window.location.href='/alertas'">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge" style="display:none">0</span>
+            </button>
+            <div class="user-menu">
+                <div class="user-avatar"></div>
+                <div class="user-info">
+                    <div class="name"></div>
+                    <div class="role"></div>
+                </div>
+                <div class="user-dropdown">
+                    <a href="/perfil"><i class="fas fa-user"></i> Mi perfil</a>
+                    <a href="#" onclick="event.preventDefault();logout()"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Actividades</h1>
+                <div class="page-header-actions" id="pageActions" style="display:none">
+                    <button class="btn btn-outline" id="btnSolicitudes" onclick="verSolicitudes()" style="display:none"><i class="fas fa-bell"></i> Solicitudes <span class="badge badge-warning" id="badgeSol" style="display:none">0</span></button>
+                    <button class="btn btn-primary" onclick="openModal()"><i class="fas fa-plus"></i> Nueva Actividad</button>
+                </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="toolbar">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Buscar actividad...">
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Categoría</th>
+                                <th>Duración</th>
+                                <th>Participantes</th>
+                                <th>Estado</th>
+                                <th>Fecha</th>
+                                <th id="thParticipar">Quiero participar</th>
+                                <th id="thAcciones">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="actividadesTable">
+                            <tr><td colspan="8" class="empty-state"><p>Cargando...</p></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="actividadModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="actividadModalTitle">Nueva Actividad</h3>
+                <button class="modal-close" onclick="Modal.close('actividadModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="actividadForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Título</label>
+                        <input type="text" name="titulo" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Descripción</label>
+                        <textarea name="descripcion" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Categoría</label>
+                            <select name="categoria_id" id="actCategoria" class="form-control" required>
+                                <option value="">Seleccionar categoría</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Duración (minutos)</label>
+                            <input type="number" name="duracion" class="form-control" value="30">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Instrucciones</label>
+                        <textarea name="instrucciones" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Estado</label>
+                        <select name="estado" class="form-control">
+                            <option value="Activa">Activa</option>
+                            <option value="Inactiva">Inactiva</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="Modal.close('actividadModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+    <script src="/static/js/actividades.js"></script>
+
+    <div class="modal-overlay" id="solicitudesModal">
+        <div class="modal" style="max-width:700px">
+            <div class="modal-header">
+                <h3>Solicitudes de Participación</h3>
+                <button class="modal-close" onclick="Modal.close('solicitudesModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" style="padding:0">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Estudiante</th>
+                                <th>Actividad</th>
+                                <th>Curso</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="solicitudesTable">
+                            <tr><td colspan="6" class="empty-state"><p>No hay solicitudes</p></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

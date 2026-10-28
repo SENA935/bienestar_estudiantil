@@ -8,184 +8,88 @@ from ..extensions import db
 usuarios_bp = Blueprint('usuarios', __name__)
 
 
-def require_admin():
-    user_id = int(get_jwt_identity())
-    user = Usuario.query.get(user_id)
-    if not user or user.rol.nombre not in ['Administrador', 'Coordinador']:
-        return None
-    return user
+def _require_role(roles):
+    uid = int(get_jwt_identity())
+    u = Usuario.query.get(uid)
+    return u if u and u.rol.nombre in roles else None
 
 
 @usuarios_bp.route('', methods=['GET'])
 @jwt_required()
-def get_usuarios():
+def listar():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 10, type=int)
     search = request.args.get('search', '')
-    rol_filter = request.args.get('rol', '')
-    estado_filter = request.args.get('estado', '')
-
-    query = Usuario.query
-
+    rol_f = request.args.get('rol', '')
+    estado_f = request.args.get('estado', '')
+    q = Usuario.query
     if search:
-        query = query.filter(
-            db.or_(
-                Usuario.nombre.ilike(f'%{search}%'),
-                Usuario.apellido.ilike(f'%{search}%'),
-                Usuario.username.ilike(f'%{search}%'),
-                Usuario.email.ilike(f'%{search}%')
-            )
-        )
-
-    if rol_filter:
-        rol = Rol.query.filter_by(nombre=rol_filter).first()
-        if rol:
-            query = query.filter_by(rol_id=rol.id)
-
-    if estado_filter:
-        query = query.filter_by(estado=estado_filter)
-
-    pagination = query.order_by(Usuario.id.desc()).paginate(
-        page=page, per_page=per_page, error_out=False
-    )
-
-    return jsonify({
-        'success': True,
-        'data': {
-            'usuarios': [u.to_dict() for u in pagination.items],
-            'total': pagination.total,
-            'pages': pagination.pages,
-            'current_page': page
-        }
-    })
+        q = q.filter(db.or_(Usuario.nombre.ilike(f'%{search}%'), Usuario.apellido.ilike(f'%{search}%'), Usuario.email.ilike(f'%{search}%'), Usuario.username.ilike(f'%{search}%')))
+    if rol_f:
+        q = q.join(Rol).filter(Rol.nombre == rol_f)
+    if estado_f:
+        q = q.filter(Usuario.estado == estado_f)
+    pag = q.order_by(Usuario.fecha_creacion.desc()).paginate(page=page, per_page=per_page)
+    return jsonify({'success': True, 'data': {'usuarios': [u.to_dict() for u in pag.items], 'total': pag.total, 'pages': pag.pages, 'current_page': page}})
 
 
 @usuarios_bp.route('', methods=['POST'])
 @jwt_required()
-def create_usuario():
-    admin = require_admin()
-    if not admin:
+def crear():
+    u = _require_role(['Administrador'])
+    if not u:
         return jsonify({'success': False, 'message': 'Sin permisos'}), 403
-
     data = request.get_json()
-    required = ['nombre', 'apellido', 'username', 'email', 'password', 'rol_id']
-    for field in required:
-        if not data.get(field):
-            return jsonify({'success': False, 'message': f'Campo {field} es requerido'}), 400
-
-    if Usuario.query.filter_by(username=data['username']).first():
-        return jsonify({'success': False, 'message': 'El usuario ya existe'}), 400
-
+    for f in ['nombre', 'apellido', 'username', 'email', 'password', 'rol_id']:
+        if not data.get(f):
+            return jsonify({'success': False, 'message': f'Campo {f} requerido'}), 400
     if Usuario.query.filter_by(email=data['email']).first():
-        return jsonify({'success': False, 'message': 'El email ya está registrado'}), 400
-
-    user = Usuario(
-        nombre=data['nombre'],
-        apellido=data['apellido'],
-        username=data['username'],
-        email=data['email'],
-        rol_id=data['rol_id'],
-        institucion_id=data.get('institucion_id'),
-        estado=data.get('estado', 'Activo')
-    )
-    user.set_password(data['password'])
-
-    db.session.add(user)
-    auditoria = Auditoria(
-        usuario_id=admin.id, modulo='Usuarios', accion='CREAR',
-        descripcion=f'Usuario creado: {user.username}', ip=request.remote_addr
-    )
-    db.session.add(auditoria)
+        return jsonify({'success': False, 'message': 'Email ya registrado'}), 400
+    if Usuario.query.filter_by(username=data['username']).first():
+        return jsonify({'success': False, 'message': 'Username ya existe'}), 400
+    nuevo = Usuario(nombre=data['nombre'], apellido=data['apellido'], username=data['username'], email=data['email'], rol_id=data['rol_id'], institucion_id=data.get('institucion_id'), estado=data.get('estado', 'Activo'))
+    nuevo.set_password(data['password'])
+    db.session.add(nuevo)
+    db.session.add(Auditoria(usuario_id=u.id, modulo='Usuarios', accion='CREAR', descripcion=f'Creó usuario {nuevo.username}'))
     db.session.commit()
-
-    return jsonify({'success': True, 'message': 'Usuario creado correctamente', 'data': user.to_dict()}), 201
+    return jsonify({'success': True, 'message': 'Usuario creado', 'data': nuevo.to_dict()}), 201
 
 
 @usuarios_bp.route('/<int:id>', methods=['PUT'])
 @jwt_required()
-def update_usuario(id):
-    admin = require_admin()
-    if not admin:
+def actualizar(id):
+    u = _require_role(['Administrador'])
+    if not u:
         return jsonify({'success': False, 'message': 'Sin permisos'}), 403
-
-    user = Usuario.query.get_or_404(id)
+    usr = Usuario.query.get_or_404(id)
     data = request.get_json()
-
-    if 'username' in data and data['username'] != user.username:
-        if Usuario.query.filter_by(username=data['username']).first():
-            return jsonify({'success': False, 'message': 'El usuario ya existe'}), 400
-
-    if 'email' in data and data['email'] != user.email:
-        if Usuario.query.filter_by(email=data['email']).first():
-            return jsonify({'success': False, 'message': 'El email ya está registrado'}), 400
-
-    user.nombre = data.get('nombre', user.nombre)
-    user.apellido = data.get('apellido', user.apellido)
-    user.username = data.get('username', user.username)
-    user.email = data.get('email', user.email)
-    user.rol_id = data.get('rol_id', user.rol_id)
-    user.institucion_id = data.get('institucion_id', user.institucion_id)
-    user.estado = data.get('estado', user.estado)
-
+    usr.nombre = data.get('nombre', usr.nombre)
+    usr.apellido = data.get('apellido', usr.apellido)
+    usr.email = data.get('email', usr.email)
+    usr.rol_id = data.get('rol_id', usr.rol_id)
+    usr.institucion_id = data.get('institucion_id', usr.institucion_id)
+    usr.estado = data.get('estado', usr.estado)
     if data.get('password'):
-        user.set_password(data['password'])
-
-    auditoria = Auditoria(
-        usuario_id=admin.id, modulo='Usuarios', accion='ACTUALIZAR',
-        descripcion=f'Usuario actualizado: {user.username}', ip=request.remote_addr
-    )
-    db.session.add(auditoria)
+        usr.set_password(data['password'])
+    db.session.add(Auditoria(usuario_id=u.id, modulo='Usuarios', accion='ACTUALIZAR', descripcion=f'Actualizó usuario {usr.username}'))
     db.session.commit()
-
-    return jsonify({'success': True, 'message': 'Usuario actualizado correctamente', 'data': user.to_dict()})
+    return jsonify({'success': True, 'message': 'Usuario actualizado', 'data': usr.to_dict()})
 
 
 @usuarios_bp.route('/<int:id>', methods=['DELETE'])
 @jwt_required()
-def delete_usuario(id):
-    admin = require_admin()
-    if not admin:
+def eliminar(id):
+    u = _require_role(['Administrador'])
+    if not u:
         return jsonify({'success': False, 'message': 'Sin permisos'}), 403
-
-    user = Usuario.query.get_or_404(id)
-    username = user.username
-
-    if user.id == admin.id:
-        return jsonify({'success': False, 'message': 'No puedes eliminar tu propia cuenta'}), 400
-
-    if user.rol.nombre == 'Administrador':
-        otros = Usuario.query.filter(
-            Usuario.rol.has(nombre='Administrador'), Usuario.id != user.id
-        ).count()
-        if otros == 0:
-            return jsonify({'success': False, 'message': 'No se puede eliminar el único administrador'}), 400
-
-    auditoria = Auditoria(
-        usuario_id=admin.id, modulo='Usuarios', accion='ELIMINAR',
-        descripcion=f'Usuario eliminado: {username}', ip=request.remote_addr
-    )
-    db.session.add(auditoria)
-    db.session.delete(user)
+    usr = Usuario.query.get_or_404(id)
+    db.session.add(Auditoria(usuario_id=u.id, modulo='Usuarios', accion='ELIMINAR', descripcion=f'Eliminó usuario {usr.username}'))
+    db.session.delete(usr)
     db.session.commit()
+    return jsonify({'success': True, 'message': 'Usuario eliminado'})
 
-    return jsonify({'success': True, 'message': 'Usuario eliminado correctamente'})
 
-
-@usuarios_bp.route('/<int:id>/toggle', methods=['PUT'])
+@usuarios_bp.route('/roles', methods=['GET'])
 @jwt_required()
-def toggle_usuario(id):
-    admin = require_admin()
-    if not admin:
-        return jsonify({'success': False, 'message': 'Sin permisos'}), 403
-
-    user = Usuario.query.get_or_404(id)
-    user.estado = 'Inactivo' if user.estado == 'Activo' else 'Activo'
-
-    auditoria = Auditoria(
-        usuario_id=admin.id, modulo='Usuarios', accion='ACTUALIZAR',
-        descripcion=f'Usuario {user.estado}: {user.username}', ip=request.remote_addr
-    )
-    db.session.add(auditoria)
-    db.session.commit()
-
-    return jsonify({'success': True, 'message': f'Usuario {user.estado.lower()} correctamente', 'data': user.to_dict()})
+def listar_roles():
+    return jsonify({'success': True, 'data': [r.to_dict() for r in Rol.query.all()]})

@@ -11,68 +11,66 @@ auth_bp = Blueprint('auth', __name__)
 def login():
     data = request.get_json()
     if not data:
-        return jsonify({'success': False, 'message': 'Datos no proporcionados'}), 400
-
-    username = data.get('username', '').strip()
+        return jsonify({'success': False, 'message': 'Datos requeridos'}), 400
+    email = data.get('email', '').strip()
     password = data.get('password', '')
-
-    if not username or not password:
-        return jsonify({'success': False, 'message': 'Usuario y contraseña son requeridos'}), 400
-
-    user = Usuario.query.filter_by(username=username).first()
-
-    if not user or not user.check_password(password):
+    if not email or not password:
+        return jsonify({'success': False, 'message': 'Email y contraseña requeridos'}), 400
+    usuario = Usuario.query.filter_by(email=email).first()
+    if not usuario or not usuario.check_password(password):
         return jsonify({'success': False, 'message': 'Credenciales incorrectas'}), 401
-
-    if user.estado != 'Activo':
+    if usuario.estado != 'Activo':
         return jsonify({'success': False, 'message': 'Usuario inactivo'}), 403
-
-    token = create_access_token(identity=str(user.id))
-
-    auditoria = Auditoria(
-        usuario_id=user.id,
-        modulo='Auth',
-        accion='LOGIN',
-        descripcion=f'Inicio de sesión exitoso: {user.username}',
-        ip=request.remote_addr
-    )
-    db.session.add(auditoria)
+    token = create_access_token(identity=str(usuario.id))
+    db.session.add(Auditoria(usuario_id=usuario.id, modulo='Auth', accion='LOGIN', descripcion='Inicio de sesión', ip_address=request.remote_addr))
     db.session.commit()
-
-    return jsonify({
-        'success': True,
-        'message': 'Inicio de sesión exitoso',
-        'data': {
-            'token': token,
-            'user': user.to_dict()
-        }
-    })
+    return jsonify({'success': True, 'message': 'Inicio de sesión exitoso', 'data': {'token': token, 'usuario': usuario.to_dict()}})
 
 
-@auth_bp.route('/logout', methods=['POST'])
-@jwt_required()
-def logout():
-    user_id = get_jwt_identity()
-    user = Usuario.query.get(int(user_id))
-    if user:
-        auditoria = Auditoria(
-            usuario_id=user.id,
-            modulo='Auth',
-            accion='LOGOUT',
-            descripcion=f'Cierre de sesión: {user.username}',
-            ip=request.remote_addr
-        )
-        db.session.add(auditoria)
-        db.session.commit()
-
-    return jsonify({'success': True, 'message': 'Sesión cerrada correctamente'})
+@auth_bp.route('/recuperar-contrasena', methods=['POST'])
+def recuperar_contrasena():
+    data = request.get_json()
+    if not data:
+        return jsonify({'success': False, 'message': 'Datos requeridos'}), 400
+    email = data.get('email', '').strip()
+    if not email:
+        return jsonify({'success': False, 'message': 'Correo electrónico requerido'}), 400
+    usuario = Usuario.query.filter_by(email=email).first()
+    if not usuario:
+        return jsonify({'success': True, 'message': 'Si el correo está registrado, recibirás instrucciones para restablecer tu contraseña.'})
+    db.session.add(Auditoria(usuario_id=usuario.id, modulo='Auth', accion='RECUPERAR_PASS', descripcion='Solicitud de recuperación de contraseña', ip_address=request.remote_addr))
+    db.session.commit()
+    return jsonify({'success': True, 'message': 'Se han enviado las instrucciones al correo electrónico.'})
 
 
 @auth_bp.route('/me', methods=['GET'])
 @jwt_required()
 def me():
-    user_id = get_jwt_identity()
-    user = Usuario.query.get(int(user_id))
-    if not user:
-        return jsonify({'success': False, 'message': 'Usuario no encontrado'}), 404
-    return jsonify({'success': True, 'data': user.to_dict()})
+    u = Usuario.query.get(int(get_jwt_identity()))
+    if not u:
+        return jsonify({'success': False, 'message': 'No encontrado'}), 404
+    return jsonify({'success': True, 'data': u.to_dict()})
+
+
+@auth_bp.route('/logout', methods=['POST'])
+@jwt_required()
+def logout():
+    uid = int(get_jwt_identity())
+    db.session.add(Auditoria(usuario_id=uid, modulo='Auth', accion='LOGOUT', descripcion='Cierre de sesión', ip_address=request.remote_addr))
+    db.session.commit()
+    return jsonify({'success': True, 'message': 'Sesión cerrada'})
+
+
+@auth_bp.route('/change-password', methods=['POST'])
+@jwt_required()
+def change_password():
+    uid = int(get_jwt_identity())
+    data = request.get_json()
+    u = Usuario.query.get(uid)
+    if not u.check_password(data.get('current_password', '')):
+        return jsonify({'success': False, 'message': 'Contraseña actual incorrecta'}), 400
+    if len(data.get('new_password', '')) < 6:
+        return jsonify({'success': False, 'message': 'Mínimo 6 caracteres'}), 400
+    u.set_password(data['new_password'])
+    db.session.commit()
+    return jsonify({'success': True, 'message': 'Contraseña actualizada'})

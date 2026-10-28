@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instituciones - Bienestar Estudiantil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/responsive.css">
+</head>
+<body>
+    <div class="sidebar-overlay"></div>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-icon"><img src="/static/img/logoo1.png" alt="Logo" style="width:90%;max-width:100px;height:auto"></div>
+            <div>
+                <h2>Bienestar Estudiantil</h2>
+                <small>Salud Mental y Pausas Activas</small>
+            </div>
+        </div>
+        <nav class="sidebar-nav"></nav>
+    </aside>
+    <header class="header">
+        <div class="header-left">
+            <button class="menu-toggle"><i class="fas fa-bars"></i></button>
+            <a href="/" title="Volver a la página principal" style="color:var(--text-primary);margin-right:10px;font-size:18px"><i class="fas fa-home"></i></a>
+            <h2 class="header-title">Instituciones</h2>
+        </div>
+        <div class="header-right">
+            <button class="notification-btn" onclick="window.location.href='/alertas'">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge" style="display:none">0</span>
+            </button>
+            <div class="user-menu">
+                <div class="user-avatar"></div>
+                <div class="user-info">
+                    <div class="name"></div>
+                    <div class="role"></div>
+                </div>
+                <div class="user-dropdown">
+                    <a href="/perfil"><i class="fas fa-user"></i> Mi perfil</a>
+                    <a href="#" onclick="event.preventDefault();logout()"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Instituciones</h1>
+            <div class="page-header-actions">
+                <button class="btn btn-primary" onclick="openModal()"><i class="fas fa-plus"></i> Nueva Institución</button>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="toolbar">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Buscar institución...">
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>NIT</th>
+                                <th>Teléfono</th>
+                                <th>Email</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="institucionesTable">
+                            <tr><td colspan="6" class="empty-state"><p>Cargando...</p></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="institucionesPagination"></div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="institucionModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="institucionModalTitle">Nueva Institución</h3>
+                <button class="modal-close" onclick="Modal.close('institucionModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="institucionForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" name="nombre" class="form-control" required>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>NIT</label>
+                            <input type="text" name="nit" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Teléfono</label>
+                            <input type="text" name="telefono" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Estado</label>
+                        <select name="estado" class="form-control">
+                            <option value="Activa">Activa</option>
+                            <option value="Inactiva">Inactiva</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="Modal.close('institucionModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+    <script>
+        let currentPage=1;
+        document.addEventListener('DOMContentLoaded',async()=>{if(!Auth.checkAuth())return;initLayout();await load();document.getElementById('searchInput')?.addEventListener('input',debounce(()=>{currentPage=1;load()},300));document.getElementById('institucionForm')?.addEventListener('submit',save)});
+        async function load(){const s=document.getElementById('searchInput')?.value||'';const res=await Api.get(`/api/instituciones?page=${currentPage}&per_page=10&search=${s}`);if(!res||!res.success)return;const{instituciones:items,total,pages,current_page:cp}=res.data;const tb=document.getElementById('institucionesTable');if(!tb)return;if(!items.length){tb.innerHTML='<tr><td colspan="6" class="empty-state"><i class="fas fa-building"></i><h3>No hay instituciones</h3></td></tr>';return}tb.innerHTML=items.map(i=>`<tr><td>${i.nombre}</td><td>${i.nit||'-'}</td><td>${i.telefono||'-'}</td><td>${i.email||'-'}</td><td><span class="badge badge-${i.estado==='Activa'?'success':'danger'}">${i.estado}</span></td><td><div class="table-actions"><button class="btn btn-sm btn-primary" onclick="editItem(${i.id})" title="Editar"><i class="fas fa-edit"></i></button><button class="btn btn-sm btn-danger" onclick="delItem(${i.id})" title="Eliminar"><i class="fas fa-trash"></i></button></div></td></tr>`).join('');renderPag('institucionesPagination',pages,cp,p=>{currentPage=p;load()})}
+        async function save(e){e.preventDefault();const f=e.target,id=f.dataset.id,d={nombre:f.nombre.value,nit:f.nit.value,telefono:f.telefono.value,email:f.email.value,estado:f.estado.value};let res=id?await Api.put(`/api/instituciones/${id}`,d):await Api.post('/api/instituciones',d);if(res&&res.success){Toast.show(res.message,'success');Modal.close('institucionModal');f.reset();f.dataset.id='';load()}else Toast.show(res?.message||'Error','error')}
+        async function editItem(id){const res=await Api.get(`/api/instituciones?per_page=100`);if(!res||!res.success)return;const i=res.data.instituciones.find(x=>x.id===id);if(!i)return;const f=document.getElementById('institucionForm');f.dataset.id=id;f.nombre.value=i.nombre;f.nit.value=i.nit||'';f.telefono.value=i.telefono||'';f.email.value=i.email||'';f.estado.value=i.estado;document.getElementById('institucionModalTitle').textContent='Editar Institución';Modal.open('institucionModal')}
+        async function delItem(id){if(!await Modal.confirm('¿Eliminar esta institución?'))return;const r=await Api.delete(`/api/instituciones/${id}`);if(r&&r.success){Toast.show('Eliminada','success');load()}}
+        function openModal(){const f=document.getElementById('institucionForm');f.reset();f.dataset.id='';document.getElementById('institucionModalTitle').textContent='Nueva Institución';Modal.open('institucionModal')}
+        function renderPag(id,tp,cp,fn){const c=document.getElementById(id);if(!c)return;if(tp<=1){c.innerHTML='';return}c.innerHTML=`<button class="prev-btn" ${cp<=1?'disabled':''}>←</button><span class="page-info">Página ${cp} de ${tp}</span><button class="next-btn" ${cp>=tp?'disabled':''}>→</button>`;c.querySelector('.prev-btn').addEventListener('click',()=>fn(cp-1));c.querySelector('.next-btn').addEventListener('click',()=>fn(cp+1))}
+        function debounce(fn,d){let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),d)}}
+    </script>
+</body>
+</html>
